@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![MaruxOS Logo](MaruxOS%20디자인/icons/marux-logo.png)
+![MaruxOS Logo](MaruxOS%20디자인/marux-logo-512.png)
 
 **The World's First OS Built 100% with AI**
 
