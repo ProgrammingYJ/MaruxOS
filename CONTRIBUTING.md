@@ -216,7 +216,7 @@ MaruxOS is built using **Linux From Scratch (LFS) 12.1**, NOT Debian/Ubuntu. Key
 
 ## License
 
-By contributing, you agree that your contributions will be licensed under the MIT License.
+By contributing, you agree that your contributions will be released into the **Public Domain** - complete freedom with no restrictions.
 
 ---
 
@@ -329,7 +329,7 @@ MaruxOS는 **Linux From Scratch (LFS) 12.1** 기반입니다 (Debian/Ubuntu 아�
 
 ## 라이선스
 
-기여함으로써 귀하의 기여가 MIT 라이선스에 따라 라이선스됨에 동의합니다.
+기여함으로써 귀하의 기여가 **퍼블릭 도메인**으로 공개됨에 동의합니다 - 제한 없는 완전한 자유.
 
 ---
 

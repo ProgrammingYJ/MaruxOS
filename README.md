@@ -8,7 +8,7 @@
 
 *Not based on Ubuntu, Debian, or any distribution - Pure Linux From Scratch*
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![License: Public Domain](https://img.shields.io/badge/License-Public%20Domain-brightgreen.svg)](LICENSE)
 [![Linux](https://img.shields.io/badge/Kernel-6.12%20LTS-orange.svg)](https://kernel.org/)
 [![LFS](https://img.shields.io/badge/Base-LFS%2012.1-green.svg)](https://www.linuxfromscratch.org/)
 [![AI](https://img.shields.io/badge/Built%20with-Claude%20Code-blueviolet.svg)](https://claude.ai/)
@@ -140,7 +140,7 @@ grub-mkrescue -o MaruxOS-1.0.iso iso-build
 
 ## License
 
-MaruxOS is open source software. The build system is licensed under MIT.
+MaruxOS is released into the **Public Domain** - complete freedom with no restrictions.
 
 Components have their respective licenses:
 - Linux Kernel: GPL-2.0
