@@ -1,0 +1,95 @@
+#!/bin/sh
+# MaruxOS System xinitrc
+# /etc/X11/xinit/xinitrc
+
+# XDG Runtime Directory
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p $XDG_RUNTIME_DIR
+chmod 700 $XDG_RUNTIME_DIR
+
+# Locale settings (Korean, Japanese, UTF-8)
+export LANG=ko_KR.UTF-8
+export LC_ALL=
+export LC_CTYPE=ko_KR.UTF-8
+export LC_MESSAGES=ko_KR.UTF-8
+export LC_COLLATE=C
+
+# Fallback to UTF-8 if Korean locale unavailable
+if ! locale -a 2>/dev/null | grep -q "ko_KR"; then
+    export LANG=C.UTF-8
+    export LC_CTYPE=C.UTF-8
+fi
+
+# Input Method for Korean/Japanese
+export GTK_IM_MODULE=ibus
+export QT_IM_MODULE=ibus
+export XMODIFIERS=@im=ibus
+
+# Network initialization log
+LOGFILE="/tmp/Network_log.txt"
+echo "=== MaruxOS Network Initialization Log ===" > $LOGFILE
+echo "Date: $(date)" >> $LOGFILE
+echo "" >> $LOGFILE
+
+# Detect and activate network interfaces
+echo "=== Network Interfaces ===" >> $LOGFILE
+ls /sys/class/net/ >> $LOGFILE 2>&1
+echo "" >> $LOGFILE
+
+# Bring up interfaces and run DHCP
+for iface in /sys/class/net/*; do
+    iface_name=$(basename $iface)
+    if [ "$iface_name" != "lo" ]; then
+        echo "Activating $iface_name..." >> $LOGFILE
+        ip link set $iface_name up >> $LOGFILE 2>&1
+        sleep 1
+        /usr/sbin/dhcpcd $iface_name >> $LOGFILE 2>&1 &
+        echo "dhcpcd started for $iface_name (PID: $!)" >> $LOGFILE
+    fi
+done
+
+# Wait for DHCP
+sleep 3
+
+# Log final network status
+echo "" >> $LOGFILE
+echo "=== Final Network Status ===" >> $LOGFILE
+ip addr >> $LOGFILE 2>&1
+echo "" >> $LOGFILE
+echo "=== Route Table ===" >> $LOGFILE
+ip route >> $LOGFILE 2>&1
+echo "" >> $LOGFILE
+echo "=== Network Initialization Complete ===" >> $LOGFILE
+
+# Auto-sync config from server (if available)
+CONFIG_SERVER="192.168.0.163:8080"
+mkdir -p ~/.config/tint2
+wget -q -T 3 http://$CONFIG_SERVER/tint2rc -O ~/.config/tint2/tint2rc 2>/dev/null
+wget -q -T 3 http://$CONFIG_SERVER/terminal.desktop -O /usr/share/applications/terminal.desktop 2>/dev/null
+wget -q -T 3 http://$CONFIG_SERVER/filemanager.desktop -O /usr/share/applications/filemanager.desktop 2>/dev/null
+
+# GTK Theme
+export GTK_THEME=Adwaita:dark
+export GTK2_RC_FILES=/usr/share/themes/Adwaita-dark/gtk-2.0/gtkrc
+
+# Set wallpaper
+if [ -f /usr/share/pixmaps/maruxos/marux-desktop.png ]; then
+    feh --bg-fill /usr/share/pixmaps/maruxos/marux-desktop.png &
+elif [ -f /usr/share/backgrounds/marux-desktop.png ]; then
+    feh --bg-fill /usr/share/backgrounds/marux-desktop.png &
+fi
+
+# Start Openbox window manager
+openbox &
+
+# Start tint2 panel
+sleep 1
+tint2 &
+
+# Start input method (if installed)
+if command -v ibus-daemon >/dev/null 2>&1; then
+    ibus-daemon -drx &
+fi
+
+# Keep session alive
+exec sleep infinity

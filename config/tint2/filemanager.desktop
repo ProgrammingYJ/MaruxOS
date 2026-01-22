@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Files
+Comment=File Manager
+Exec=xterm -e mc
+Icon=system-file-manager
+Type=Application
+Categories=System;FileTools;FileManager;
+StartupWMClass=xterm

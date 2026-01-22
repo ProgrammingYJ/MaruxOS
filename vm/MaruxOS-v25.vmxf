@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<Foundry>
+<VM>
+<VMId type="string">52 1c 2e 59 17 61 1e a4-e1 56 97 9e e9 f1 de 9d</VMId>
+<ClientMetaData>
+<clientMetaDataAttributes/>
+<HistoryEventList/></ClientMetaData>
+<vmxPathName type="string">MaruxOS-v25.vmx</vmxPathName></VM></Foundry>

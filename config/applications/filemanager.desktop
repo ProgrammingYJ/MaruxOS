@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Files
+Comment=File Manager
+Exec=pcmanfm
+Icon=system-file-manager
+Terminal=false
+Type=Application
+Categories=System;FileTools;FileManager;
+StartupWMClass=pcmanfm

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Terminal
+Comment=Terminal Emulator
+Exec=xterm
+Icon=utilities-terminal
+Type=Application
+Categories=System;TerminalEmulator;
+StartupWMClass=xterm

@@ -1,0 +1,78 @@
+# MaruxOS Build Artifacts
+# ========================
+
+# Build directory
+build/
+!build/.gitkeep
+
+# Downloaded sources
+kernel/source/*
+!kernel/source/.gitkeep
+
+# Kernel configurations (keep template)
+kernel/config/.config
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# Log files
+*.log
+
+# ISO images
+*.iso
+*.img
+
+# Checksums
+*.md5
+*.sha256
+*.sha512
+
+# Compressed files (except design assets)
+*.tar.gz
+*.tar.xz
+*.tar.bz2
+*.tgz
+*.zip
+!MaruxOS*.zip
+
+# Virtual machine files
+*.vdi
+*.vmdk
+*.qcow2
+
+# Editor files
+.vscode/
+.idea/
+*.sublime-*
+.DS_Store
+Thumbs.db
+
+# Package files
+*.deb
+packages/*/DEBIAN/
+*.buildinfo
+*.changes
+
+# Test files
+test-*.sh
+debug-*.sh
+
+# Personal notes
+notes.txt
+TODO.txt
+NOTES.md
+
+# Sensitive information
+secrets/
+credentials/
+*.key
+*.pem
+*.priv
+
+# Distribution specific
+nul
+iso/live/filesystem.squashfs
