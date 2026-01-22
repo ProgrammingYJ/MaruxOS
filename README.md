@@ -8,6 +8,8 @@
 
 *Not based on Ubuntu, Debian, or any distribution - Pure Linux From Scratch*
 
+[![Download ISO](https://img.shields.io/badge/Download-MaruxOS%201.0-blue.svg?style=for-the-badge)](https://github.com/ProgrammingYJ/MaruxOS/releases/latest)
+
 [![License: Public Domain](https://img.shields.io/badge/License-Public%20Domain-brightgreen.svg)](LICENSE)
 [![Linux](https://img.shields.io/badge/Kernel-6.12%20LTS-orange.svg)](https://kernel.org/)
 [![LFS](https://img.shields.io/badge/Base-LFS%2012.1-green.svg)](https://www.linuxfromscratch.org/)
@@ -69,6 +71,14 @@ Unlike Ubuntu, Fedora, or Arch which are based on existing Linux distributions, 
 3. **Boot** from USB
 4. Login is automatic (root user)
 5. Desktop starts automatically via `startx`
+
+## Known Limitations
+
+| Issue | Description |
+|-------|-------------|
+| No Desktop Icons | Desktop file system not supported (unlike Windows) |
+| English Only | Korean, Japanese, and other languages not yet supported |
+| Legacy File Manager | mc (Midnight Commander) is text-based and outdated |
 
 ## Project Structure
 
