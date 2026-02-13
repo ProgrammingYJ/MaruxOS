@@ -723,6 +723,28 @@
 
 ---
 
+### 67-v35 → 67-v36 - 2026-01-22 ~ 01-28
+**변경사항:**
+- GitHub Release v1.0 배포
+- 문서 전면 개편 (README, FAQ, DEVELOPMENT, LFS-BUILD-GUIDE, CONTRIBUTING)
+- 라이선스 변경: MIT → Public Domain
+- 빌드 히스토리 완전 재작성 (60MB 대화 로그 분석)
+- **결과:** ✅ 정식 릴리즈 완료
+
+---
+
+### 67-v36 → 67-v37 - 2026-02-13
+**변경사항:**
+- Firefox 아이콘 중복 표시 문제 수정
+- firefox.desktop 파일 수정:
+  - `StartupWMClass=firefox` → `StartupWMClass=Navigator`
+  - `StartupNotify=true` 추가
+- **문제:** tint2 패널에서 Firefox 런처 아이콘과 실행 중인 창이 별도 아이콘으로 표시
+- **원인:** Firefox의 실제 WM_CLASS는 `Navigator`인데 .desktop 파일에는 `firefox`로 설정되어 있었음
+- **결과:** ✅ Firefox 실행 시 단일 아이콘으로 표시 (예상)
+
+---
+
 
 ## 빌드 정보
 

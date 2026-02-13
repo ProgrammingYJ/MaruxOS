@@ -723,6 +723,28 @@ This document records the changes made in each version during the MaruxOS ISO bu
 
 ---
 
+### 67-v35 → 67-v36 - 2026-01-22 ~ 01-28
+**Changes:**
+- GitHub Release v1.0 published
+- Complete documentation overhaul (README, FAQ, DEVELOPMENT, LFS-BUILD-GUIDE, CONTRIBUTING)
+- License change: MIT → Public Domain
+- Build history completely rewritten (analyzed 60MB conversation log)
+- **Result:** ✅ Official release completed
+
+---
+
+### 67-v36 → 67-v37 - 2026-02-13
+**Changes:**
+- Fixed Firefox icon duplication in tint2 panel
+- Modified firefox.desktop file:
+  - `StartupWMClass=firefox` → `StartupWMClass=Navigator`
+  - Added `StartupNotify=true`
+- **Issue:** Firefox launcher icon and running window appeared as separate icons in tint2 panel
+- **Root Cause:** Firefox's actual WM_CLASS is `Navigator`, but .desktop file had it set to `firefox`
+- **Result:** ✅ Firefox now displays as single icon when running (expected)
+
+---
+
 
 ## Technical Notes
 

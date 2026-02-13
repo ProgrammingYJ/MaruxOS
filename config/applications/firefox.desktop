@@ -6,4 +6,5 @@ Icon=firefox
 Terminal=false
 Type=Application
 Categories=Network;WebBrowser;
-StartupWMClass=firefox
+StartupWMClass=Navigator
+StartupNotify=true
