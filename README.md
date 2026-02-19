@@ -8,7 +8,7 @@
 
 *Not based on Ubuntu, Debian, or any distribution - Pure Linux From Scratch*
 
-[![Download ISO](https://img.shields.io/badge/Download-MaruxOS%201.0-blue.svg?style=for-the-badge)](https://github.com/ProgrammingYJ/MaruxOS/releases/latest)
+[![Download ISO](https://img.shields.io/badge/Download-MaruxOS%201.1-blue.svg?style=for-the-badge)](https://github.com/ProgrammingYJ/MaruxOS/releases/latest)
 
 [![License: Public Domain](https://img.shields.io/badge/License-Public%20Domain-brightgreen.svg)](LICENSE)
 [![Linux](https://img.shields.io/badge/Kernel-6.12%20LTS-orange.svg)](https://kernel.org/)
@@ -43,6 +43,7 @@ Unlike Ubuntu, Fedora, or Arch which are based on existing Linux distributions, 
 - **Custom Desktop** - Openbox window manager with tint2 panel
 - **Live Boot** - Boot directly from USB/CD without installation
 - **Modern Kernel** - Linux 6.12 LTS
+- **Korean Input** - Full Korean (Hangul) input support via ibus-hangul (Ctrl+Y toggle)
 
 ## System Requirements
 
@@ -63,6 +64,8 @@ Unlike Ubuntu, Fedora, or Arch which are based on existing Linux distributions, 
 | File Manager | mc (Midnight Commander) |
 | Web Browser | Firefox |
 | Wallpaper | feh |
+| Korean Input | ibus-hangul 1.5.5 (libhangul 0.2.0, ibus 1.5.29) |
+| Korean Fonts | Nanum Gothic, Nanum Myeongjo |
 
 ## Quick Start
 
@@ -72,12 +75,20 @@ Unlike Ubuntu, Fedora, or Arch which are based on existing Linux distributions, 
 4. Login is automatic (root user)
 5. Desktop starts automatically via `startx`
 
+## Korean Input Guide
+
+| Action | Key |
+|--------|-----|
+| Korean/English Toggle | **Ctrl+Y** or **Shift+Space** |
+| Keyboard Layout | Dubeolsik (2-set QWERTY) |
+| Hanja Conversion | F9 |
+
 ## Known Limitations
 
 | Issue | Description |
 |-------|-------------|
 | No Desktop Icons | Desktop file system not supported (unlike Windows) |
-| English Only | Korean, Japanese, and other languages not yet supported |
+| Terminal Korean Display | Korean text may display incorrectly in xterm (Firefox and GTK3 apps work fine) |
 | Legacy File Manager | mc (Midnight Commander) is text-based and outdated |
 
 ## Project Structure
@@ -131,14 +142,15 @@ grub-mkrescue -o MaruxOS-1.0.iso iso-build
 - **Live boot only** - No disk installation support yet
 - **No package manager** - Software is pre-installed
 - **Terminal-based file manager** - GUI file manager has library issues
-- **English/Korean UI** - Other languages may have display issues
+- **Terminal Korean display** - xterm may not display Korean correctly (GTK3 apps work fine)
 
 ## Roadmap
 
 - [ ] Disk installation support
 - [ ] Package management system
 - [ ] GUI file manager
-- [ ] More language support
+- [x] ~~Korean input support~~ (v1.1)
+- [ ] More language support (Japanese, Chinese)
 - [ ] ARM architecture support
 
 ## Support & Contact
@@ -194,6 +206,7 @@ MaruxOS는 **세계 최초로 100% AI(Claude Code)만으로 제작된 운영체�
 - **커스텀 데스크톱** - Openbox 윈도우 매니저 + tint2 패널
 - **라이브 부팅** - USB/CD에서 설치 없이 바로 부팅
 - **최신 커널** - Linux 6.12 LTS
+- **한글 입력 지원** - ibus-hangul 기반 한/영 전환 (Ctrl+Y)
 
 ## 시스템 요구 사항
 
@@ -214,6 +227,8 @@ MaruxOS는 **세계 최초로 100% AI(Claude Code)만으로 제작된 운영체�
 | 파일 관리자 | mc (Midnight Commander) |
 | 웹 브라우저 | Firefox |
 | 배경화면 | feh |
+| 한글 입력기 | ibus-hangul 1.5.5 (libhangul 0.2.0, ibus 1.5.29) |
+| 한국어 폰트 | 나눔고딕, 나눔명조 |
 
 ## 빠른 시작
 
@@ -223,12 +238,20 @@ MaruxOS는 **세계 최초로 100% AI(Claude Code)만으로 제작된 운영체�
 4. 자동 로그인 (root 사용자)
 5. `startx`로 데스크톱 자동 시작
 
+## 한글 입력 가이드
+
+| 동작 | 키 |
+|------|-----|
+| 한/영 전환 | **Ctrl+Y** 또는 **Shift+Space** |
+| 자판 배열 | 2벌식 (QWERTY) |
+| 한자 변환 | F9 |
+
 ## 현재 제한 사항
 
 - **라이브 부팅만 가능** - 디스크 설치 미지원
 - **패키지 관리자 없음** - 소프트웨어 사전 설치됨
 - **터미널 기반 파일 관리자** - GUI 파일 관리자 라이브러리 문제
-- **영어/한국어 UI** - 다른 언어 표시 문제 가능
+- **터미널 한글 표시** - xterm에서 한글 표시가 깨질 수 있음 (Firefox 등 GTK3 앱은 정상)
 
 ## 지원 및 문의
 
@@ -254,7 +277,7 @@ MaruxOS는 **세계 최초로 100% AI(Claude Code)만으로 제작된 운영체�
 
 <div align="center">
 
-**Current Version: 1.0 "67"**
+**Current Version: 1.1 "67"**
 
 Made with Linux From Scratch 12.1
 **Made with ❤️ for the Linux community**
