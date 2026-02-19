@@ -741,10 +741,269 @@ This document records the changes made in each version during the MaruxOS ISO bu
   - Added `StartupNotify=true`
 - **Issue:** Firefox launcher icon and running window appeared as separate icons in tint2 panel
 - **Root Cause:** Firefox's actual WM_CLASS is `Navigator`, but .desktop file had it set to `firefox`
-- **Result:** ✅ Firefox now displays as single icon when running (expected)
+- **Result:** ✅ Firefox now displays as single icon when running
 
 ---
 
+### 67-v37 → 67-v38 - 2026-02-13
+**Changes:**
+- Added Korean locale support
+- Created /etc/locale.gen file:
+  - en_US.UTF-8 UTF-8
+  - ko_KR.UTF-8 UTF-8 (Korean)
+  - ja_JP.UTF-8 UTF-8 (Japanese)
+  - zh_CN.UTF-8 UTF-8 (Chinese)
+- Created /etc/locale.conf file:
+  - LANG=ko_KR.UTF-8
+  - LC_CTYPE=ko_KR.UTF-8
+  - LC_MESSAGES=en_US.UTF-8 (English system messages)
+  - LC_COLLATE=C
+- Enhanced xinitrc locale settings:
+  - Set LANG, LC_CTYPE, LC_MESSAGES, LC_COLLATE, LC_NUMERIC, LC_TIME environment variables
+  - Automatic fallback to en_US.UTF-8 when Korean locale is unavailable
+- Korean/Japanese input method configuration:
+  - GTK_IM_MODULE=ibus
+  - QT_IM_MODULE=ibus
+  - XMODIFIERS=@im=ibus
+  - Auto-start ibus-daemon (when installed)
+- Created locale directories:
+  - /usr/share/locale/ko/LC_MESSAGES
+  - /usr/share/locale/ja/LC_MESSAGES
+  - /usr/share/locale/zh_CN/LC_MESSAGES
+  - /usr/lib/locale
+- **Result:** ✅ Korean UTF-8 encoding support, Korean I/O environment established
+
+---
+
+### 67-v38 → 67-v44 - 2026-02-13
+**Changes:**
+- v38~v43: Korean locale testing and rollback
+- Extracted and restored config files from release ISO
+- Fixed tint2rc location: `/etc/skel/.config/tint2/` → `/etc/xdg/tint2/`
+- Desktop file fixes:
+  - maruxos-menu.desktop → marux-menu.desktop
+  - Removed terminal.desktop, filemanager.desktop
+  - Added xterm.desktop, mc.desktop, battery.desktop, network.desktop, volume.desktop
+- **Result:** ✅ Complete rollback to release version successful
+
+---
+
+### 67-v44 → 67-v47 - 2026-02-13
+**Changes:**
+- Full Korean locale support:
+  - All 14 LC_* environment variables set to Korean
+  - locale.gen: Added ko_KR.UTF-8, ko_KR.EUC-KR
+  - locale.conf: All LC_* variables configured
+  - /etc/environment: System-wide locale settings
+- xinitrc Korean locale configuration:
+  - LC_ALL, LC_CTYPE, LC_NUMERIC, LC_TIME, LC_COLLATE, etc.
+  - GTK_IM_MODULE=ibus, QT_IM_MODULE=ibus, XMODIFIERS=@im=ibus
+- Generated Korean locale with localedef (ko_KR.UTF-8, en_US.UTF-8)
+- Installed Nanum fonts:
+  - NanumGothic (Regular, Bold, ExtraBold)
+  - NanumMyeongjo (Regular, Bold)
+  - 5 font files total
+- Updated font cache with fc-cache
+- Added Korean font verification and warning messages
+- **Result:** ✅ Korean text display fully working, locale fully supported
+
+---
+
+### 67-v47 → 67-v49 - 2026-02-13
+**Changes:**
+- Installed ibus-hangul Korean input method:
+  - libhangul 0.2.0 (Korean composition library)
+  - ibus 1.5.29 (Input Bus framework)
+  - ibus-hangul 1.5.5 (Korean input engine)
+- Changed toggle key: Ctrl+Shift+Tab → **Ctrl+P**
+- Fixed GRUB menu Korean character corruption:
+  - Changed Korean text to English: "MaruxOS 1.0 (67) - Korean Input"
+- ibus-hangul installed files:
+  - /usr/lib/ibus/ibus-engine-hangul (core input engine)
+  - /usr/share/ibus/component/hangul.xml (component definition)
+  - /etc/xdg/autostart/ibus.desktop (auto-start)
+  - /etc/skel/.config/ibus/ibus-hangul.conf (configuration)
+- Keyboard layout: Dubeolsik (2-set Korean, QWERTY)
+- Hanja conversion key: F9
+- Python 3.12 'imp' module removal caused GUI setup tool installation failure (non-critical)
+- **Result:** ✅ Korean typing fully supported (Ctrl+P to toggle Korean/English)
+- **Issue:** Ctrl+P conflicts with Firefox print function
+
+---
+
+### 67-v49 → 67-v50 - 2026-02-13
+**Changes:**
+- Changed toggle key: Ctrl+P → **Ctrl+Y**
+- **Fixed:** Ctrl+P was captured by Firefox's print function
+- Modified install-ibus-hangul.sh:
+  - HangulKeys=control+p → HangulKeys=control+y
+- **Result:** ✅ Korean/English toggle without Firefox conflict
+
+---
+
+### 67-v50 → 67-v51 - 2026-02-13
+**Changes:**
+- Enhanced ibus-daemon debugging:
+  - Added library dependency check logs using ldd
+  - `--verbose` option for detailed log output
+  - Exit code checks for ibus-daemon execution failure detection
+- Added ibus-daemon status diagnostics to xinitrc
+- **Purpose:** Investigate why ibus-daemon runs but Korean input doesn't work
+- **Result:** ❌ ibus-daemon runs but Korean/English toggle not working
+
+---
+
+### 67-v51 → 67-v52 - 2026-02-13
+**Changes:**
+- Removed ibus-daemon `--daemonize` option
+- Foreground execution revealed actual error message:
+  ```
+  Can not execute default config program
+  ```
+- **Issue Found:** ibus was built with `--disable-dconf`, disabling all config backends, making ibus unable to save/read settings
+- **Result:** ❌ Root cause identified (missing config backend)
+
+---
+
+### 67-v52 → 67-v53 - 2026-02-14
+**Changes:**
+- Rebuilt ibus with `--enable-memconf` (memory-based config backend)
+- Added `--config=memconf` to ibus-daemon startup options
+- Added /root/.config/ibus/bus directory creation
+- Updated install-ibus-hangul.sh with memconf build options
+- **Root Cause Fix:**
+  - Before: Built with `--disable-dconf` → No config backend → "Can not execute default config program" crash
+  - After: Built with `--enable-memconf` → Memory-based config backend
+- **Result:** ✅ All 5 ibus processes running (ibus-daemon, ibus-memconf, ibus-x11, ibus-portal, ibus-engine-hangul)
+- **Result:** ❌ Korean/English toggle still not working (GTK can't recognize im-ibus.so)
+
+---
+
+### 67-v53 → 67-v54 - 2026-02-19
+**Changes:**
+- **[Critical Fix 1] Wayland Dependency Patch:**
+  - When building on WSL2, GTK3 headers define `GDK_WINDOWING_WAYLAND`, causing im-ibus.so to include Wayland symbols
+  - MaruxOS GTK3 is X11-only, so Wayland symbols don't exist
+  - Fix: sed patch in ibus source code replacing `GDK_WINDOWING_WAYLAND` → `MARUX_DISABLED_WAYLAND`
+  - Completely resolved `undefined symbol: gdk_wayland_display_get_type` error
+- **[Critical Fix 2] Manual GTK3 immodules Cache Registration:**
+  - `gtk-query-immodules-3.0` fails to register im-ibus.so in cache
+  - squashfs is read-only, cannot modify `/usr/lib/gtk-3.0/3.0.0/immodules.cache` at runtime
+  - Fix: Manually add ibus entry to `/tmp/gtk-immodules.cache` and set `GTK_IM_MODULE_FILE` environment variable
+  - Build script also manually adds ibus entry to immodules.cache
+- **[Critical Fix 3] Korean/English Toggle Fix:**
+  - Set `initial-input-mode` to `'latin'` (English default)
+  - Set hangul engine `switch-keys` to `'Hangul,Shift+space,Control+y'`
+  - Uses hangul engine internal toggle mechanism instead of ibus trigger key
+- **Diagnostic Logging:**
+  - Added 7-step Korean input diagnostic log to xinitrc (`/tmp/hangul-diag.log`)
+  - Checks im-ibus.so existence/symbols, immodules.cache, ibus process status, environment variables
+- **Result:** ✅ **Korean Input Fully Working!**
+  - Ctrl+Y / Shift+Space: Korean/English toggle
+  - Dubeolsik (2-set) QWERTY keyboard layout
+  - F9: Hanja conversion
+  - Full Korean input support in Firefox and all GTK3 apps
+
+---
+
+## MaruxOS 1.1 Release Notes
+
+**MaruxOS 1.1** (codename 67) is the first major update with full Korean input support.
+
+### Key Changes
+- **Korean Input Support**: Fully working ibus-hangul Korean input method
+- **Korean Locale**: Full ko_KR.UTF-8 support (14 LC_* variables)
+- **Korean Fonts**: Nanum Gothic/Myeongjo 5 variants installed
+- **Korean/English Toggle**: Ctrl+Y or Shift+Space
+
+### Technical Components
+| Component | Version | Notes |
+|-----------|---------|-------|
+| libhangul | 0.2.0 | Korean composition library |
+| ibus | 1.5.29 | Input Bus framework (memconf backend) |
+| ibus-hangul | 1.5.5 | Korean input engine |
+
+### Critical Issues Resolved
+1. **Missing ibus config backend** → Enabled memory-based config backend with `--enable-memconf`
+2. **im-ibus.so Wayland symbol error** → Source code patch to disable Wayland code
+3. **GTK3 immodules cache not registered** → Manual cache entry injection + `GTK_IM_MODULE_FILE` env var
+4. **Korean/English toggle not working** → hangul engine `switch-keys` for internal toggle mechanism
+
+---
+
+## Build Information
+
+| Item | Value |
+|------|-------|
+| First Build | 2025-12-16 |
+| Current Version | 67-v54 |
+| Codename | 67 (formerly Phoenix) |
+| Version | 1.1 |
+| Compression | gzip (squashfs) |
+| ISO Size | ~1.2GB |
+| Total Builds | 92 (x86_64 + v2~v33 + 67-v1~v54) |
+
+---
+
+## File Structure
+```
+MaruxOS-1.1-67-v54.iso
+├── boot/
+│   ├── grub/
+│   │   ├── grub.cfg
+│   │   └── bios.img
+│   ├── vmlinuz
+│   └── initrd.img
+└── live/
+    └── filesystem.squashfs (gzip compression)
+```
+
+---
+
+## Version Timeline
+
+| Date | Version | Key Changes |
+|------|---------|------------|
+| 2025-12-16 | x86_64 ~ v10 | Initial system construction |
+| 2025-12-17 | v11 ~ v24 | System stabilization and improvements |
+| 2025-12-18 | v25 ~ v31 | Desktop environment construction |
+| 2025-12-19 | v32 ~ 67-v3 | Terminal, codename change |
+| 2025-12-20 | 67-v4 ~ 67-v10 | File manager attempts, window buttons |
+| 2025-12-23 | 67-v11 | Window button click events fixed |
+| 2025-12-24 | 67-v12 | Custom icons, system tray, Chromium |
+| 2025-12-30 | 67-v13 ~ v15 | Chromium fix, mc improvement, Windows 11 style taskbar |
+| 2026-01-02 | 67-v16 | Firefox browser installation |
+| 2026-01-03 | 67-v17 | Firefox debug mode, library additions |
+| 2026-01-03 | 67-v18 | Firefox locale fix, system tray utilities |
+| 2026-01-04 | 67-v19 | Custom icon theme (failed) |
+| 2026-01-10 | 67-v20 | xinitrc fix, wallpaper path, GTK icon theme |
+| 2026-01-10 | 67-v21 | tint2 buttons for WiFi/Volume/Battery (failed) |
+| 2026-01-10 | 67-v22 | tint2 executor system icons |
+| 2026-01-10 | 67-v23 | Real network status icons |
+| 2026-01-11 | 67-v24 | dhcpcd installation, DHCP support |
+| 2026-01-11 | 67-v25 | /etc/issue codename Phoenix → 67 |
+| 2026-01-11 | 67-v26 | dhcpcd in xinitrc, rc.local |
+| 2026-01-11 | 67-v27 | rc.sysinit/lsb-release codename, auto interface detection |
+| 2026-01-20 | 67-v28 | Auto network interface activation (ip link set up) |
+| 2026-01-20 | 67-v29 | Network initialization logging (/tmp/Network_log.txt) |
+| 2026-01-21 | 67-v30 | initrd "Phoenix" → "67" |
+| 2026-01-21 | 67-v31 | squashfs rebuild (with xinitrc) |
+| 2026-01-21 | 67-v32 | /etc/skel/.bash_profile (auto startx) |
+| 2026-01-21 | 67-v33 | rc.sysinit copy command fix (cp -a) |
+| 2026-01-21 | 67-v34 | Explicit .xinitrc copy in rc.sysinit |
+| 2026-01-21 | 67-v35 | System-wide xinitrc network logging |
+| 2026-01-22 ~ 01-28 | 67-v36 | GitHub Release v1.0, documentation overhaul, Public Domain |
+| 2026-02-13 | 67-v37 | Firefox icon duplication fix (StartupWMClass=Navigator) |
+| 2026-02-13 | 67-v38 | Korean locale support (ko_KR.UTF-8, ibus setup) |
+| 2026-02-13 | 67-v44 ~ v47 | Full Korean locale support, Nanum fonts |
+| 2026-02-13 | 67-v49 | ibus-hangul installation, Ctrl+P toggle |
+| 2026-02-13 | 67-v50 | Toggle key Ctrl+P → Ctrl+Y (Firefox conflict fix) |
+| 2026-02-13 | 67-v51 | ibus-daemon debugging (ldd, verbose, exit code) |
+| 2026-02-13 | 67-v52 | Removed --daemonize, foreground execution for real errors |
+| 2026-02-14 | 67-v53 | ibus memconf config backend enabled (root cause fix) |
+| 2026-02-19 | **67-v54** | **Korean input fully working! (v1.1 release)** |
+
+---
 
 ## Technical Notes
 
@@ -757,5 +1016,14 @@ pcmanfm requires GLib 2.68+ for the `g_once_init_leave_pointer` symbol. The LFS 
 ### Why not xfe?
 xfe uses the FOX toolkit, which has compatibility issues with the LFS system libraries, resulting in segmentation faults on startup.
 
-### Current Solution
+### Current File Manager
 mc (Midnight Commander) is used as the file manager. While terminal-based, it's stable and fully functional with the LFS system libraries.
+
+### WSL2 Cross-Compilation Wayland Issue
+WSL2's GTK3 includes Wayland support, defining the `GDK_WINDOWING_WAYLAND` macro. The ibus GTK3 IM module (im-ibus.so) references this macro and includes Wayland-specific code. MaruxOS is X11-only, so Wayland symbols don't exist, causing `undefined symbol` errors. The ibus `--disable-wayland` configure option does NOT control the GTK3 IM module's Wayland code (it's controlled by `#ifdef` in GTK3 headers). Solution: Direct source code replacement of `GDK_WINDOWING_WAYLAND` with `MARUX_DISABLED_WAYLAND` using sed.
+
+### Live ISO GTK immodules Cache Issue
+squashfs is read-only, so `/usr/lib/gtk-3.0/3.0.0/immodules.cache` cannot be modified at runtime. `gtk-query-immodules-3.0` also fails to auto-register im-ibus.so in the cache. Solution: xinitrc manually adds the ibus entry to `/tmp/gtk-immodules.cache` and sets the `GTK_IM_MODULE_FILE` environment variable to point to this file.
+
+### ibus memconf Config Backend
+LFS doesn't have a dconf/GSettings database, so ibus's default config backend (dconf) cannot be used. Building ibus with `--enable-memconf` enables a memory-based config backend. Runtime settings injected via gsettings commands are stored in memory by memconf.

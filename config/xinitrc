@@ -1,95 +1,230 @@
 #!/bin/sh
-# MaruxOS System xinitrc
-# /etc/X11/xinit/xinitrc
 
 # XDG Runtime Directory
 export XDG_RUNTIME_DIR=/tmp/runtime-root
 mkdir -p $XDG_RUNTIME_DIR
 chmod 700 $XDG_RUNTIME_DIR
 
-# Locale settings (Korean, Japanese, UTF-8)
+# 로케일 설정 (한국어 UTF-8 완벽 지원)
 export LANG=ko_KR.UTF-8
-export LC_ALL=
+export LC_ALL=ko_KR.UTF-8
 export LC_CTYPE=ko_KR.UTF-8
+export LC_NUMERIC=ko_KR.UTF-8
+export LC_TIME=ko_KR.UTF-8
+export LC_COLLATE=ko_KR.UTF-8
+export LC_MONETARY=ko_KR.UTF-8
 export LC_MESSAGES=ko_KR.UTF-8
-export LC_COLLATE=C
+export LC_PAPER=ko_KR.UTF-8
+export LC_NAME=ko_KR.UTF-8
+export LC_ADDRESS=ko_KR.UTF-8
+export LC_TELEPHONE=ko_KR.UTF-8
+export LC_MEASUREMENT=ko_KR.UTF-8
+export LC_IDENTIFICATION=ko_KR.UTF-8
 
-# Fallback to UTF-8 if Korean locale unavailable
-if ! locale -a 2>/dev/null | grep -q "ko_KR"; then
-    export LANG=C.UTF-8
-    export LC_CTYPE=C.UTF-8
-fi
-
-# Input Method for Korean/Japanese
+# 한국어 입력기 설정 (ibus/fcitx)
 export GTK_IM_MODULE=ibus
 export QT_IM_MODULE=ibus
 export XMODIFIERS=@im=ibus
 
-# Network initialization log
+# 한국어 폰트 설정
+export LANG_FONTS="NanumGothic,DejaVu Sans,Sans"
+
+# ========================================
+# 한글 입력 진단 로그 (/tmp/hangul-diag.log)
+# ========================================
+DIAG="/tmp/hangul-diag.log"
+echo "=== MaruxOS Korean Input Diagnostics ===" > $DIAG
+echo "Date: $(date)" >> $DIAG
+echo "" >> $DIAG
+
+# [진단1] im-ibus.so 존재 및 심볼 확인
+echo "=== [1] im-ibus.so 파일 확인 ===" >> $DIAG
+if [ -f /usr/lib/gtk-3.0/3.0.0/immodules/im-ibus.so ]; then
+    echo "  EXISTS: YES" >> $DIAG
+    ls -la /usr/lib/gtk-3.0/3.0.0/immodules/im-ibus.so >> $DIAG 2>&1
+    echo "" >> $DIAG
+    echo "  ldd (의존성):" >> $DIAG
+    ldd /usr/lib/gtk-3.0/3.0.0/immodules/im-ibus.so >> $DIAG 2>&1
+    echo "" >> $DIAG
+    echo "  undefined symbols 확인:" >> $DIAG
+    ldd -r /usr/lib/gtk-3.0/3.0.0/immodules/im-ibus.so 2>&1 | grep "undefined" >> $DIAG 2>&1 || echo "  NO undefined symbols (GOOD!)" >> $DIAG
+else
+    echo "  EXISTS: NO - im-ibus.so가 설치되지 않음!" >> $DIAG
+fi
+echo "" >> $DIAG
+
+# [진단2] immodules.cache 확인
+echo "=== [2] GTK immodules.cache 확인 ===" >> $DIAG
+if [ -f /usr/lib/gtk-3.0/3.0.0/immodules.cache ]; then
+    echo "  CACHE FILE: EXISTS" >> $DIAG
+    IBUS_IN_CACHE=$(grep -c "ibus" /usr/lib/gtk-3.0/3.0.0/immodules.cache 2>/dev/null || echo "0")
+    echo "  IBUS entries: $IBUS_IN_CACHE" >> $DIAG
+    if [ "$IBUS_IN_CACHE" -gt 0 ]; then
+        echo "  RESULT: ibus가 캐시에 등록됨 (GOOD!)" >> $DIAG
+        grep "ibus" /usr/lib/gtk-3.0/3.0.0/immodules.cache >> $DIAG 2>&1
+    else
+        echo "  RESULT: ibus가 캐시에 없음! GTK가 im-ibus.so를 로드하지 못함!" >> $DIAG
+    fi
+else
+    echo "  CACHE FILE: NOT FOUND" >> $DIAG
+fi
+echo "" >> $DIAG
+
+# [진단3] GTK3 immodules 캐시 - ibus 항목 수동 등록
+echo "=== [3] GTK immodules cache ibus 등록 ===" >> $DIAG
+if ! grep -q ibus /usr/lib/gtk-3.0/3.0.0/immodules.cache 2>/dev/null; then
+    echo "  ibus가 기본 캐시에 없음 -> 수동으로 ibus 항목 추가" >> $DIAG
+    # 기존 캐시 복사 후 ibus 항목 수동 추가
+    cp /usr/lib/gtk-3.0/3.0.0/immodules.cache /tmp/gtk-immodules.cache 2>/dev/null || true
+    cat >> /tmp/gtk-immodules.cache << 'IBUS_CACHE_EOF'
+
+"/usr/lib/gtk-3.0/3.0.0/immodules/im-ibus.so"
+"ibus" "Intelligent Input Bus" "ibus10" "/usr/share/locale" ""
+
+IBUS_CACHE_EOF
+    export GTK_IM_MODULE_FILE=/tmp/gtk-immodules.cache
+    echo "  GTK_IM_MODULE_FILE=$GTK_IM_MODULE_FILE" >> $DIAG
+    if grep -q ibus /tmp/gtk-immodules.cache 2>/dev/null; then
+        echo "  ibus 수동 등록 성공!" >> $DIAG
+    fi
+else
+    echo "  기본 캐시에 ibus 이미 존재 - 추가 불필요" >> $DIAG
+fi
+echo "" >> $DIAG
+
+# ibus 설정 디렉토리 설정
+export XDG_CONFIG_HOME="$HOME/.config"
+mkdir -p "$XDG_CONFIG_HOME/ibus"
+mkdir -p "$XDG_CONFIG_HOME/ibus/bus"
+
+# ibus 입력기 데몬 시작
+if [ -x /usr/bin/ibus-daemon ]; then
+    # 기존 ibus-daemon 종료
+    killall ibus-daemon 2>/dev/null || true
+
+    # ibus 기본 설정 파일 생성
+    cat > "$XDG_CONFIG_HOME/ibus/ibus.conf" << 'IBUS_CONF_EOF'
+[general]
+engines-order = ['hangul']
+preload-engines = ['hangul']
+IBUS_CONF_EOF
+
+    # dbus-launch
+    eval $(dbus-launch --sh-syntax)
+    export DBUS_SESSION_BUS_ADDRESS
+
+    # ibus-daemon 시작
+    /usr/bin/ibus-daemon --xim --verbose --panel disable >> /tmp/ibus-daemon.log 2>&1 &
+    DAEMON_PID=$!
+
+    # daemon이 완전히 시작될 때까지 대기
+    sleep 5
+
+    # hangul 엔진 활성화
+    ibus engine hangul 2>> $DIAG || true
+
+    # memconf에 한영 전환 키 설정 주입
+    gsettings set org.freedesktop.ibus.general.hotkey trigger "['Control+y']" 2>/dev/null || true
+    gsettings set org.freedesktop.ibus.general.hotkey triggers "['Control+y']" 2>/dev/null || true
+    gsettings set org.freedesktop.ibus.general preload-engines "['hangul']" 2>/dev/null || true
+    gsettings set org.freedesktop.ibus.general use-global-engine true 2>/dev/null || true
+    gsettings set org.freedesktop.ibus.engine.hangul initial-input-mode 'latin' 2>/dev/null || true
+    gsettings set org.freedesktop.ibus.engine.hangul switch-keys 'Hangul,Shift+space,Control+y' 2>/dev/null || true
+
+    # [진단4] ibus 상태 확인
+    echo "=== [4] ibus 프로세스 상태 ===" >> $DIAG
+    ps aux | grep ibus | grep -v grep >> $DIAG 2>&1
+    echo "" >> $DIAG
+
+    echo "=== [5] ibus engine 상태 ===" >> $DIAG
+    echo "  Active engine: $(ibus engine 2>&1)" >> $DIAG
+    echo "  Hotkey trigger: $(gsettings get org.freedesktop.ibus.general.hotkey trigger 2>&1)" >> $DIAG
+    echo "  Hotkey triggers: $(gsettings get org.freedesktop.ibus.general.hotkey triggers 2>&1)" >> $DIAG
+    echo "  Preload engines: $(gsettings get org.freedesktop.ibus.general preload-engines 2>&1)" >> $DIAG
+    echo "  Initial input mode: $(gsettings get org.freedesktop.ibus.engine.hangul initial-input-mode 2>&1)" >> $DIAG
+    echo "" >> $DIAG
+
+    echo "=== [6] 환경변수 ===" >> $DIAG
+    echo "  GTK_IM_MODULE=$GTK_IM_MODULE" >> $DIAG
+    echo "  QT_IM_MODULE=$QT_IM_MODULE" >> $DIAG
+    echo "  XMODIFIERS=$XMODIFIERS" >> $DIAG
+    echo "  DBUS_SESSION_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS" >> $DIAG
+    echo "  GTK_IM_MODULE_FILE=${GTK_IM_MODULE_FILE:-NOT SET}" >> $DIAG
+    echo "" >> $DIAG
+
+    echo "=== [7] ibus-daemon.log (last 20 lines) ===" >> $DIAG
+    tail -20 /tmp/ibus-daemon.log >> $DIAG 2>&1
+    echo "" >> $DIAG
+
+    echo "=== DIAGNOSTICS COMPLETE ===" >> $DIAG
+    echo "부팅 후 'cat /tmp/hangul-diag.log' 로 확인하세요" >> $DIAG
+fi
+
+# 네트워크 초기화 로그 시작
 LOGFILE="/tmp/Network_log.txt"
 echo "=== MaruxOS Network Initialization Log ===" > $LOGFILE
 echo "Date: $(date)" >> $LOGFILE
 echo "" >> $LOGFILE
 
-# Detect and activate network interfaces
-echo "=== Network Interfaces ===" >> $LOGFILE
-ls /sys/class/net/ >> $LOGFILE 2>&1
+# 네트워크 인터페이스 확인
+echo "Checking network interfaces..." >> $LOGFILE
+ls -la /sys/class/net/ >> $LOGFILE 2>&1
 echo "" >> $LOGFILE
 
-# Bring up interfaces and run DHCP
+sleep 2
+
+# 인터페이스 활성화
 for iface in /sys/class/net/*; do
     iface_name=$(basename $iface)
-    if [ "$iface_name" != "lo" ]; then
-        echo "Activating $iface_name..." >> $LOGFILE
-        ip link set $iface_name up >> $LOGFILE 2>&1
-        sleep 1
-        /usr/sbin/dhcpcd $iface_name >> $LOGFILE 2>&1 &
-        echo "dhcpcd started for $iface_name (PID: $!)" >> $LOGFILE
+    echo "Processing interface: $iface_name" >> $LOGFILE
+
+    if [ "$iface_name" = "lo" ]; then
+        echo "  Skipping loopback interface" >> $LOGFILE
+        continue
     fi
+
+    echo "  Bringing up $iface_name..." >> $LOGFILE
+    ip link set $iface_name up >> $LOGFILE 2>&1
+
+    echo "  Interface status:" >> $LOGFILE
+    ip link show $iface_name >> $LOGFILE 2>&1
+
+    echo "  Starting dhcpcd on $iface_name..." >> $LOGFILE
+    /usr/sbin/dhcpcd $iface_name >> $LOGFILE 2>&1 &
+    echo "  dhcpcd started with PID $!" >> $LOGFILE
+    echo "" >> $LOGFILE
 done
 
-# Wait for DHCP
-sleep 3
-
-# Log final network status
-echo "" >> $LOGFILE
+# 최종 네트워크 상태
 echo "=== Final Network Status ===" >> $LOGFILE
 ip addr >> $LOGFILE 2>&1
 echo "" >> $LOGFILE
-echo "=== Route Table ===" >> $LOGFILE
 ip route >> $LOGFILE 2>&1
 echo "" >> $LOGFILE
-echo "=== Network Initialization Complete ===" >> $LOGFILE
+echo "=== Log Complete ===" >> $LOGFILE
+chmod 644 $LOGFILE
 
-# Auto-sync config from server (if available)
-CONFIG_SERVER="192.168.0.163:8080"
-mkdir -p ~/.config/tint2
-wget -q -T 3 http://$CONFIG_SERVER/tint2rc -O ~/.config/tint2/tint2rc 2>/dev/null
-wget -q -T 3 http://$CONFIG_SERVER/terminal.desktop -O /usr/share/applications/terminal.desktop 2>/dev/null
-wget -q -T 3 http://$CONFIG_SERVER/filemanager.desktop -O /usr/share/applications/filemanager.desktop 2>/dev/null
+# GTK 설정
+export GTK2_RC_FILES=/etc/gtk-2.0/gtkrc
+export GTK_THEME=Adwaita
 
-# GTK Theme
-export GTK_THEME=Adwaita:dark
-export GTK2_RC_FILES=/usr/share/themes/Adwaita-dark/gtk-2.0/gtkrc
-
-# Set wallpaper
+# 배경화면
 if [ -f /usr/share/pixmaps/maruxos/marux-desktop.png ]; then
-    feh --bg-fill /usr/share/pixmaps/maruxos/marux-desktop.png &
-elif [ -f /usr/share/backgrounds/marux-desktop.png ]; then
-    feh --bg-fill /usr/share/backgrounds/marux-desktop.png &
+    feh --bg-scale /usr/share/pixmaps/maruxos/marux-desktop.png &
 fi
 
-# Start Openbox window manager
+# Openbox 윈도우 매니저
 openbox &
+sleep 0.5
 
-# Start tint2 panel
-sleep 1
-tint2 &
-
-# Start input method (if installed)
-if command -v ibus-daemon >/dev/null 2>&1; then
-    ibus-daemon -drx &
+# 시스템 트레이 앱들
+if [ -x /usr/bin/nm-applet ]; then
+    /usr/bin/nm-applet 2>/dev/null &
 fi
 
-# Keep session alive
-exec sleep infinity
+if [ -x /usr/bin/volumeicon ]; then
+    /usr/bin/volumeicon 2>/dev/null &
+fi
+
+# tint2 패널
+exec tint2

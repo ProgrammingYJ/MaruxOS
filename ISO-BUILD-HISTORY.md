@@ -741,28 +741,213 @@
   - `StartupNotify=true` 추가
 - **문제:** tint2 패널에서 Firefox 런처 아이콘과 실행 중인 창이 별도 아이콘으로 표시
 - **원인:** Firefox의 실제 WM_CLASS는 `Navigator`인데 .desktop 파일에는 `firefox`로 설정되어 있었음
-- **결과:** ✅ Firefox 실행 시 단일 아이콘으로 표시 (예상)
+- **결과:** ✅ Firefox 실행 시 단일 아이콘으로 표시
 
 ---
 
+### 67-v37 → 67-v38 - 2026-02-13
+**변경사항:**
+- 한국어 로케일 지원 추가
+- /etc/locale.gen 파일 생성:
+  - en_US.UTF-8 UTF-8
+  - ko_KR.UTF-8 UTF-8 (한국어)
+  - ja_JP.UTF-8 UTF-8 (일본어)
+  - zh_CN.UTF-8 UTF-8 (중국어)
+- /etc/locale.conf 파일 생성:
+  - LANG=ko_KR.UTF-8
+  - LC_CTYPE=ko_KR.UTF-8
+  - LC_MESSAGES=en_US.UTF-8 (영문 시스템 메시지)
+  - LC_COLLATE=C
+- xinitrc 로케일 설정 개선:
+  - LANG, LC_CTYPE, LC_MESSAGES, LC_COLLATE, LC_NUMERIC, LC_TIME 환경변수 설정
+  - 한국어 로케일 미지원 시 en_US.UTF-8로 자동 폴백
+- 한국어/일본어 입력기 설정:
+  - GTK_IM_MODULE=ibus
+  - QT_IM_MODULE=ibus
+  - XMODIFIERS=@im=ibus
+  - ibus-daemon 자동 실행 (설치 시)
+- 로케일 디렉토리 생성:
+  - /usr/share/locale/ko/LC_MESSAGES
+  - /usr/share/locale/ja/LC_MESSAGES
+  - /usr/share/locale/zh_CN/LC_MESSAGES
+  - /usr/lib/locale
+- **결과:** ✅ 한국어 UTF-8 인코딩 지원, 한글 입출력 환경 구축
+
+---
+
+### 67-v38 → 67-v44 - 2026-02-13
+**변경사항:**
+- v38~v43: 한국어 로케일 테스트 및 롤백
+- 릴리즈 ISO에서 설정 파일 추출 및 복원
+- tint2rc 위치 수정: `/etc/skel/.config/tint2/` → `/etc/xdg/tint2/`
+- Desktop 파일 수정:
+  - maruxos-menu.desktop → marux-menu.desktop
+  - terminal.desktop, filemanager.desktop 제거
+  - xterm.desktop, mc.desktop, battery.desktop, network.desktop, volume.desktop 추가
+- **결과:** ✅ 릴리즈 버전으로 완전 롤백 성공
+
+---
+
+### 67-v44 → 67-v47 - 2026-02-13
+**변경사항:**
+- 완벽한 한국어 로케일 지원 추가:
+  - 모든 LC_* 환경변수 한국어로 설정 (14개 변수)
+  - locale.gen: ko_KR.UTF-8, ko_KR.EUC-KR 추가
+  - locale.conf: 모든 LC_* 변수 설정
+  - /etc/environment: 시스템 전역 로케일 설정
+- xinitrc 한국어 로케일 설정:
+  - LC_ALL, LC_CTYPE, LC_NUMERIC, LC_TIME, LC_COLLATE 등
+  - GTK_IM_MODULE=ibus, QT_IM_MODULE=ibus, XMODIFIERS=@im=ibus
+- localedef로 한국어 로케일 생성 (ko_KR.UTF-8, en_US.UTF-8)
+- Nanum 폰트 설치:
+  - NanumGothic (Regular, Bold, ExtraBold)
+  - NanumMyeongjo (Regular, Bold)
+  - 총 5개 폰트 파일 설치
+- fc-cache로 폰트 캐시 업데이트
+- 한국어 폰트 확인 및 경고 메시지 추가
+- **결과:** ✅ 한국어 텍스트 완벽 표시, 로케일 완전 지원
+
+---
+
+### 67-v47 → 67-v49 - 2026-02-13
+**변경사항:**
+- ibus-hangul 한글 입력기 설치:
+  - libhangul 0.2.0 (한글 조합 라이브러리)
+  - ibus 1.5.29 (입력 버스 프레임워크)
+  - ibus-hangul 1.5.5 (한글 입력 엔진)
+- 한영 전환 키 수정: Ctrl+Shift+Tab → **Ctrl+P**
+- GRUB 메뉴 한글 깨짐 수정:
+  - "MaruxOS 1.0 (67) - 한글 입력 지원" → "MaruxOS 1.0 (67) - Korean Input"
+- ibus-hangul 설치 파일:
+  - /usr/lib/ibus/ibus-engine-hangul (핵심 입력 엔진)
+  - /usr/share/ibus/component/hangul.xml (컴포넌트 정의)
+  - /etc/xdg/autostart/ibus.desktop (자동 시작)
+  - /etc/skel/.config/ibus/ibus-hangul.conf (설정 파일)
+- 자판 배열: 2벌식 (QWERTY)
+- 한자 변환 키: F9
+- Python 3.12 'imp' 모듈 제거로 인한 GUI 설정 도구 설치 실패 (비중요)
+- **결과:** ✅ 한글 타이핑 완전 지원 (Ctrl+P로 한영 전환)
+- **문제:** Ctrl+P가 Firefox 인쇄 기능과 충돌
+
+---
+
+### 67-v49 → 67-v50 - 2026-02-13
+**변경사항:**
+- 한영 전환 키 수정: Ctrl+P → **Ctrl+Y**
+- **문제 해결:** Firefox에서 Ctrl+P가 인쇄 기능(print)으로 선점되어 있던 문제
+- install-ibus-hangul.sh 수정:
+  - HangulKeys=control+p → HangulKeys=control+y
+- **결과:** ✅ Firefox와 충돌 없이 한영 전환 가능
+
+---
+
+### 67-v50 → 67-v51 - 2026-02-13
+**변경사항:**
+- ibus-daemon 디버깅 강화:
+  - ldd로 라이브러리 의존성 확인 로그 추가
+  - `--verbose` 옵션으로 상세 로그 출력
+  - exit code 체크로 ibus-daemon 실행 실패 감지
+- xinitrc에 ibus-daemon 상태 진단 코드 추가
+- **목적:** ibus-daemon이 실행되지만 한글 입력이 안 되는 원인 파악
+- **결과:** ❌ ibus-daemon 실행은 되나 한영 전환 미작동
+
+---
+
+### 67-v51 → 67-v52 - 2026-02-13
+**변경사항:**
+- ibus-daemon `--daemonize` 옵션 제거
+- 포그라운드 실행으로 실제 에러 메시지 확인:
+  ```
+  Can not execute default config program
+  ```
+- **문제 발견:** ibus 빌드 시 `--disable-dconf`로 설정 백엔드를 모두 비활성화하여 ibus가 설정을 저장/읽기 불가
+- **결과:** ❌ 근본 원인 확인됨 (설정 백엔드 부재)
+
+---
+
+### 67-v52 → 67-v53 - 2026-02-14
+**변경사항:**
+- ibus 재빌드: `--enable-memconf` (메모리 기반 설정 백엔드 활성화)
+- ibus-daemon 실행 옵션에 `--config=memconf` 추가
+- /root/.config/ibus/bus 디렉토리 생성 추가
+- install-ibus-hangul.sh에 memconf 빌드 옵션 반영
+- **근본 원인 해결:**
+  - 이전: `--disable-dconf`로 빌드 → 설정 백엔드 없음 → "Can not execute default config program" 크래시
+  - 현재: `--enable-memconf`로 빌드 → 메모리 기반 설정 백엔드 사용
+- **결과:** ✅ ibus-daemon 5개 프로세스 모두 정상 실행 (ibus-daemon, ibus-memconf, ibus-x11, ibus-portal, ibus-engine-hangul)
+- **결과:** ❌ 한영 전환 여전히 미작동 (GTK가 im-ibus.so를 인식 못함)
+
+---
+
+### 67-v53 → 67-v54 - 2026-02-19
+**변경사항:**
+- **[핵심 수정 1] Wayland 의존성 패치:**
+  - WSL2에서 빌드 시 GTK3 헤더에 `GDK_WINDOWING_WAYLAND`이 정의되어 im-ibus.so에 Wayland 심볼 포함
+  - MaruxOS의 GTK3는 X11 전용이라 Wayland 심볼 미존재
+  - 해결: ibus 소스 코드에서 `GDK_WINDOWING_WAYLAND` → `MARUX_DISABLED_WAYLAND`로 sed 패치
+  - `undefined symbol: gdk_wayland_display_get_type` 에러 완전 해결
+- **[핵심 수정 2] GTK3 immodules cache 수동 등록:**
+  - `gtk-query-immodules-3.0`이 im-ibus.so를 캐시에 등록하지 못하는 문제
+  - squashfs는 읽기 전용이므로 `/usr/lib/gtk-3.0/3.0.0/immodules.cache` 직접 수정 불가
+  - 해결: `/tmp/gtk-immodules.cache`에 ibus 항목 수동 추가 후 `GTK_IM_MODULE_FILE` 환경변수로 지정
+  - 빌드 스크립트에서도 immodules.cache에 ibus 항목 수동 추가
+- **[핵심 수정 3] 한영 전환 동작 수정:**
+  - `initial-input-mode`를 `'latin'`으로 설정 (영어 기본)
+  - hangul 엔진의 `switch-keys`에 `'Hangul,Shift+space,Control+y'` 설정
+  - ibus trigger 키 대신 hangul 엔진 내부 전환 메커니즘 사용
+- **진단 로그 추가:**
+  - xinitrc에 7단계 한글 입력 진단 로그 추가 (`/tmp/hangul-diag.log`)
+  - im-ibus.so 존재/심볼 확인, immodules.cache 확인, ibus 프로세스 상태, 환경변수 확인
+- **결과:** ✅ **한글 입력 완전 작동!**
+  - Ctrl+Y / Shift+Space: 한영 전환
+  - 2벌식 QWERTY 자판 배열
+  - F9: 한자 변환
+  - Firefox 등 GTK3 앱에서 한글 입력 완벽 지원
+
+---
+
+## MaruxOS 1.1 릴리즈 노트
+
+**MaruxOS 1.1** (코드네임 67)은 한글 입력 완전 지원이 추가된 첫 번째 메이저 업데이트입니다.
+
+### 주요 변경사항
+- **한글 입력 지원**: ibus-hangul 기반 한글 입력기 완전 작동
+- **한국어 로케일**: ko_KR.UTF-8 완벽 지원 (14개 LC_* 변수)
+- **한국어 폰트**: Nanum Gothic/Myeongjo 5종 설치
+- **한영 전환**: Ctrl+Y 또는 Shift+Space
+
+### 기술 구성
+| 컴포넌트 | 버전 | 비고 |
+|----------|------|------|
+| libhangul | 0.2.0 | 한글 조합 라이브러리 |
+| ibus | 1.5.29 | 입력 버스 프레임워크 (memconf 백엔드) |
+| ibus-hangul | 1.5.5 | 한글 입력 엔진 |
+
+### 해결한 핵심 문제들
+1. **ibus 설정 백엔드 부재** → `--enable-memconf`로 메모리 기반 설정 백엔드 활성화
+2. **im-ibus.so Wayland 심볼 에러** → 소스 코드 패치로 Wayland 코드 비활성화
+3. **GTK3 immodules cache 미등록** → 수동 캐시 항목 주입 + `GTK_IM_MODULE_FILE` 환경변수
+4. **한영 전환 미작동** → hangul 엔진 `switch-keys` 설정으로 내부 전환 메커니즘 활용
+
+---
 
 ## 빌드 정보
 
 | 항목 | 값 |
 |------|-----|
 | 최초 빌드 | 2025-12-16 |
-| 현재 버전 | 67-v35 |
+| 현재 버전 | 67-v54 |
 | 코드네임 | 67 (구 Phoenix) |
-| 버전 | 1.0 |
+| 버전 | 1.1 |
 | 압축 방식 | gzip (squashfs) |
 | ISO 크기 | ~1.2GB |
-| 총 빌드 횟수 | 69회 (x86_64 + v2~v33 + 67-v1~v35) |
+| 총 빌드 횟수 | 92회 (x86_64 + v2~v33 + 67-v1~v54) |
 
 ---
 
 ## 파일 구조
 ```
-MaruxOS-1.0-67-v35.iso
+MaruxOS-1.1-67-v54.iso
 ├── boot/
 │   ├── grub/
 │   │   ├── grub.cfg
@@ -807,3 +992,38 @@ MaruxOS-1.0-67-v35.iso
 | 2026-01-21 | 67-v33 | rc.sysinit 복사 명령어 수정 (cp -a) |
 | 2026-01-21 | 67-v34 | rc.sysinit에 .xinitrc 명시적 복사 추가 |
 | 2026-01-21 | 67-v35 | 시스템 전역 xinitrc에 네트워크 로그 코드 추가 |
+| 2026-01-22 ~ 01-28 | 67-v36 | GitHub Release v1.0, 문서 전면 개편, Public Domain 라이선스 |
+| 2026-02-13 | 67-v37 | Firefox 아이콘 중복 표시 수정 (StartupWMClass=Navigator) |
+| 2026-02-13 | 67-v38 | 한국어 로케일 지원 추가 (ko_KR.UTF-8, ibus 설정) |
+| 2026-02-13 | 67-v44 ~ v47 | 완벽한 한국어 로케일 지원, Nanum 폰트 설치 |
+| 2026-02-13 | 67-v49 | ibus-hangul 한글 입력기 설치, Ctrl+P 한영 전환 |
+| 2026-02-13 | 67-v50 | 한영 전환 키 Ctrl+P → Ctrl+Y (Firefox 충돌 해결) |
+| 2026-02-13 | 67-v51 | ibus-daemon 디버깅 강화 (ldd, verbose, exit code 체크) |
+| 2026-02-13 | 67-v52 | --daemonize 제거, 포그라운드 실행으로 실제 에러 확인 |
+| 2026-02-14 | 67-v53 | ibus memconf 설정 백엔드 활성화 (근본 원인 해결) |
+| 2026-02-19 | **67-v54** | **한글 입력 완전 작동! (v1.1 릴리즈)** |
+
+---
+
+## 기술 노트
+
+### gzip을 사용하는 이유
+LFS 커널이 xz/lzma squashfs 지원 없이 빌드됨. gzip 압축으로 전환하여 부팅 실패 해결.
+
+### pcmanfm을 사용하지 않는 이유
+pcmanfm은 `g_once_init_leave_pointer` 심볼을 위해 GLib 2.68+ 필요. LFS 시스템의 GLib 버전이 낮아 심볼 조회 에러 발생. GLib 라이브러리를 복사하면 시스템 불안정.
+
+### xfe를 사용하지 않는 이유
+xfe는 FOX 툴킷을 사용하며 LFS 시스템 라이브러리와 호환성 문제로 Segmentation fault 발생.
+
+### 현재 파일 관리자
+mc (Midnight Commander)를 파일 관리자로 사용. 터미널 기반이지만 LFS 시스템 라이브러리와 안정적으로 작동.
+
+### WSL2 크로스 컴파일 시 Wayland 문제
+WSL2의 GTK3에는 Wayland 지원이 포함되어 `GDK_WINDOWING_WAYLAND` 매크로가 정의됨. ibus의 GTK3 IM 모듈(im-ibus.so)이 이 매크로를 참조하여 Wayland 코드를 포함하게 됨. MaruxOS는 X11 전용이므로 Wayland 심볼이 존재하지 않아 `undefined symbol` 에러 발생. ibus `--disable-wayland` 옵션은 GTK3 IM 모듈의 Wayland 코드를 제어하지 못함 (GTK3 헤더의 `#ifdef`로 제어됨). 해결책: 소스 코드에서 `GDK_WINDOWING_WAYLAND`을 `MARUX_DISABLED_WAYLAND`로 직접 치환.
+
+### Live ISO에서 GTK immodules cache 문제
+squashfs는 읽기 전용이므로 `/usr/lib/gtk-3.0/3.0.0/immodules.cache`를 런타임에 수정 불가. `gtk-query-immodules-3.0`도 im-ibus.so를 캐시에 자동 등록하지 못함. 해결책: xinitrc에서 `/tmp/gtk-immodules.cache`에 ibus 항목을 수동으로 추가하고 `GTK_IM_MODULE_FILE` 환경변수로 이 파일을 지정.
+
+### ibus memconf 설정 백엔드
+LFS에는 dconf/GSettings 데이터베이스가 없으므로 ibus의 기본 설정 백엔드(dconf)를 사용할 수 없음. `--enable-memconf`로 ibus를 빌드하면 메모리 기반 설정 백엔드를 사용. gsettings 명령으로 런타임에 설정을 주입하면 memconf가 메모리에 저장.

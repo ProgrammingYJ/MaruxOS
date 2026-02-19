@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Volume
+Comment=Volume Control
+Exec=xterm -e alsamixer
+Icon=/usr/share/icons/MaruxOS/24x24/status/audio-volume-high.png
+Terminal=false
+Type=Application
+Categories=System;

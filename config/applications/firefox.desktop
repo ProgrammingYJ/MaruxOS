@@ -1,10 +1,8 @@
 [Desktop Entry]
 Name=Firefox
-Comment=Web Browser
-Exec=firefox
-Icon=firefox
-Terminal=false
+Exec=/usr/bin/firefox %u
+Icon=/opt/firefox/browser/chrome/icons/default/default128.png
 Type=Application
 Categories=Network;WebBrowser;
-StartupWMClass=Navigator
-StartupNotify=true
+Terminal=false
+MimeType=text/html;text/xml;application/xhtml+xml;

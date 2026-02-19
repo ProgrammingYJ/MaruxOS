@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Applications
+Exec=xterm -e "echo 'App Menu - Feature Coming Soon' && sleep 2"
+Icon=/usr/share/pixmaps/maruxos/marux-logo.png
+Type=Application
+Categories=System;
+NoDisplay=false

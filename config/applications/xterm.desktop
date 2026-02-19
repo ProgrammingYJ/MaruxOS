@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Terminal
+Comment=Open Terminal
+Exec=xterm
+Icon=/usr/share/maruxos/icons/marux-terminal.png
+Terminal=false
+Type=Application
+Categories=System;TerminalEmulator;

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Network
+Comment=Network Settings
+Exec=xterm -e nmtui
+Icon=/usr/share/icons/MaruxOS/24x24/status/network-wireless-signal-excellent.png
+Terminal=false
+Type=Application
+Categories=System;
