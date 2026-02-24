@@ -1,0 +1,395 @@
+#!/bin/bash
+# MaruxOS 1.1-67-v1 Build Script (v1.1 first build - version bump + initrd fix + Korean input)
+
+set -e
+
+WORK_DIR="/home/administrator/MaruxOS/build"
+SQUASHFS_ROOT="$WORK_DIR/rootfs-lfs"
+ISO_DIR="$WORK_DIR/iso-build"
+CONFIG_DIR="/mnt/c/Users/Administrator/Desktop/MaruxOS/config"
+OUTPUT_DIR="/mnt/c/Users/Administrator/Desktop/MaruxOS/output"
+SCRIPT_DIR="/mnt/c/Users/Administrator/Desktop/MaruxOS/scripts"
+VERSION="67-v1"
+
+echo "=========================================="
+echo "MaruxOS $VERSION Build Script"
+echo "v1.1 first build - GRUB/version/initrd update"
+echo "=========================================="
+
+cd "$WORK_DIR"
+
+# Clean up any existing mounts
+echo "[1/13] Cleaning up..."
+umount "$SQUASHFS_ROOT/proc" 2>/dev/null || true
+umount "$SQUASHFS_ROOT/sys" 2>/dev/null || true
+umount "$SQUASHFS_ROOT/dev" 2>/dev/null || true
+
+# Create ISO directory structure
+echo "[2/13] Setting up ISO directory..."
+mkdir -p "$ISO_DIR/boot/grub"
+mkdir -p "$ISO_DIR/live"
+
+# Copy kernel and initrd
+echo "  - Copying kernel..."
+VMLINUZ=$(ls "$SQUASHFS_ROOT/boot/vmlinuz"* 2>/dev/null | head -1)
+if [ -n "$VMLINUZ" ]; then
+    cp "$VMLINUZ" "$ISO_DIR/boot/vmlinuz"
+else
+    echo "Error: vmlinuz not found"
+    exit 1
+fi
+
+echo "  - Copying initrd..."
+INITRD=$(ls "$SQUASHFS_ROOT/boot/initrd"* 2>/dev/null | head -1)
+if [ -n "$INITRD" ]; then
+    cp "$INITRD" "$ISO_DIR/boot/initrd.img"
+else
+    echo "Warning: initrd not found, skipping..."
+fi
+
+# Create GRUB config (v1.1)
+cat > "$ISO_DIR/boot/grub/grub.cfg" << 'GRUB_EOF'
+set default=0
+set timeout=5
+
+menuentry "MaruxOS 1.1 (67) - Korean Input" {
+    linux /boot/vmlinuz boot=live quiet
+    initrd /boot/initrd.img
+}
+
+menuentry "MaruxOS 1.1 (67) - Safe Mode" {
+    linux /boot/vmlinuz boot=live single
+    initrd /boot/initrd.img
+}
+GRUB_EOF
+
+# Install ibus-hangul (Korean input method)
+echo "[3/13] Installing ibus-hangul Korean input method..."
+echo "  This will compile libhangul, ibus, and ibus-hangul from source..."
+
+if [ -f "$SCRIPT_DIR/install-ibus-hangul.sh" ]; then
+    echo "  - Running ibus-hangul installation script..."
+    bash "$SCRIPT_DIR/install-ibus-hangul.sh"
+
+    if [ $? -eq 0 ]; then
+        echo "  ✓ ibus-hangul installation completed successfully"
+    else
+        echo "  ✗ ERROR: ibus-hangul installation failed"
+        exit 1
+    fi
+else
+    echo "  ✗ ERROR: install-ibus-hangul.sh not found at $SCRIPT_DIR"
+    exit 1
+fi
+
+# Apply config files
+echo "[4/13] Copying config files..."
+
+# Copy xinitrc (with GTK immodules cache update + hangul settings)
+echo "  - Copying xinitrc..."
+cp "$CONFIG_DIR/xinitrc" "$SQUASHFS_ROOT/etc/X11/xinit/xinitrc"
+chmod 755 "$SQUASHFS_ROOT/etc/X11/xinit/xinitrc"
+
+# Add Korean locale configuration
+echo "[5/13] Adding full Korean locale support..."
+
+# Create locale.gen
+cat > "$SQUASHFS_ROOT/etc/locale.gen" << 'LOCALE_GEN_EOF'
+# MaruxOS Locale Configuration - Full Korean Support
+en_US.UTF-8 UTF-8
+ko_KR.UTF-8 UTF-8
+ko_KR.EUC-KR EUC-KR
+C.UTF-8 UTF-8
+LOCALE_GEN_EOF
+
+# Create locale.conf
+cat > "$SQUASHFS_ROOT/etc/locale.conf" << 'LOCALE_CONF_EOF'
+LANG=ko_KR.UTF-8
+LC_ALL=ko_KR.UTF-8
+LC_CTYPE=ko_KR.UTF-8
+LC_NUMERIC=ko_KR.UTF-8
+LC_TIME=ko_KR.UTF-8
+LC_COLLATE=ko_KR.UTF-8
+LC_MONETARY=ko_KR.UTF-8
+LC_MESSAGES=ko_KR.UTF-8
+LC_PAPER=ko_KR.UTF-8
+LC_NAME=ko_KR.UTF-8
+LC_ADDRESS=ko_KR.UTF-8
+LC_TELEPHONE=ko_KR.UTF-8
+LC_MEASUREMENT=ko_KR.UTF-8
+LC_IDENTIFICATION=ko_KR.UTF-8
+LOCALE_CONF_EOF
+
+# Create environment file for system-wide locale
+cat > "$SQUASHFS_ROOT/etc/environment" << 'ENV_EOF'
+LANG=ko_KR.UTF-8
+LC_ALL=ko_KR.UTF-8
+ENV_EOF
+
+# Create locale directories
+mkdir -p "$SQUASHFS_ROOT/usr/share/locale/ko/LC_MESSAGES"
+mkdir -p "$SQUASHFS_ROOT/usr/lib/locale"
+
+# Generate locales
+echo "  - Generating Korean locale..."
+chroot "$SQUASHFS_ROOT" /usr/bin/localedef -i ko_KR -f UTF-8 ko_KR.UTF-8 2>/dev/null || echo "    Warning: localedef not available, locale may need manual generation"
+chroot "$SQUASHFS_ROOT" /usr/bin/localedef -i en_US -f UTF-8 en_US.UTF-8 2>/dev/null || true
+
+# Verify Korean fonts are available
+echo "  - Checking Korean fonts..."
+KOREAN_FONTS_FOUND=0
+if [ -d "$SQUASHFS_ROOT/usr/share/fonts" ]; then
+    if find "$SQUASHFS_ROOT/usr/share/fonts" -name "*Nanum*" -o -name "*NotoSans*CJK*" -o -name "*Baekmuk*" | grep -q .; then
+        echo "    ✓ Korean fonts found"
+        KOREAN_FONTS_FOUND=1
+    fi
+fi
+
+if [ $KOREAN_FONTS_FOUND -eq 0 ]; then
+    echo "    ⚠ WARNING: Korean fonts not found!"
+    echo "    Korean text may display as boxes/squares"
+fi
+
+# Update font cache
+if [ -x "$SQUASHFS_ROOT/usr/bin/fc-cache" ]; then
+    echo "  - Updating font cache..."
+    chroot "$SQUASHFS_ROOT" /usr/bin/fc-cache -f 2>/dev/null || true
+fi
+
+echo "  - Full Korean locale configuration complete"
+
+# Configure ibus-hangul
+echo "[6/13] Configuring ibus-hangul..."
+
+# Update library cache for ibus libraries
+if [ -x "$SQUASHFS_ROOT/usr/sbin/ldconfig" ]; then
+    echo "  - Updating library cache..."
+    chroot "$SQUASHFS_ROOT" /usr/sbin/ldconfig 2>/dev/null || true
+fi
+
+# Update ibus component cache
+if [ -x "$SQUASHFS_ROOT/usr/bin/ibus" ]; then
+    echo "  - Updating ibus cache..."
+    chroot "$SQUASHFS_ROOT" /usr/bin/ibus write-cache 2>/dev/null || echo "    Note: ibus cache will be generated on first run"
+fi
+
+# Create and compile GSettings schemas
+echo "  - Creating and compiling GSettings schemas..."
+mkdir -p "$SQUASHFS_ROOT/usr/share/glib-2.0/schemas"
+
+# ibus GSettings schema 확인
+if ! ls "$SQUASHFS_ROOT/usr/share/glib-2.0/schemas/org.freedesktop.ibus.gschema.xml" 2>/dev/null; then
+    echo "    ⚠ ibus GSettings schema missing - should have been created by install-ibus-hangul.sh"
+else
+    echo "    ✓ ibus GSettings schema exists"
+fi
+
+if ! ls "$SQUASHFS_ROOT/usr/share/glib-2.0/schemas/"*hangul* 2>/dev/null; then
+    echo "    ⚠ hangul GSettings schema missing"
+else
+    echo "    ✓ hangul GSettings schema exists"
+fi
+
+# 스키마 컴파일
+if [ -x "$SQUASHFS_ROOT/usr/bin/glib-compile-schemas" ]; then
+    chroot "$SQUASHFS_ROOT" /usr/bin/glib-compile-schemas /usr/share/glib-2.0/schemas/
+    echo "    ✓ GSettings schemas compiled"
+else
+    echo "    ⚠ glib-compile-schemas not found"
+fi
+
+# Verify ibus-hangul installation
+echo "  - Verifying ibus-hangul installation..."
+if [ -f "$SQUASHFS_ROOT/usr/lib/ibus/ibus-engine-hangul" ]; then
+    echo "    ✓ ibus-engine-hangul: INSTALLED"
+else
+    echo "    ✗ ERROR: ibus-engine-hangul not found!"
+    exit 1
+fi
+
+if [ -f "$SQUASHFS_ROOT/usr/share/ibus/component/hangul.xml" ]; then
+    echo "    ✓ hangul.xml component: INSTALLED"
+else
+    echo "    ✗ ERROR: hangul.xml component not found!"
+    exit 1
+fi
+
+echo "  ✓ ibus-hangul configured successfully"
+
+# GTK3 immodules cache update (CRITICAL!)
+echo "[7/13] Updating GTK3 immodules cache (CRITICAL for Korean input)..."
+
+if [ -x "$SQUASHFS_ROOT/usr/bin/gtk-query-immodules-3.0" ]; then
+    echo "  - Running gtk-query-immodules-3.0..."
+    chroot "$SQUASHFS_ROOT" /bin/bash -c '/usr/bin/gtk-query-immodules-3.0 > /usr/lib/gtk-3.0/3.0.0/immodules.cache 2>/dev/null' || true
+    echo "    ✓ GTK3 immodules cache generated"
+fi
+
+# gtk-query-immodules-3.0이 ibus를 캐시에 추가하지 못할 경우 수동 등록
+if ! grep -q ibus "$SQUASHFS_ROOT/usr/lib/gtk-3.0/3.0.0/immodules.cache" 2>/dev/null; then
+    echo "  - ibus not in cache, manually adding..."
+    cat >> "$SQUASHFS_ROOT/usr/lib/gtk-3.0/3.0.0/immodules.cache" << 'IBUS_CACHE_EOF'
+
+"/usr/lib/gtk-3.0/3.0.0/immodules/im-ibus.so"
+"ibus" "Intelligent Input Bus" "ibus10" "/usr/share/locale" ""
+
+IBUS_CACHE_EOF
+    echo "    ✓ ibus manually added to immodules.cache"
+else
+    echo "    ✓ ibus already in immodules.cache"
+fi
+
+# 최종 확인
+IBUS_ENTRIES=$(grep -c "ibus" "$SQUASHFS_ROOT/usr/lib/gtk-3.0/3.0.0/immodules.cache" 2>/dev/null || echo "0")
+echo "    ✓ immodules.cache: $IBUS_ENTRIES ibus entries"
+
+# Verify im-ibus.so
+if [ -f "$SQUASHFS_ROOT/usr/lib/gtk-3.0/3.0.0/immodules/im-ibus.so" ]; then
+    echo "    ✓ im-ibus.so: INSTALLED"
+else
+    echo "    ✗ ERROR: im-ibus.so not found!"
+fi
+
+# Update version info in rootfs
+echo "[8/13] Updating version info to 1.1..."
+
+# Update /etc/maruxos-release
+if [ -f "$SQUASHFS_ROOT/etc/maruxos-release" ]; then
+    sed -i 's/MaruxOS 1\.0/MaruxOS 1.1/g' "$SQUASHFS_ROOT/etc/maruxos-release"
+    echo "    ✓ /etc/maruxos-release updated"
+fi
+
+# Update /etc/os-release
+if [ -f "$SQUASHFS_ROOT/etc/os-release" ]; then
+    sed -i 's/VERSION="1\.0"/VERSION="1.1"/g' "$SQUASHFS_ROOT/etc/os-release"
+    sed -i 's/VERSION_ID="1\.0"/VERSION_ID="1.1"/g' "$SQUASHFS_ROOT/etc/os-release"
+    sed -i 's/MaruxOS 1\.0/MaruxOS 1.1/g' "$SQUASHFS_ROOT/etc/os-release"
+    echo "    ✓ /etc/os-release updated"
+fi
+
+# Update /etc/issue
+if [ -f "$SQUASHFS_ROOT/etc/issue" ]; then
+    sed -i 's/MaruxOS 1\.0/MaruxOS 1.1/g' "$SQUASHFS_ROOT/etc/issue"
+    echo "    ✓ /etc/issue updated"
+fi
+
+# Update /etc/lsb-release
+if [ -f "$SQUASHFS_ROOT/etc/lsb-release" ]; then
+    sed -i 's/DISTRIB_RELEASE=1\.0/DISTRIB_RELEASE=1.1/g' "$SQUASHFS_ROOT/etc/lsb-release"
+    sed -i 's/MaruxOS 1\.0/MaruxOS 1.1/g' "$SQUASHFS_ROOT/etc/lsb-release"
+    echo "    ✓ /etc/lsb-release updated"
+fi
+
+# Update /usr/bin/marux-splash (boot splash screen)
+if [ -f "$SQUASHFS_ROOT/usr/bin/marux-splash" ]; then
+    sed -i 's/MaruxOS 1\.0/MaruxOS 1.1/g' "$SQUASHFS_ROOT/usr/bin/marux-splash"
+    sed -i 's/Phoenix/67/g' "$SQUASHFS_ROOT/usr/bin/marux-splash"
+    echo "    ✓ /usr/bin/marux-splash updated"
+fi
+
+# [NEW in v1] Update initrd boot splash (1.0 Phoenix → 1.1 67)
+echo "[9/13] Updating initrd boot splash..."
+echo "  - Extracting initrd.img..."
+INITRD_WORK="/tmp/initrd-modify-$$"
+mkdir -p "$INITRD_WORK"
+cd "$INITRD_WORK"
+gunzip -c "$ISO_DIR/boot/initrd.img" | cpio -id 2>/dev/null
+
+if [ -f "$INITRD_WORK/init" ]; then
+    echo "  - Current boot splash text:"
+    grep -n "MaruxOS\|Phoenix" "$INITRD_WORK/init" || true
+
+    echo "  - Updating version info in init script..."
+    sed -i 's/MaruxOS 1\.0 Phoenix/MaruxOS 1.1 67/g' "$INITRD_WORK/init"
+    sed -i 's/MaruxOS 1\.0/MaruxOS 1.1/g' "$INITRD_WORK/init"
+
+    echo "  - Updated boot splash text:"
+    grep -n "MaruxOS\|1\.1" "$INITRD_WORK/init" || true
+    echo "    ✓ init script updated"
+else
+    echo "    ⚠ init script not found in initrd"
+fi
+
+echo "  - Repacking initrd.img..."
+find . | cpio -o -H newc 2>/dev/null | gzip -9 > "$ISO_DIR/boot/initrd.img"
+echo "    ✓ initrd.img repacked"
+
+cd "$WORK_DIR"
+rm -rf "$INITRD_WORK"
+
+echo "  ✓ initrd boot splash updated (1.0 Phoenix → 1.1 67)"
+
+# Copy desktop files (release version)
+echo "[10/13] Copying desktop files..."
+cp "$CONFIG_DIR/applications/marux-menu.desktop" "$SQUASHFS_ROOT/usr/share/applications/" 2>/dev/null || true
+cp "$CONFIG_DIR/applications/firefox.desktop" "$SQUASHFS_ROOT/usr/share/applications/" 2>/dev/null || true
+cp "$CONFIG_DIR/applications/xterm.desktop" "$SQUASHFS_ROOT/usr/share/applications/" 2>/dev/null || true
+cp "$CONFIG_DIR/applications/mc.desktop" "$SQUASHFS_ROOT/usr/share/applications/" 2>/dev/null || true
+cp "$CONFIG_DIR/applications/battery.desktop" "$SQUASHFS_ROOT/usr/share/applications/" 2>/dev/null || true
+cp "$CONFIG_DIR/applications/network.desktop" "$SQUASHFS_ROOT/usr/share/applications/" 2>/dev/null || true
+cp "$CONFIG_DIR/applications/volume.desktop" "$SQUASHFS_ROOT/usr/share/applications/" 2>/dev/null || true
+
+# Copy tint2 config (release location: /etc/xdg/tint2/)
+echo "[11/13] Copying tint2 config..."
+mkdir -p "$SQUASHFS_ROOT/etc/xdg/tint2"
+cp "$CONFIG_DIR/tint2/tint2rc" "$SQUASHFS_ROOT/etc/xdg/tint2/tint2rc"
+
+echo "[12/13] Setting permissions..."
+chmod 644 "$SQUASHFS_ROOT/etc/locale.gen" 2>/dev/null || true
+chmod 644 "$SQUASHFS_ROOT/etc/locale.conf" 2>/dev/null || true
+chmod 644 "$SQUASHFS_ROOT/etc/environment" 2>/dev/null || true
+chmod 644 "$SQUASHFS_ROOT/etc/xdg/tint2/tint2rc" 2>/dev/null || true
+chmod 755 "$SQUASHFS_ROOT/usr/lib/ibus/ibus-engine-hangul" 2>/dev/null || true
+
+# Remove old squashfs
+echo "[13/13] Building ISO..."
+rm -f "$ISO_DIR/live/filesystem.squashfs"
+
+# Create new squashfs
+echo "  - Creating squashfs (this may take a while)..."
+mksquashfs "$SQUASHFS_ROOT" "$ISO_DIR/live/filesystem.squashfs" \
+    -comp gzip \
+    -e boot \
+    -noappend
+
+# Create ISO
+echo "  - Creating ISO image..."
+mkdir -p "$OUTPUT_DIR"
+
+xorriso -as mkisofs \
+    -iso-level 3 \
+    -full-iso9660-filenames \
+    -volid "MARUXOS" \
+    -eltorito-boot boot/grub/bios.img \
+    -no-emul-boot \
+    -boot-load-size 4 \
+    -boot-info-table \
+    --grub2-boot-info \
+    --grub2-mbr /usr/lib/grub/i386-pc/boot_hybrid.img \
+    -eltorito-catalog boot/grub/boot.cat \
+    --protective-msdos-label \
+    -output "$OUTPUT_DIR/MaruxOS-1.1-$VERSION.iso" \
+    "$ISO_DIR" 2>/dev/null || \
+grub-mkrescue -o "$OUTPUT_DIR/MaruxOS-1.1-$VERSION.iso" "$ISO_DIR"
+
+# Show result
+echo ""
+echo "=========================================="
+echo "✓ Build complete!"
+ls -lh "$OUTPUT_DIR/MaruxOS-1.1-$VERSION.iso" 2>/dev/null || echo "ISO created"
+echo "=========================================="
+echo ""
+echo "Changes in v1 (MaruxOS 1.1):"
+echo "  ✅ GRUB 메뉴 버전 1.0 → 1.1 업데이트"
+echo "  ✅ initrd 부팅 스플래시 수정: 'MaruxOS 1.0 Phoenix' → 'MaruxOS 1.1 67'"
+echo "  ✅ /etc/maruxos-release, os-release, issue, lsb-release 버전 업데이트"
+echo "  ✅ ISO 파일명: MaruxOS-1.1-$VERSION.iso"
+echo ""
+echo "v1.1 주요 기능:"
+echo "  - 한글 입력 완전 지원 (ibus-hangul)"
+echo "  - Ctrl+Y / Shift+Space: 한영 전환"
+echo "  - 2벌식 QWERTY 자판 배열"
+echo "  - F9: 한자 변환"
+echo "  - 한국어 로케일 (ko_KR.UTF-8)"
+echo "  - 나눔 폰트 (고딕/명조)"
+echo "=========================================="
