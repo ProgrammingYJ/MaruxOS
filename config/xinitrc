@@ -217,6 +217,25 @@ fi
 openbox &
 sleep 0.5
 
+# 바탕화면 아이콘 (idesk)
+if [ -x /usr/bin/idesk ]; then
+    # skel 복사 보장 (Live ISO tmpfs 환경 대비)
+    if [ ! -f "$HOME/.ideskrc" ] && [ -f /etc/skel/.ideskrc ]; then
+        cp /etc/skel/.ideskrc "$HOME/.ideskrc"
+    fi
+    if [ ! -d "$HOME/.idesktop" ] && [ -d /etc/skel/.idesktop ]; then
+        cp -r /etc/skel/.idesktop "$HOME/.idesktop"
+    fi
+
+    # ~/Desktop 폴더 생성 + 동기화
+    mkdir -p "$HOME/Desktop"
+    if [ -x /usr/bin/marux-desktop-refresh ]; then
+        /usr/bin/marux-desktop-refresh --quiet
+    fi
+
+    idesk &
+fi
+
 # 시스템 트레이 앱들
 if [ -x /usr/bin/nm-applet ]; then
     /usr/bin/nm-applet 2>/dev/null &

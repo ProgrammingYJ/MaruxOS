@@ -1,0 +1,86 @@
+#!/bin/sh
+# MaruxOS - 바탕화면 새 항목 만들기
+# Usage: marux-new-desktop-item <type>
+# Types: folder, text, script
+
+DESKTOP_DIR="$HOME/Desktop"
+mkdir -p "$DESKTOP_DIR"
+
+TYPE="$1"
+
+case "$TYPE" in
+    folder)
+        PROMPT="New folder name"
+        DEFAULT="New Folder"
+        ;;
+    text)
+        PROMPT="New file name"
+        DEFAULT="New File.txt"
+        ;;
+    script)
+        PROMPT="New script name"
+        DEFAULT="New Script.sh"
+        ;;
+    *)
+        echo "Usage: marux-new-desktop-item <folder|text|script>"
+        exit 1
+        ;;
+esac
+
+# 이름 입력 받기
+printf "%s [%s]: " "$PROMPT" "$DEFAULT"
+read -r NAME
+NAME="${NAME:-$DEFAULT}"
+
+# 이미 존재하면 번호 붙이기
+TARGET="$DESKTOP_DIR/$NAME"
+if [ -e "$TARGET" ]; then
+    i=2
+    base="${NAME%.*}"
+    ext="${NAME##*.}"
+    if [ "$base" = "$ext" ]; then
+        ext=""
+    fi
+    while [ -e "$TARGET" ]; do
+        if [ -n "$ext" ] && [ "$TYPE" != "folder" ]; then
+            TARGET="$DESKTOP_DIR/${base} (${i}).${ext}"
+        else
+            TARGET="$DESKTOP_DIR/${NAME} (${i})"
+        fi
+        i=$((i + 1))
+    done
+    NAME="$(basename "$TARGET")"
+fi
+
+# 생성
+case "$TYPE" in
+    folder)
+        mkdir -p "$TARGET"
+        echo "Folder created: $NAME"
+        ;;
+    text)
+        touch "$TARGET"
+        echo "File created: $NAME"
+        ;;
+    script)
+        cat > "$TARGET" << 'SHEOF'
+#!/bin/bash
+# New Script
+
+SHEOF
+        chmod +x "$TARGET"
+        echo "Script created: $NAME"
+        ;;
+esac
+
+# 바탕화면 새로고침
+if [ -x /usr/bin/marux-desktop-refresh ]; then
+    /usr/bin/marux-desktop-refresh --quiet
+fi
+killall idesk 2>/dev/null
+sleep 0.3
+idesk &
+
+echo ""
+echo "Desktop refreshed."
+sleep 1

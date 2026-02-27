@@ -1,0 +1,9 @@
+table Icon
+  Caption: Terminal
+  Command: xterm -fa 'Monospace' -fs 11
+  Icon: /usr/share/pixmaps/maruxos/terminal.png
+  X: 80
+  Y: 80
+  Width: 48
+  Height: 48
+end

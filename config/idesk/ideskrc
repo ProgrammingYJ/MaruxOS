@@ -1,0 +1,36 @@
+table Config
+  FontName: NanumGothic
+  FontSize: 10
+  FontColor: #FFFFFF
+  Locked: false
+  Transparency: 150
+  Shadow: true
+  ShadowColor: #000000
+  ShadowX: 1
+  ShadowY: 2
+  Bold: false
+  ClickDelay: 300
+  IconSnap: true
+  SnapWidth: 80
+  SnapHeight: 80
+  SnapOrigin: BottomRight
+  SnapShadow: true
+  SnapShadowTrans: 200
+  CaptionOnHover: false
+  CaptionPlacement: Bottom
+  FillStyle: None
+  Background.Delay: 0
+  Background.Source: None
+  Background.File: None
+  Background.Mode: Scale
+  Background.Color: #000000
+end
+
+table Actions
+  Lock: control right
+  Reload: middle
+  Drag: left
+  EndDrag: left
+  Execute[0]: left doubleClk
+  Execute[1]: right
+end

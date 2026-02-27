@@ -1,0 +1,9 @@
+table Icon
+  Caption: Files
+  Command: xterm -e mc ~ /
+  Icon: /usr/share/pixmaps/maruxos/file-manager.png
+  X: 80
+  Y: 180
+  Width: 48
+  Height: 48
+end

@@ -1,0 +1,101 @@
+#!/bin/sh
+# MaruxOS Wallpaper Changer
+# feh를 사용한 배경화면 변경 도구
+
+WALLPAPER_DIR="/usr/share/backgrounds"
+
+clear
+echo "==========================================="
+echo "       MaruxOS Wallpaper Changer"
+echo "==========================================="
+echo ""
+
+# 현재 배경화면 표시
+CURRENT=""
+if [ -f "$HOME/.fehbg" ]; then
+    CURRENT=$(grep -o "'[^']*'" "$HOME/.fehbg" 2>/dev/null | tail -1 | tr -d "'")
+fi
+if [ -n "$CURRENT" ]; then
+    echo "  Current: $(basename "$CURRENT")"
+else
+    echo "  Current: (default)"
+fi
+echo ""
+
+# 배경화면 목록
+echo "  Available wallpapers:"
+echo "  -------------------------------------------"
+
+i=1
+for img in "$WALLPAPER_DIR"/*.png "$WALLPAPER_DIR"/*.jpg "$WALLPAPER_DIR"/*.jpeg; do
+    [ -f "$img" ] || continue
+    name=$(basename "$img")
+    size=$(ls -lh "$img" 2>/dev/null | awk '{print $5}')
+    if [ "$img" = "$CURRENT" ]; then
+        echo "  $i) $name ($size) [current]"
+    else
+        echo "  $i) $name ($size)"
+    fi
+    eval "IMG_$i=\"$img\""
+    i=$((i + 1))
+done
+
+total=$((i - 1))
+
+if [ "$total" -eq 0 ]; then
+    echo "  No wallpapers found in $WALLPAPER_DIR"
+    echo ""
+    echo "  Press Enter to exit"
+    read dummy
+    exit 0
+fi
+
+echo ""
+echo "  c) Enter custom image path"
+echo "  p) Preview wallpapers (feh thumbnail view)"
+echo "  q) Cancel"
+echo ""
+printf "  Select [1-$total/c/p/q]: "
+read choice
+
+case "$choice" in
+    q|Q)
+        echo "  Cancelled."
+        ;;
+    c|C)
+        echo ""
+        printf "  Enter image path: "
+        read custom_path
+        if [ -f "$custom_path" ]; then
+            feh --bg-scale "$custom_path"
+            echo "  Wallpaper changed to: $(basename "$custom_path")"
+        else
+            echo "  Error: File not found: $custom_path"
+        fi
+        ;;
+    p|P)
+        echo "  Opening thumbnail preview..."
+        echo "  (Click an image to set it as wallpaper)"
+        feh --thumb --thumb-width 200 --thumb-height 150 \
+            --action "feh --bg-scale %F" \
+            "$WALLPAPER_DIR/" 2>/dev/null
+        echo "  Preview closed."
+        ;;
+    [0-9]*)
+        eval "selected=\$IMG_$choice"
+        if [ -n "$selected" ] && [ -f "$selected" ]; then
+            feh --bg-scale "$selected"
+            echo ""
+            echo "  Wallpaper changed to: $(basename "$selected")"
+        else
+            echo "  Invalid selection: $choice"
+        fi
+        ;;
+    *)
+        echo "  Invalid input."
+        ;;
+esac
+
+echo ""
+echo "  Press Enter to close"
+read dummy

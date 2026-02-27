@@ -1,0 +1,156 @@
+#!/bin/sh
+# MaruxOS Desktop Refresh - ~/Desktop 폴더 내용을 idesk 아이콘으로 동기화
+# Usage: marux-desktop-refresh [--quiet]
+
+DESKTOP_DIR="$HOME/Desktop"
+IDESK_DIR="$HOME/.idesktop"
+ICON_DIR="/usr/share/pixmaps/maruxos"
+
+# 기본 아이콘 경로
+ICON_FILE="$ICON_DIR/file-generic.png"
+ICON_FOLDER="$ICON_DIR/folder.png"
+ICON_TEXT="$ICON_DIR/file-text.png"
+ICON_SCRIPT="$ICON_DIR/terminal.png"
+ICON_IMAGE="$ICON_DIR/file-image.png"
+ICON_FIREFOX="/opt/firefox/browser/chrome/icons/default/default128.png"
+
+# 아이콘 없으면 fallback
+fallback_icon() {
+    if [ -f "$1" ]; then
+        echo "$1"
+    elif [ -f "$ICON_FILE" ]; then
+        echo "$ICON_FILE"
+    elif [ -f "$ICON_DIR/file-manager.png" ]; then
+        echo "$ICON_DIR/file-manager.png"
+    else
+        echo "$ICON_DIR/terminal.png"
+    fi
+}
+
+# 파일 확장자로 아이콘 결정
+get_icon() {
+    filepath="$1"
+    if [ -d "$filepath" ]; then
+        fallback_icon "$ICON_FOLDER"
+        return
+    fi
+
+    case "$filepath" in
+        *.txt|*.md|*.log|*.conf|*.cfg|*.ini)
+            fallback_icon "$ICON_TEXT" ;;
+        *.sh|*.bash|*.py|*.pl)
+            fallback_icon "$ICON_SCRIPT" ;;
+        *.png|*.jpg|*.jpeg|*.gif|*.bmp|*.xpm|*.svg)
+            fallback_icon "$ICON_IMAGE" ;;
+        *.html|*.htm)
+            fallback_icon "$ICON_FIREFOX" ;;
+        *.desktop)
+            fallback_icon "$ICON_FILE" ;;
+        *)
+            fallback_icon "$ICON_FILE" ;;
+    esac
+}
+
+# 파일 확장자로 실행 명령 결정
+get_command() {
+    filepath="$1"
+    if [ -d "$filepath" ]; then
+        echo "xterm -e mc \"$filepath\" /"
+        return
+    fi
+
+    case "$filepath" in
+        *.txt|*.md|*.log|*.conf|*.cfg|*.ini)
+            echo "xterm -fa 'Monospace' -fs 11 -e nano \"$filepath\"" ;;
+        *.sh|*.bash)
+            echo "xterm -fa 'Monospace' -fs 11 -e bash \"$filepath\"" ;;
+        *.py)
+            echo "xterm -fa 'Monospace' -fs 11 -e python3 \"$filepath\"" ;;
+        *.png|*.jpg|*.jpeg|*.gif|*.bmp|*.svg)
+            echo "feh \"$filepath\"" ;;
+        *.html|*.htm)
+            echo "/usr/bin/firefox \"$filepath\"" ;;
+        *.desktop)
+            # .desktop 파일에서 Exec 줄 추출
+            exec_line=$(grep -m1 '^Exec=' "$filepath" 2>/dev/null | sed 's/^Exec=//' | sed 's/ %[fFuU]//g')
+            if [ -n "$exec_line" ]; then
+                echo "$exec_line"
+            else
+                echo "xterm -fa 'Monospace' -fs 11 -e less \"$filepath\""
+            fi
+            ;;
+        *)
+            if [ -x "$filepath" ]; then
+                echo "xterm -fa 'Monospace' -fs 11 -e \"$filepath\""
+            else
+                echo "xterm -fa 'Monospace' -fs 11 -e less \"$filepath\""
+            fi
+            ;;
+    esac
+}
+
+# Desktop 폴더 생성
+mkdir -p "$DESKTOP_DIR"
+mkdir -p "$IDESK_DIR"
+
+# 동적 아이콘 삭제 (desktop-* 접두어), 고정 아이콘은 유지
+for f in "$IDESK_DIR"/desktop-*.lnk; do
+    [ -f "$f" ] && rm -f "$f"
+done
+
+# ~/Desktop 내용 스캔 + .lnk 파일 생성
+# 고정 아이콘: Terminal(80,80), Files(80,180), Firefox(80,280)
+# 데스크톱 파일: Y=400부터 시작, 100px 간격, 5개마다 다음 열(X+100)
+START_X=80
+START_Y=400
+STEP_Y=100
+MAX_Y=900
+CURRENT_X=$START_X
+CURRENT_Y=$START_Y
+
+count=0
+for item in "$DESKTOP_DIR"/*; do
+    [ -e "$item" ] || continue
+
+    filename=$(basename "$item")
+
+    # 숨김 파일 무시
+    case "$filename" in
+        .*) continue ;;
+    esac
+
+    icon=$(get_icon "$item")
+    command=$(get_command "$item")
+
+    # 캡션: 긴 이름은 15자로 자름
+    caption="$filename"
+    if [ ${#caption} -gt 15 ]; then
+        caption="$(echo "$caption" | cut -c1-12)..."
+    fi
+
+    # .lnk 파일 생성
+    cat > "$IDESK_DIR/desktop-${count}.lnk" << LNKEOF
+table Icon
+  Caption: $caption
+  Command: $command
+  Icon: $icon
+  X: $CURRENT_X
+  Y: $CURRENT_Y
+  Width: 48
+  Height: 48
+end
+LNKEOF
+
+    count=$((count + 1))
+    CURRENT_Y=$((CURRENT_Y + STEP_Y))
+
+    # 화면 아래로 넘어가면 다음 열로
+    if [ $CURRENT_Y -gt $MAX_Y ]; then
+        CURRENT_Y=$START_Y
+        CURRENT_X=$((CURRENT_X + 100))
+    fi
+done
+
+if [ "$1" != "--quiet" ]; then
+    echo "Desktop refreshed: $count items from ~/Desktop"
+fi
