@@ -73,14 +73,15 @@ SHEOF
         ;;
 esac
 
-# 바탕화면 새로고침
+# .lnk 파일 업데이트
 if [ -x /usr/bin/marux-desktop-refresh ]; then
     /usr/bin/marux-desktop-refresh --quiet
 fi
+# double-fork: 서브셸 안에서 idesk 시작 → 서브셸 종료 시 idesk 부모가 init(PID 1)으로 변경
+# xterm이 닫혀도 idesk는 init 하위 프로세스라 영향 없음
 killall idesk 2>/dev/null
 sleep 0.3
-idesk &
+( /usr/bin/idesk > /dev/null 2>&1 & )
 
-echo ""
-echo "Desktop refreshed."
-sleep 1
+echo "Created: $NAME"
+sleep 0.5

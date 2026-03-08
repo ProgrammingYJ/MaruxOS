@@ -6,49 +6,13 @@ DESKTOP_DIR="$HOME/Desktop"
 IDESK_DIR="$HOME/.idesktop"
 ICON_DIR="/usr/share/pixmaps/maruxos"
 
-# 기본 아이콘 경로
-ICON_FILE="$ICON_DIR/file-generic.png"
-ICON_FOLDER="$ICON_DIR/folder.png"
-ICON_TEXT="$ICON_DIR/file-text.png"
-ICON_SCRIPT="$ICON_DIR/terminal.png"
-ICON_IMAGE="$ICON_DIR/file-image.png"
-ICON_FIREFOX="/opt/firefox/browser/chrome/icons/default/default128.png"
-
-# 아이콘 없으면 fallback
-fallback_icon() {
-    if [ -f "$1" ]; then
-        echo "$1"
-    elif [ -f "$ICON_FILE" ]; then
-        echo "$ICON_FILE"
-    elif [ -f "$ICON_DIR/file-manager.png" ]; then
+# 모든 파일/폴더에 파일관리자 아이콘 사용 (terminal.png fallback)
+get_icon() {
+    if [ -f "$ICON_DIR/file-manager.png" ]; then
         echo "$ICON_DIR/file-manager.png"
     else
         echo "$ICON_DIR/terminal.png"
     fi
-}
-
-# 파일 확장자로 아이콘 결정
-get_icon() {
-    filepath="$1"
-    if [ -d "$filepath" ]; then
-        fallback_icon "$ICON_FOLDER"
-        return
-    fi
-
-    case "$filepath" in
-        *.txt|*.md|*.log|*.conf|*.cfg|*.ini)
-            fallback_icon "$ICON_TEXT" ;;
-        *.sh|*.bash|*.py|*.pl)
-            fallback_icon "$ICON_SCRIPT" ;;
-        *.png|*.jpg|*.jpeg|*.gif|*.bmp|*.xpm|*.svg)
-            fallback_icon "$ICON_IMAGE" ;;
-        *.html|*.htm)
-            fallback_icon "$ICON_FIREFOX" ;;
-        *.desktop)
-            fallback_icon "$ICON_FILE" ;;
-        *)
-            fallback_icon "$ICON_FILE" ;;
-    esac
 }
 
 # 파일 확장자로 실행 명령 결정
