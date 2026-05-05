@@ -15,6 +15,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Backup and restore utility
 - System monitoring dashboard
 
+## [1.2.1] - 2026-05-05
+
+### Fixed
+- New File / Refresh Desktop 후 모든 바탕화면 아이콘 사라지는 버그 (v3) — `setsid`로 idesk 재시작 시 SIGHUP 차단
+- 일부 바탕화면 아이콘 미표시 / 새 파일 아이콘 미표시 (v4) — PNG `marux-*` prefix 참조 통일
+- 터미널 아이콘 불투명 배경 (v4) — 빌드 시 `MaruxOS 디자인/` → rootfs 아이콘 자동 동기화
+
+### Changed
+- `MaruxOS 디자인/terminal.png` → `marux-terminal.png` (이름 prefix 통일)
+- CLAUDE.md 신규 — Claude Code 협업 컴파스
+
 ## [1.2.0] - 2026-05-05
 
 ### Added
@@ -24,15 +35,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 바탕화면 아이콘 매니저 idesk (Terminal, Files, Firefox 기본 + ~/Desktop 동기화)
 - 바탕화면 헬퍼: `marux-desktop-refresh`, `marux-new-desktop-item`
 - neofetch 시스템 정보 도구
-- CLAUDE.md — Claude Code 협업 컴파스
-
-### Fixed
-- New File / Refresh Desktop 후 모든 바탕화면 아이콘 사라지는 버그 (v3) — `setsid`로 idesk 재시작 시 SIGHUP 차단
-- 일부 바탕화면 아이콘 미표시 / 새 파일 아이콘 미표시 (v4) — PNG `marux-*` prefix 참조 통일
-- 터미널 아이콘 불투명 배경 (v4) — 빌드 시 `MaruxOS 디자인/` → rootfs 아이콘 자동 동기화
-
-### Changed
-- `MaruxOS 디자인/terminal.png` → `marux-terminal.png` (이름 prefix 통일)
 
 ## [1.0.0] - 2024-11-23
 

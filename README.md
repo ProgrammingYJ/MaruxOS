@@ -8,7 +8,7 @@
 
 *Not based on Ubuntu, Debian, or any distribution - Pure Linux From Scratch*
 
-[![Download ISO](https://img.shields.io/badge/Download-MaruxOS%201.2.0-blue.svg?style=for-the-badge)](https://github.com/ProgrammingYJ/MaruxOS/releases/latest)
+[![Download ISO](https://img.shields.io/badge/Download-MaruxOS%201.2.1-blue.svg?style=for-the-badge)](https://github.com/ProgrammingYJ/MaruxOS/releases/latest)
 
 [![License: Public Domain](https://img.shields.io/badge/License-Public%20Domain-brightgreen.svg)](LICENSE)
 [![Linux](https://img.shields.io/badge/Kernel-6.12%20LTS-orange.svg)](https://kernel.org/)
@@ -277,7 +277,7 @@ MaruxOS는 **세계 최초로 100% AI(Claude Code)만으로 제작된 운영체�
 
 <div align="center">
 
-**Current Version: 1.2.0 "67"**
+**Current Version: 1.2.1 "67"**
 
 Made with Linux From Scratch 12.1
 **Made with ❤️ for the Linux community**
