@@ -1,7 +1,7 @@
 table Icon
   Caption: Terminal
   Command: xterm -fa 'Monospace' -fs 11
-  Icon: /usr/share/pixmaps/maruxos/terminal.png
+  Icon: /usr/share/pixmaps/maruxos/marux-terminal.png
   X: 80
   Y: 80
   Width: 48

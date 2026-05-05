@@ -6,12 +6,12 @@ DESKTOP_DIR="$HOME/Desktop"
 IDESK_DIR="$HOME/.idesktop"
 ICON_DIR="/usr/share/pixmaps/maruxos"
 
-# 모든 파일/폴더에 파일관리자 아이콘 사용 (terminal.png fallback)
+# 모든 파일/폴더에 파일관리자 아이콘 사용 (terminal fallback)
 get_icon() {
-    if [ -f "$ICON_DIR/file-manager.png" ]; then
-        echo "$ICON_DIR/file-manager.png"
+    if [ -f "$ICON_DIR/marux-file-manager.png" ]; then
+        echo "$ICON_DIR/marux-file-manager.png"
     else
-        echo "$ICON_DIR/terminal.png"
+        echo "$ICON_DIR/marux-terminal.png"
     fi
 }
 

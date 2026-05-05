@@ -77,11 +77,11 @@ esac
 if [ -x /usr/bin/marux-desktop-refresh ]; then
     /usr/bin/marux-desktop-refresh --quiet
 fi
-# double-fork: 서브셸 안에서 idesk 시작 → 서브셸 종료 시 idesk 부모가 init(PID 1)으로 변경
-# xterm이 닫혀도 idesk는 init 하위 프로세스라 영향 없음
+# setsid로 새 세션/프로세스 그룹 분리 → xterm 종료 시 SIGHUP 전파 차단
+# (이전 `( cmd & )` 방식은 부모만 init으로 reparent했고 세션은 xterm 그대로라 SIGHUP에 같이 죽었음)
 killall idesk 2>/dev/null
 sleep 0.3
-( /usr/bin/idesk > /dev/null 2>&1 & )
+setsid /usr/bin/idesk > /dev/null 2>&1 < /dev/null &
 
 echo "Created: $NAME"
 sleep 0.5

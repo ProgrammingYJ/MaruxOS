@@ -102,7 +102,7 @@
     </item>
     <item label="Refresh Desktop">
       <action name="Execute">
-        <command>sh -c "/usr/bin/marux-desktop-refresh; killall idesk 2>/dev/null; sleep 0.3; (/usr/bin/idesk &gt;/dev/null 2&gt;&amp;1 &amp;)"</command>
+        <command>sh -c "/usr/bin/marux-desktop-refresh; killall idesk 2>/dev/null; sleep 0.3; setsid /usr/bin/idesk &gt;/dev/null 2&gt;&amp;1 &lt;/dev/null &amp;"</command>
       </action>
     </item>
     <separator/>
