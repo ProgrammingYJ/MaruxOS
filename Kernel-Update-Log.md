@@ -1350,3 +1350,30 @@ ls -la /home/$USER/MaruxOS-arm64/
 - **사용자 조치 필요**: 노출된 비번은 이미 공개된 것으로 간주 → WSL 계정 비번(및 재사용처) **변경**. 히스토리 정화(git filter-repo + force push)는 사용자 판단 후.
 
 **교훈**: 도구 설정 파일(`.claude/settings.local.json`)에 셸 명령 원문이 저장되는데 그 안에 `echo '비번' | sudo -S` 가 들어가면 비번이 설정 파일에 박힌다. *로컬* 설정은 처음부터 gitignore, 비밀은 명령줄이 아니라 환경/키링으로. 공개 전 스캔은 릴리즈 체크리스트의 첫 줄.
+
+---
+
+## Section 34 — 2026-08-28: x86_64 데스크톱 패리티 착수 ("ISO도 img처럼") — 진행 중 핸드오프
+
+**요청**: 사용자 "iso도 img처럼 Qt랑 앱 7종 등등 다 하고 싶다". x86 ISO(cooked-v9)는 tint2/xterm/mc 구성이라 Pi v34와 격차.
+
+### 접근 — ARM64 크로스 체계를 x86 sysroot로 재사용
+ARM64 Qt 스택은 "호스트 gcc + `--sysroot`" 크로스였으므로, **x86 rootfs 사본을 sysroot로 두면 같은 스크립트가 접두어만 바꿔 돈다.** 네이티브 속도라 Qt5 전체 5분, plank 사슬 1분.
+- 작업 디렉토리: **`/home/administrator/MaruxOS/x86-parity/`** (B) — `rootfs-lfs-parity/`(= `build/rootfs-lfs` 사본, 기존 x86 파이프라인 무위험), `bin/`(gcc-13 래퍼), `qt-src/ fm-src/ ed-src/ tools-src/ qt-host/`, 마커 `.q/.f/.e/.t-COMPLETE`, 콘솔 `*.console`
+- 변환 스크립트(`scripts/*-x86.sh`, 생성기 = 세션 scratchpad `mk-x86-scripts.py` 로직을 헤더에 요약): install-qt5 / install-pcmanfm-qt / install-featherpad / install-lxtools / gate-qt-launch / install-plank / install-desktop-polish / install-plank-polish / install-quicksettings
+
+### x86에서만 만난 벽 (전부 해소·스크립트 반영)
+| # | 벽 | 해소 |
+|---|---|---|
+| 1 | 호스트 gcc **14.2** vs rootfs libstdc++ **13.2** → GLIBCXX_3.4.33 요구 위험 | `apt g++-13` + `$B/bin/x86_64-linux-gnu-*` → gcc-13 심링크, 스크립트 `PATH="$B/bin:$PATH"` |
+| 2 | Qt configure `xcb-xlib` 전제 실패: `linux-g++-64` mkspec의 `QMAKE_*_X11=/usr/X11R6/*`(sysroot 밖) | mkspec에서 `/X11R6/d` (INCDIR/LIBDIR_X11 + LIBDIR_OPENGL) |
+| 3 | 재구성해도 같은 실패 — **config.cache**가 xlib=false를 캐시 | configure 전 `rm -f config.cache` |
+| 4 | x86 rootfs는 **/usr/lib + /usr/lib64 분리**(meson 산출물이 lib64: glib·cairo·mesa·g-i) | 크로스: PKG_CONFIG_LIBDIR에 lib64/pkgconfig 추가 / chroot: PKG_CONFIG_PATH + meson `--libdir=lib` |
+| 5 | 변환기가 `LFS=${QTGATE_ROOT:-…}` 형태를 못 잡아 x86 게이트가 ARM64 경로를 봄 → 앱 사슬 1차 중단 | gate-qt-launch-x86.sh 기본값 `rootfs-lfs-parity`로 수정 |
+| 6 | 세션 중단 시 nohup setsid 자식도 죽은 사례(p2 xcb-util-wm에서 끊김) | 마커 기반 resumable이라 재발사로 이어짐 |
+
+### 상태 (2026-08-28 00:55 KST 기준)
+- ✅ Qt5 스택(qtbase·x11extras·qtermwidget·qterminal) / plank 사슬(g-i·vala·libgee·libwnck 43.2·bamf·plank) / mc·feh / marux-quicksettings / pcmanfm-qt **빌드**
+- 🔄 재발사됨: plank-polish(picom+Marux 테마, `.p2-COMPLETE` 대기) + 앱 사슬(pcmanfm 게이트 → featherpad → lxtools 4종)
+- ⏳ 미착수: ① **config 이식** `setup-desktop-config-x86-v1.sh`(= arm64 v15 포팅: inittab 패턴은 x86 기존 autologin 줄 인정, `.bash_profile` exec→일반, xinitrc·독·MIME·keyfile·라이선스 게이트) ② **ISO cooked-v10** = v9 + `SQUASHFS_ROOT=rootfs-lfs-parity` + [8] xinitrc/[10] idesk 복사 스킵(config 스크립트가 담당) + 스테이징 rsync(exclude)·strip·라이선스·**네이티브 chroot 기동 게이트** → mksquashfs ③ (선택) ibus-hangul 한/영 export 패치본 x86 재빌드(`install-hangul-arm64-v2.sh` 변환) — 없으면 상태 바 한/A가 A 고정 ④ 릴리즈 x86 자산 교체(`gh release upload --clobber`) + 릴리즈 노트/README 갱신
+- 확인 명령: scratchpad `x86-status.sh`(마커·바이너리 표) — 없으면 `ls $B/*.console; ls $B/.{q,f,e,t}-COMPLETE $B/rootfs-lfs-parity/sources/.{p,p2,5A,q}-COMPLETE`

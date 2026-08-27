@@ -1096,6 +1096,9 @@
 - 함정: root로 실행 시 `WSL_KERNEL_BUILD_ROOT` 기본값이 `/home/root/…`로 풀려 커널을 못 찾음 → 환경변수로 `/home/administrator/MaruxOS-kernel-build` 명시(1차 발사 실패).
 - 산출: `MaruxOS-2.0.0-x86_64.iso` **1.24G** (SHA `6342ac4fd4271a7236025dba248eb0edde8cd28c6fbaeb54cd390f55b8165ccb`, = cooked-v9.iso). 빌드 23:54→23:56(2분).
 
+### 2.0.0-cooked-v9 → 2.0.0-cooked-v10 - 2026-08-28 (x86_64 데스크톱 패리티: Qt 앱 7종·Plank·picom·상태 바·자동 로그인) [준비 중]
+**맥락:** "ISO도 img처럼". x86 rootfs 사본(`x86-parity/rootfs-lfs-parity`)에 ARM64 크로스 체계 재사용으로 Qt 스택·앱·plank·picom·quicksettings 이식 중(Kernel-Log §34). 스크립트 미작성: config x86 v1 + build v10(스테이징 rsync·strip·라이선스·네이티브 기동 게이트). 산출 예정: `MaruxOS-2.0.0-x86_64.iso` 교체.
+
 ## ARM64 트랙 이미지 빌드 (별도 명명 `build-2.0.0-cooked-arm64-vN.sh`)
 
 > ⚠️ x86_64 `cooked-vN`과 **완전 별개 트랙**. 산출물 `MaruxOS-2.0.0-arm64.img.xz` (Live ISO 아님 — Pi 4B용 hybrid disk image). v1~v5는 인라인 조립이라 미기록 (상세: `ARM64-Update-Log.md`). **v6가 최초의 스크립트화 빌드.**

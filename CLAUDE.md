@@ -85,6 +85,7 @@ qemu-system-x86_64 -m 4G -enable-kvm -cdrom output/MaruxOS-X.Y.Z-67-vN.iso
 | Windows 프로젝트 루트 (공통) | `c:\Users\Administrator\Desktop\MaruxOS\` |
 | WSL x86_64 빌드 (기존) | `/home/$USER/MaruxOS/build/` — **건드림 ❌** |
 | WSL ARM64 빌드 (NEW) | `/home/$USER/MaruxOS-arm64/` — **완전 분리** ⭐ |
+| WSL x86 패리티 작업(2026-08-28~) | `/home/$USER/MaruxOS/x86-parity/` — x86 rootfs **사본** + gcc-13 래퍼 + Qt 크로스(`scripts/*-x86.sh`). 기존 `build/`는 건드리지 않음 |
 | ARM64 하위 | `toolchain/`, `kernel/`, `firmware/`, `rootfs-clfs-arm64/`, `iso-build/`, `output/` |
 | ARM64 전용 config (Pi boot용) | `config-arm64/` (config.txt, cmdline.txt 등) |
 
