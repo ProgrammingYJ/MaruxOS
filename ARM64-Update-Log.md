@@ -2203,7 +2203,10 @@ SHA256  29579682072cd1a78c15df4d775e6e1d4840a343619f8b883622a0ad24a8a535
 - "gcc 빼면 커널 패닉?" → 아니다: 커널은 kernel8.img로 부팅, 런타임은 `libgcc_s.so`·`libstdc++.so`(유지). 컴파일러 실행파일은 새 프로그램을 만들 때만. 대신 **게이트로 증명**: 슬림 사본에서 NEEDED 전수 해석 + 기동 게이트 7종 재실행. 잃는 건 self-hosting 시연뿐(`SLIM_KEEP_GCC=1`로 복원 가능).
 - 구현: 이미지 사본에만 exclude/strip/라이선스 동봉 → $LFS(빌드 sysroot)는 그대로. IMGSIZE 27G→8G(dd 시간 1/3).
 
-### 🏁 현재 핸드오프 (2026-08-27 03:55) — **최신 = v33 (출품 제출본)**
+### 🔐 v34 (2026-08-27 18:09) — 공개 릴리즈 자산: root 비번 `marux`
+공개 직전 비밀정보 스캔에서 이미지 root 비번이 개발자 개인 비번과 동일하고 그 문자열이 origin/main에 이미 노출돼 있었음이 드러남(Kernel-Log §33). v34 = v33 + 이미지 사본 `/etc/shadow` root 해시를 `marux`로 교체(openssl 검증 게이트). SHA `1a6cbcc0a1cf842de7fc2edcd4336d6fed506804ed1be57ffafd4e852b730756` 384M. 문서의 비번은 `<ROOT_PW>`로 치환, `.claude/settings.local.json` 추적 해제. **사용자: 노출된 비번 변경 필요.**
+
+### 🏁 현재 핸드오프 (2026-08-27 03:55) — **최신 = v33 → v34 (릴리즈 자산)**
 ```
 MaruxOS-2.0.0-arm64.img.xz
 SHA256  fc3e038f42758b78c589b8b46029e3a927e1f2f263bac07a0226689e6beabca2
