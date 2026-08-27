@@ -1091,6 +1091,11 @@
 
 ---
 
+### 2.0.0-cooked-v8 → 2.0.0-cooked-v9 - 2026-08-27 (x86_64 공개 릴리즈 ISO — x86 전용 메뉴 + root/marux) ✅ **= GitHub 릴리즈 자산**
+**맥락:** GitHub 릴리즈 v2.0.0 자산용. 공유 `config/openbox/menu.xml`이 ARM64 배치 Q~T로 Qt 앱 기준이 되어 x86에선 메뉴가 깨짐 → **`config/openbox/menu-x86.xml`**(origin/main 1.2.1판) 분리 + 게이트(Qt 앱 참조 금지·xterm/mc/firefox 실존). root 비번 `marux`(v8까지 빈 비번; tty1 자동 로그인 유지). 산출 사본 `MaruxOS-2.0.0-x86_64.iso` + sha256. 그 외 v8 동일(커널 6.18.26, tint2/xterm/mc/Firefox/ibus-hangul).
+- 함정: root로 실행 시 `WSL_KERNEL_BUILD_ROOT` 기본값이 `/home/root/…`로 풀려 커널을 못 찾음 → 환경변수로 `/home/administrator/MaruxOS-kernel-build` 명시(1차 발사 실패).
+- 산출: `MaruxOS-2.0.0-x86_64.iso` **1.24G** (SHA `6342ac4fd4271a7236025dba248eb0edde8cd28c6fbaeb54cd390f55b8165ccb`, = cooked-v9.iso). 빌드 23:54→23:56(2분).
+
 ## ARM64 트랙 이미지 빌드 (별도 명명 `build-2.0.0-cooked-arm64-vN.sh`)
 
 > ⚠️ x86_64 `cooked-vN`과 **완전 별개 트랙**. 산출물 `MaruxOS-2.0.0-arm64.img.xz` (Live ISO 아님 — Pi 4B용 hybrid disk image). v1~v5는 인라인 조립이라 미기록 (상세: `ARM64-Update-Log.md`). **v6가 최초의 스크립트화 빌드.**
