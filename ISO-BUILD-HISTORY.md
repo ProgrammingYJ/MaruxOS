@@ -1366,6 +1366,10 @@
 - 발사 5회(게이트 자기 오류 4건 교정: readelf pipefail 침묵사·`ls a b glob` 전부누락 오판·libperl 깊은 경로·MimeType text/x-python 오탐·사본 경로 가드). 슬림 사본에서 **기동 게이트 7종 PASS**, NEEDED 202종 전부 해석.
 - 산출: **361M** (SHA `fc3e038f42758b78c589b8b46029e3a927e1f2f263bac07a0226689e6beabca2`, WSL·Win 일치 377,620,436 B, 사이드카 갱신). rootfs 복사 1.3G → strip 후 **919M** → xz **361M** (v32 3.2G 대비 **-89%**). 빌드 03:45→03:50(5분, 이미지 8G).
 
+### arm64-v34 - 2026-08-27 (🔐 공개 릴리즈용 root 비번 marux + v33 다이어트/라이선스) [빌드 중]
+**맥락:** GitHub 공개 직전 비밀정보 스캔(Kernel-Log §33) — v33까지의 이미지 `/etc/shadow` root 해시가 개발자 개인 비번이었음. 이미지 사본에서 `openssl passwd -6`로 `marux` 해시 주입 + salt 재계산 검증 게이트. 첫 발사는 호스트 절전 복귀 후 snapfuse 마운트가 굳어 `sfdisk`의 `sync()`가 무한 대기 → WSL 재시작 후 재발사.
+- 산출: 빌드 중 → SHA 추기.
+
 ### (선행 스크립트 변경) 2026-08-14 — libwnck 43.0→43.2 + config v8
 - **`install-plank-arm64.sh`**: libwnck **43.2**로 버전업 — 43.0은 `invalidate_icons`에 screens NULL 가드가 없어 bamfdaemon 즉사(실기기 dmesg 트레이스→디스어셈블→43.0↔43.2 diff로 근원 특정. 업스트림 픽스 채택). $LFS 재빌드 완료(bamf 포함). **43.2 라이브 검증**: gzip+base64 시리얼 무플래시 배포 → bamf 가동 → **점 표시+실행 중 앱 클릭 전환 실기기 확인**.
 - **`setup-desktop-config-arm64-v8.sh`** (v7 클론): tint2 **clock-only**(`panel_items = C`, `panel_size = 100 36`) — 윈도우식 우하단 시계(실기기 확정).

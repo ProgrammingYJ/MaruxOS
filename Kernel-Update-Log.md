@@ -1336,3 +1336,17 @@ ls -la /home/$USER/MaruxOS-arm64/
 
 ### 교훈
 "Public Domain"은 *태도*였지 *라이선스 문서*가 아니었다. 이념(오픈소스 환원)은 Unlicense로 더 정확히 표현되고, 그 위에서 **남의 라이선스를 존중하는 절차**(텍스트 동봉·소스 제안·패치 공개)가 실제 신뢰를 만든다.
+
+---
+
+## Section 33 — 2026-08-27: GitHub 공개 직전 보안 점검 — 개인 비번 노출 발견·제거
+
+**발견**: 공개 전 비밀정보 스캔에서 개발자 개인 비번 문자열이 ① `ARM64-Update-Log.md`·`ISO-BUILD-HISTORY.md`(root 비번으로 기록) ② `config/system-defaults.conf`(x86 빌드 입력) ③ **`.claude/settings.local.json`**(WSL sudo 명령 허용 목록 — 즉 *호스트 PC 비번*) 에 존재. 더 나쁜 것: ②③은 **커밋 3a3d326 이래 공개 저장소 origin/main에 이미 올라가 있었다.** WiFi 비번은 저장소 어디에도 없음 ✓.
+
+**조치**
+- 문서의 비번 → `<ROOT_PW>` 플레이스홀더, `system-defaults.conf` → `marux`(공개 기본값), `.claude/settings.local.json` **추적 해제 + .gitignore**(백업 `*.bak*`·`*.xz`·docx 백업도 무시)
+- **v34**: 이미지 사본 `/etc/shadow`의 root 해시를 `marux`(sha512)로 교체 + openssl 검증 게이트. tty1 자동 로그인이라 데스크톱 사용엔 무관
+- 정리된 트리를 커밋 `10027ec` → `origin/2.0.0-cooked-arm64` 푸시(커밋 트리에 잔재 0 확인)
+- **사용자 조치 필요**: 노출된 비번은 이미 공개된 것으로 간주 → WSL 계정 비번(및 재사용처) **변경**. 히스토리 정화(git filter-repo + force push)는 사용자 판단 후.
+
+**교훈**: 도구 설정 파일(`.claude/settings.local.json`)에 셸 명령 원문이 저장되는데 그 안에 `echo '비번' | sudo -S` 가 들어가면 비번이 설정 파일에 박힌다. *로컬* 설정은 처음부터 gitignore, 비밀은 명령줄이 아니라 환경/키링으로. 공개 전 스캔은 릴리즈 체크리스트의 첫 줄.
