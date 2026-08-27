@@ -1,0 +1,34 @@
+#---- MaruxOS floating clock (2026-08-14 실기기 라이브 튜닝 확정 — 사용자 스케치 구현) ----
+# 우하단 공중 부양 라운드 회색 박스, 2줄 (HH : MM / mm-dd(요일)).
+# - panel_shrink=1 + clock_padding 좌우 30 → 박스가 텍스트 기준 대칭 확장 = 중앙정렬 구조 보장
+# - strut_policy=none → 화면 공간 예약 없음(창이 밑까지 내려감), panel_layer=top → 항상 위
+# - 라운드 코너 진짜 투명 = picom 컴포지터 전제 (tint2 "real transparency" 로그 확인됨)
+# - 폰트: NanumGothic Bold 실물 존재 (fc-list 확인) — 숫자/한글 요일 톤 통일
+# ⚠️ 활성 rc는 ~/.config/tint2/tint2rc (홈 복사본 우선) — 배포 시 홈 캐시 제거 필수
+# ⚠️ tint2는 sed 후 핫리로드 안 됨(파일 교체가 감시 끊음) — 변경 후 재시작 필수
+# Background 1: rounded gray box
+rounded = 12
+border_width = 0
+background_color = #c8c8c8 90
+border_color = #000000 0
+
+panel_monitor = all
+panel_position = bottom right horizontal
+panel_items = C
+panel_size = 150 60
+panel_margin = 10 10
+panel_padding = 0 0 0
+panel_background_id = 1
+panel_layer = top
+strut_policy = none
+panel_dock = 0
+panel_shrink = 1
+wm_menu = 0
+
+time1_format = %H : %M
+time1_font = NanumGothic Bold 15
+time2_format = %m-%d(%a)
+time2_font = NanumGothic Bold 10
+clock_font_color = #1a1a1a 100
+clock_padding = 30 8
+clock_background_id = 0

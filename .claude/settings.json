@@ -1,0 +1,37 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(echo \"=== exit: $? ===\")",
+      "Bash(wsl.exe -d Ubuntu -e bash -lc ' *)",
+      "PowerShell($ram = \\(Get-CimInstance Win32_ComputerSystem\\).TotalPhysicalMemory / 1GB; Write-Output \\(\"Host RAM: {0:N1} GB\" -f $ram\\); $cfg = \"$env:USERPROFILE\\\\.wslconfig\"; if \\(Test-Path $cfg\\) { Write-Output \"=== existing .wslconfig ===\"; Get-Content $cfg } else { Write-Output \"no .wslconfig \\(WSL using defaults\\)\" })",
+      "Bash(wsl.exe -d Ubuntu -e bash -lc 'sudo -n true 2>/dev/null && echo \"SUDO: PASSWORDLESS\" || echo \"SUDO: NEEDS_PASSWORD\"')",
+      "Bash(wsl.exe -d Ubuntu -u root -e bash -lc 'id; echo \"---\"; echo \"root shell OK\"')",
+      "Bash(echo \"=== wsl exit: $? ===\")",
+      "PowerShell(wsl --shutdown)",
+      "Bash(wsl.exe -d Ubuntu -u root -e bash -lc ' *)",
+      "Bash(wsl.exe -d Ubuntu -u root -e bash)",
+      "Bash(wsl.exe -d Ubuntu -e bash)",
+      "PowerShell($bat = \\(Get-CimInstance Win32_Battery\\).BatteryStatus; Write-Output \"전원: $\\(if\\($bat -eq 2\\){'AC\\(충전중/연결\\)'}else{'배터리 or 상태='+$bat}\\)\"; Write-Output \"=== 현재 AC sleep 타임아웃 ===\"; powercfg /query SCHEME_CURRENT SUB_SLEEP STANDBYIDLE 2>$null | Select-String \"Current AC\" ; Write-Output \"=== 슬립 방지 설정 \\(AC standby/hibernate = 0\\) ===\"; powercfg /change standby-timeout-ac 0; powercfg /change hibernate-timeout-ac 0; Write-Output \"적용 완료 \\(AC에서 자동 슬립/최대절전 끔\\). 복구: powercfg /change standby-timeout-ac 30\")",
+      "WebFetch(domain:www.raspberrypi.com)",
+      "Bash(ls -R \"c:/Users/Administrator/Desktop/MaruxOS/config-arm64/\")",
+      "Bash(ls -la \"c:/Users/Administrator/Desktop/MaruxOS/docs/arm64/\")",
+      "Bash(wc -l Kernel-Update-Log.md)",
+      "Bash(git log *)",
+      "Bash(ls -la docs/)",
+      "Bash(ls -la docs/arm64/)",
+      "Bash(find docs *)",
+      "Bash(cd \"c:/Users/Administrator/Desktop/MaruxOS/config-arm64\" && stat -c '%n %s' firmware/start4.elf firmware/start4x.elf firmware/fixup4.dat firmware/fixup4x.dat firmware/overlays/*.dtbo isolation-test/kernel8.img isolation-test/bcm2711-rpi-4-b.dtb 2>/dev/null)",
+      "Read(//c/Users/Administrator/Desktop/MaruxOS/**)",
+      "PowerShell(& powershell -ExecutionPolicy Bypass -File \"C:\\\\Users\\\\ADMINI~1\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-Administrator-Desktop-MaruxOS\\\\ef7811bf-ac6d-4211-9f1a-dd1d66959e3f\\\\scratchpad\\\\serial-capture.ps1\" -ComPort COM9 -Baud 115200 -Seconds 120)",
+      "Read(//f//**)",
+      "PowerShell(& powershell -ExecutionPolicy Bypass -File \"C:\\\\Users\\\\ADMINI~1\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-Administrator-Desktop-MaruxOS\\\\ef7811bf-ac6d-4211-9f1a-dd1d66959e3f\\\\scratchpad\\\\serial-interact.ps1\" -ComPort COM9 -Baud 115200 -Seconds 70)",
+      "Bash(wsl.exe -d Ubuntu -u root -e bash -c ' *)",
+      "Bash(wsl.exe -d Ubuntu -u root -e bash /mnt/c/Users/Administrator/Desktop/MaruxOS/scripts/build-2.0.0-cooked-arm64-v6.sh)",
+      "Bash(wsl.exe -d Ubuntu -u root -e bash -c 'sed \"s/\\\\r$//\" /mnt/c/Users/Administrator/Desktop/MaruxOS/scripts/build-2.0.0-cooked-arm64-v6.sh | bash')"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\Administrator",
+      "F:\\"
+    ]
+  }
+}

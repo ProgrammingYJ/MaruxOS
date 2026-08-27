@@ -5,6 +5,16 @@ export XDG_RUNTIME_DIR=/tmp/runtime-root
 mkdir -p $XDG_RUNTIME_DIR
 chmod 700 $XDG_RUNTIME_DIR
 
+# XDG Session 메타데이터 (plank/jgmenu 등이 데스크톱 컨텍스트 인식)
+# 미설정 시 plank가 [WARN] 다수 출력 (fatal은 아니지만 cleanup)
+export XDG_SESSION_TYPE=x11
+export XDG_SESSION_CLASS=user
+export XDG_SESSION_DESKTOP=MaruxOS
+export XDG_CURRENT_DESKTOP=MaruxOS
+export DESKTOP_SESSION=MaruxOS
+export XDG_DATA_DIRS=/usr/local/share:/usr/share
+export XDG_CONFIG_DIRS=/etc/xdg
+
 # 로케일 설정 (한국어 UTF-8 완벽 지원)
 export LANG=ko_KR.UTF-8
 export LC_ALL=ko_KR.UTF-8
@@ -213,6 +223,11 @@ if [ -f /usr/share/pixmaps/maruxos/marux-desktop.png ]; then
     feh --bg-scale /usr/share/pixmaps/maruxos/marux-desktop.png &
 fi
 
+# X11 client 기본값 적용 (xterm 한국어 폰트 등)
+if [ -f /etc/X11/Xresources ] && command -v xrdb >/dev/null 2>&1; then
+    xrdb -merge /etc/X11/Xresources
+fi
+
 # Openbox 윈도우 매니저
 openbox &
 sleep 0.5
@@ -236,6 +251,18 @@ if [ -x /usr/bin/idesk ]; then
     idesk &
 fi
 
+# Plank dock (v3~v7 시도 — v8에서 롤백, 2.0.x 패치로 deferred)
+# 조건부 시작 블록은 유지 (/usr/bin/plank 없으면 자동 skip).
+# 2.0.x에서 부활 시 이 블록이 다시 활성화됨.
+if [ -x /usr/bin/plank ]; then
+    if [ ! -d "$HOME/.config/plank" ] && [ -d /etc/skel/.config/plank ]; then
+        mkdir -p "$HOME/.config"
+        cp -r /etc/skel/.config/plank "$HOME/.config/plank"
+    fi
+    /usr/bin/plank 2>/dev/null &
+    sleep 0.3
+fi
+
 # 시스템 트레이 앱들
 if [ -x /usr/bin/nm-applet ]; then
     /usr/bin/nm-applet 2>/dev/null &
@@ -245,5 +272,5 @@ if [ -x /usr/bin/volumeicon ]; then
     /usr/bin/volumeicon 2>/dev/null &
 fi
 
-# tint2 패널
+# tint2 패널 (plank가 있으면 systray-only 모드로 자동 fallback — build script가 적절한 tint2rc 배치)
 exec tint2

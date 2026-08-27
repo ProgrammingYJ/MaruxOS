@@ -25,13 +25,13 @@
 
 ### MaruxOS란?
 
-MaruxOS는 **Linux From Scratch (LFS) 12.1**을 기반으로 하는 완전히 독립적인 Linux 배포판입니다.
+MaruxOS는 **Linux From Scratch (LFS) 12.0 툴체인 + 12.1-era 유저랜드**를 기반으로 하는 완전히 독립적인 Linux 배포판입니다.
 
 **핵심 특징:**
 - 100% 소스코드부터 빌드
 - 외부 배포판 의존성 제로
 - 완전한 커스터마이징 가능
-- Linux 6.12 LTS 커널
+- Linux 6.18.26 LTS 커널 (2.0.0 "Cooked" 기준, 1.x는 6.7.4였음 — errata 참고)
 - GCC 13.2.0 도구체인
 - SysVinit 초기화 시스템
 - Openbox + tint2 데스크톱 환경
@@ -318,7 +318,7 @@ bash /sources/../scripts/lfs/08-system-configuration.sh
    - `/etc/profile` (환경 변수)
    - `/etc/hosts` (호스트 이름)
 4. **Linux 커널 빌드**
-   - Kernel 6.12 LTS
+   - Kernel 6.18.26 LTS
    - 모듈 설치
    - `/boot/vmlinuz` 설치
 5. **GRUB 부트로더 설치**
@@ -498,7 +498,7 @@ bash scripts/lfs/03-build-temp-tools.sh
 
 ## 라이선스
 
-MaruxOS는 MIT 라이선스 하에 배포됩니다.
+MaruxOS의 자체 기여물은 퍼블릭 도메인(Public Domain)으로 배포됩니다 — 저작권 포기, 제한 없는 완전한 자유.
 
 개별 패키지는 각자의 라이선스를 따릅니다 (GPL, LGPL, BSD 등).
 

@@ -1,5 +1,16 @@
 # MaruxOS Build Status
 
+> ⚠️ **HISTORICAL SNAPSHOT — Genesis 시기 (2025-11) 박제본**
+>
+> 본 문서는 MaruxOS 최초 LFS Phase 0-3 완료 시점의 스냅샷입니다 (Phase 3/8, 37.5%).
+> 이후 1.0 Phoenix → 1.1/1.2.x "67" → 2.0.0 "Cooked"로 진화. 본 문서의 "마지막 업데이트: 2024-11-28"은 timestamp hallucination (실제는 **2025-11-28**).
+>
+> 현재 상태는 [CHANGELOG.md](CHANGELOG.md) + [Kernel-Update-Log.md](Kernel-Update-Log.md) 참조.
+> 본 문서는 의도적으로 박제되어 있음 — Genesis 시점의 결정과 함정을 그대로 보존해야 발표 자료(OSS Korea 2026)의 archaeology가 됨.
+
+---
+
+
 ## 🎯 현재 진행 상황
 
 ### ✅ 완료된 단계

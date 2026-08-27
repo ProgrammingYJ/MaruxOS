@@ -1,0 +1,10 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -25,6 +25,7 @@
+ include(GNUInstallDirs)
+ include(LXQtPreventInSourceBuilds)
+ include(LXQtCompilerSettings)
++remove_definitions(-DQT_NO_CAST_FROM_ASCII -DQT_NO_CAST_TO_ASCII -DQT_NO_CAST_FROM_BYTEARRAY -DQT_NO_URL_CAST_FROM_STRING) # MaruxOS: ASCII cast 허용 (2018 코드 x build-tools 0.13)
+ include(LXQtTranslateTs)
+ include(LXQtTranslateDesktop)
+ include(Qt5TranslationLoader)

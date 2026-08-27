@@ -6,3 +6,5 @@ Type=Application
 Categories=Network;WebBrowser;
 Terminal=false
 MimeType=text/html;text/xml;application/xhtml+xml;
+StartupNotify=true
+StartupWMClass=Navigator

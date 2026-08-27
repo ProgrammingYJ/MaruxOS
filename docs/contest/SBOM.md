@@ -1,0 +1,89 @@
+# 붙임1 — SBOM (소프트웨어 자재명세서) · MaruxOS 2.0.0 ARM64
+
+> 실제 빌드에 사용된 업스트림 tarball(`SOURCES.md`, 264개) 중 **이미지에 설치되어 동작하는 구성 요소**를 기능 단위로 묶어 기재. 세부 라이브러리 전체 목록·SHA256은 `SOURCES.md`, 라이선스 준수 방식은 `THIRD-PARTY-LICENSES.md`, 수정 사항은 `patches/` 참조.
+>
+> MaruxOS 고유 저작물(빌드 시스템 약 36,000줄 Bash·설정·문서·`marux-quicksettings` Vala·자체 아이콘)은 **The Unlicense**.
+
+| 번호 | 라이브러리명 | 버전 | 라이선스 | 공식 저장소 URL | 사용 목적 및 주요 기능 |
+|---|---|---|---|---|---|
+| 1 | Linux kernel | 6.18.26 (LTS) | GPL-2.0-only | https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git | 운영체제 커널. Pi 4B 부팅 드라이버 builtin 구성, brcmfmac FWSUP 비활성 패치(patches/) |
+| 2 | glibc | 2.38 | LGPL-2.1+ | https://sourceware.org/git/glibc.git | C 표준 라이브러리 / 동적 링커 (동적 링크로 사용) |
+| 3 | GCC (libgcc, libstdc++ 런타임) | 13.2.0 | GPL-3.0+ with GCC Runtime Library Exception 3.1 | https://gcc.gnu.org/git/gcc.git | C/C++ 컴파일러 및 런타임 라이브러리 |
+| 4 | GNU Binutils | 2.41 | GPL-3.0+ | https://sourceware.org/git/binutils-gdb.git | 링커·어셈블러 (빌드 도구) |
+| 5 | GMP / MPFR / MPC | 6.3.0 / 4.2.1 / 1.3.1 | LGPL-3.0+ / LGPL-3.0+ / LGPL-3.0+ | https://gmplib.org/ , https://www.mpfr.org/ , https://www.multiprecision.org/ | GCC 의존 다정밀 연산 라이브러리 |
+| 6 | zlib | 1.3.1 | zlib | https://github.com/madler/zlib | 압축 라이브러리 |
+| 7 | xz / bzip2 / gzip / zstd | 5.4.6 / 1.0.8 / 1.13 / 1.5.5 | GPL-3.0+ (xz: 0BSD/GPL) / bzip2 / GPL-3.0+ / BSD-3 | https://github.com/tukaani-project/xz , https://sourceware.org/bzip2/ , https://www.gnu.org/software/gzip/ , https://github.com/facebook/zstd | 압축 도구 |
+| 8 | sysvinit | 3.08 | GPL-2.0+ | https://github.com/slicer69/sysvinit | init 시스템 (부팅·런레벨·tty1 자동 로그인) |
+| 9 | eudev | 3.2.14 | GPL-2.0+ / LGPL-2.1+ | https://github.com/eudev-project/eudev | 장치 관리(udev) |
+| 10 | D-Bus | 1.14.10 | AFL-2.1 or GPL-2.0+ | https://gitlab.freedesktop.org/dbus/dbus | IPC 버스 (ibus·Qt 앱 단일 인스턴스) |
+| 11 | util-linux | 2.39.3 | GPL-2.0+ / LGPL-2.1+ / BSD | https://github.com/util-linux/util-linux | agetty·mount·fdisk 등 시스템 유틸리티 |
+| 12 | GNU coreutils | 9.4 | GPL-3.0+ | https://git.savannah.gnu.org/git/coreutils.git | 기본 명령(ls, cp, …) |
+| 13 | Bash | 5.2.21 | GPL-3.0+ | https://git.savannah.gnu.org/git/bash.git | 셸 / 빌드·부팅 스크립트 실행 |
+| 14 | GNU findutils / grep / sed / gawk / diffutils / tar / make | 4.9.0 / 3.11 / 4.9 / 5.3.0 / 3.10 / 1.35 / 4.4.1 | GPL-3.0+ | https://www.gnu.org/software/ | 기본 텍스트·파일 도구 |
+| 15 | shadow | 4.14.5 | BSD-3-Clause | https://github.com/shadow-maint/shadow | 계정·로그인 관리 |
+| 16 | Linux-PAM | 1.6.0 | BSD-3-Clause | https://github.com/linux-pam/linux-pam | 인증 모듈 |
+| 17 | e2fsprogs | 1.47.0 | GPL-2.0 / LGPL-2.0 | https://git.kernel.org/pub/scm/fs/ext2/e2fsprogs.git | ext4 파일시스템 도구(fsck) |
+| 18 | procps-ng / psmisc | 4.0.4 / 23.6 | GPL-2.0+ / GPL-2.0+ | https://gitlab.com/procps-ng/procps , https://gitlab.com/psmisc/psmisc | 프로세스 관리(ps, top, pkill) |
+| 19 | kmod | 31 | LGPL-2.1+ / GPL-2.0+ | https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git | 커널 모듈 도구 |
+| 20 | iproute2 | 6.7.0 | GPL-2.0+ | https://git.kernel.org/pub/scm/network/iproute2/iproute2.git | 네트워크 설정(ip) |
+| 21 | dhcpcd | 10.0.6 | BSD-2-Clause | https://github.com/NetworkConfiguration/dhcpcd | DHCP 클라이언트 (유선/무선 IP 자동 설정) |
+| 22 | wpa_supplicant | 2.11 | BSD-3-Clause | https://w1.fi/cgit/hostap/ | WiFi WPA2 인증 (4-way offload 비활성 패치) |
+| 23 | libnl | 3.9.0 | LGPL-2.1 | https://github.com/thom311/libnl | wpa_supplicant nl80211 통신 |
+| 24 | chrony | 4.5 | GPL-2.0 | https://gitlab.com/chrony/chrony | NTP 시간 동기화 (RTC 없는 Pi 시계 보정) |
+| 25 | OpenSSL | 3.2.1 | Apache-2.0 | https://github.com/openssl/openssl | TLS/암호화 (wpa_supplicant·chrony·Qt 네트워크) |
+| 26 | wireless-regdb | 2024+ regulatory.db | ISC | https://git.kernel.org/pub/scm/linux/kernel/git/wens/wireless-regdb.git | WiFi 규제 도메인 DB (KR) |
+| 27 | Cypress/Infineon CYW43455 WiFi firmware | linux-firmware cypress | Cypress 독점 라이선스(재배포 허용, 무수정) | https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git | Pi 4B WiFi 펌웨어 (커널 이미지 내장) |
+| 28 | Raspberry Pi boot firmware (start4.elf, fixup4.dat) | raspberrypi/firmware | Broadcom 독점 라이선스(Pi 기기용 재배포 허용) | https://github.com/raspberrypi/firmware | Pi 4B 부트로더 (EEPROM → start4.elf → kernel8.img) |
+| 29 | alsa-lib / alsa-utils | 1.2.10 / 1.2.10 | LGPL-2.1+ / GPL-2.0+ | https://github.com/alsa-project/alsa-lib , https://github.com/alsa-project/alsa-utils | 오디오 / 볼륨 제어(amixer) |
+| 30 | ncurses | 6.4 | MIT(X11) | https://invisible-island.net/ncurses/ | 터미널 UI 라이브러리 (mc, top) |
+| 31 | Midnight Commander (mc) | 4.8.31 | GPL-3.0+ | https://github.com/MidnightCommander/mc | 터미널 파일 관리자 (폴백) |
+| 32 | Vim | 9.1.0041 | Vim License (GPL 호환) | https://github.com/vim/vim | 터미널 편집기 |
+| 33 | Python | 3.12.2 | PSF-2.0 | https://github.com/python/cpython | 빌드·설정 도구 런타임 (v33 슬림 이미지에서 제외 예정) |
+| 34 | Perl | 5.38.2 | Artistic-1.0 / GPL-1.0+ | https://github.com/Perl/perl5 | 빌드 도구 |
+| 35 | shared-mime-info | 2.4 | GPL-2.0+ | https://gitlab.freedesktop.org/xdg/shared-mime-info | MIME 타입 DB (파일 더블클릭 → 앱 연결) |
+| 36 | libxml2 / expat | 2.12.5 / 2.6.0 | MIT / MIT | https://gitlab.gnome.org/GNOME/libxml2 , https://github.com/libexpat/libexpat | XML 파서 |
+| 37 | pcre2 | 10.43 | BSD-3-Clause | https://github.com/PCRE2Project/pcre2 | 정규식 (GLib 의존) |
+| 38 | GLib | 2.78.4 | LGPL-2.1+ | https://gitlab.gnome.org/GNOME/glib | GObject/GIO 기반 라이브러리 (GTK·ibus·plank·libfm) |
+| 39 | gobject-introspection | 1.78.1 | LGPL-2.0+ / GPL-2.0+ | https://gitlab.gnome.org/GNOME/gobject-introspection | Vala 바인딩 (plank·quicksettings 빌드) |
+| 40 | Vala | 0.56.17 | LGPL-2.1+ | https://gitlab.gnome.org/GNOME/vala | Vala 컴파일러 (Plank·marux-quicksettings 빌드) |
+| 41 | libgee | 0.20.6 | LGPL-2.1+ | https://gitlab.gnome.org/GNOME/libgee | Vala 컬렉션 라이브러리 (Plank) |
+| 42 | X.Org Server | 21.1.11 | MIT | https://gitlab.freedesktop.org/xorg/xserver | 디스플레이 서버 |
+| 43 | libX11 / libxcb / xcb-util* | 1.8.7 / 1.16 / 0.4.x | MIT | https://gitlab.freedesktop.org/xorg/lib/libx11 , https://gitlab.freedesktop.org/xorg/lib/libxcb | X11 클라이언트 라이브러리 |
+| 44 | Mesa | 24.0.1 | MIT | https://gitlab.freedesktop.org/mesa/mesa | OpenGL/DRM (VC4/V3D) |
+| 45 | libdrm | 2.4.120 | MIT | https://gitlab.freedesktop.org/mesa/drm | DRM 사용자 라이브러리 |
+| 46 | libinput / libevdev / xf86-input-libinput | 1.25.0 / 1.13.1 / 1.4.0 | MIT | https://gitlab.freedesktop.org/libinput/libinput | 입력 장치(마우스·키보드) |
+| 47 | libxkbcommon / xkeyboard-config | 1.6.0 / 2.41 | MIT / MIT | https://github.com/xkbcommon/libxkbcommon , https://gitlab.freedesktop.org/xkeyboard-config/xkeyboard-config | 키보드 레이아웃 |
+| 48 | FreeType / fontconfig / HarfBuzz / fribidi | 2.13.2 / 2.15.0 / 8.3.0 / 1.0.13 | FTL(BSD) / MIT / MIT / LGPL-2.1+ | https://gitlab.freedesktop.org/freetype/freetype , https://gitlab.freedesktop.org/fontconfig/fontconfig , https://github.com/harfbuzz/harfbuzz | 글꼴 렌더링·셰이핑 (한글 표시) |
+| 49 | cairo / pixman / pango / gdk-pixbuf / ATK | 1.18.0 / 0.42.2 / 1.51.2 / 2.42.10 / 2.38.0 | LGPL-2.1 or MPL-1.1 / MIT / LGPL-2.1+ / LGPL-2.1+ / LGPL-2.0+ | https://gitlab.freedesktop.org/cairo/cairo , https://gitlab.gnome.org/GNOME/pango | 2D 그래픽·텍스트 레이아웃 (GTK 스택) |
+| 50 | libpng / libjpeg / libtiff / imlib2 | 1.6.42 / 9f / 4.6.0 / 1.12.2 | libpng / IJG / libtiff(BSD) / Imlib2(MIT) | https://github.com/pnggroup/libpng , https://ijg.org/ , https://gitlab.com/libtiff/libtiff , https://github.com/derf/feh | 이미지 코덱 |
+| 51 | GTK+ 2 / GTK 3 | 2.24.33 / 3.24.41 | LGPL-2.1+ | https://gitlab.gnome.org/GNOME/gtk | GUI 툴킷 (ibus 입력기 모듈·quicksettings·Firefox) |
+| 52 | Openbox | 3.6.1 | GPL-2.0+ | https://github.com/danakj/openbox | 윈도 매니저 (우클릭 메뉴·키바인드) |
+| 53 | Plank | 0.11.89 | GPL-3.0+ | https://github.com/ricotz/plank | 독(dock) — 앱 실행·창 전환 |
+| 54 | bamf / libwnck | 0.5.6 / 43.2 | LGPL-3.0 / LGPL-2.0+ | https://launchpad.net/bamf , https://gitlab.gnome.org/GNOME/libwnck | Plank의 창·앱 매칭 |
+| 55 | picom | 11.2 | MIT + MPL-2.0 | https://github.com/yshui/picom | 컴포지터 (투명·유리 독 테마) |
+| 56 | idesk | 0.7.5 | BSD-3-Clause | https://github.com/neagix/idesk | 바탕화면 아이콘 |
+| 57 | feh | 3.10.3 | MIT-style | https://github.com/derf/feh | 배경화면 설정 / 폴백 이미지 뷰어 |
+| 58 | xterm | 410 | MIT(X11) | https://invisible-island.net/xterm/ | 폴백 터미널 |
+| 59 | xinit / xauth / setxkbmap / xsetroot | 1.4.2 / 1.1.3 / 1.3.4 / 1.1.4 | MIT | https://gitlab.freedesktop.org/xorg/app | X 세션 시작·설정 |
+| 60 | DejaVu fonts | 2.37 | Bitstream Vera + Public Domain | https://github.com/dejavu-fonts/dejavu-fonts | 기본 라틴 글꼴 |
+| 61 | Nanum Gothic / Nanum Myeongjo | NAVER 배포판 | SIL OFL 1.1 | https://hangeul.naver.com/fonts | 한글 글꼴 |
+| 62 | ibus | 1.5.29 | LGPL-2.1+ | https://github.com/ibus/ibus | 입력기 프레임워크 (XIM + GTK/Qt immodule) |
+| 63 | ibus-hangul | 1.5.5 | GPL-2.0+ | https://github.com/libhangul/ibus-hangul | 한글 입력 엔진 (한/영 상태 export 패치) |
+| 64 | libhangul | 0.2.0 | LGPL-2.1+ | https://github.com/libhangul/libhangul | 한글 오토마타 라이브러리 |
+| 65 | Qt 5 (qtbase, qtsvg, qtx11extras, qttools/QtHelp) | 5.15.2 | LGPL-3.0 (또는 GPL-2.0/3.0) | https://code.qt.io/cgit/qt/qtbase.git | GUI 툴킷 — 터미널·파일관리자·편집기·뷰어·계산기·압축·작업관리자 (동적 링크, 빌드 픽스 패치) |
+| 66 | lxqt-build-tools | 0.13.0 | BSD-3-Clause | https://github.com/lxqt/lxqt-build-tools | LXQt 앱 CMake 매크로 (빌드 도구) |
+| 67 | qtermwidget / QTerminal | 0.17.0 | GPL-2.0+ | https://github.com/lxqt/qtermwidget , https://github.com/lxqt/qterminal | 기본 터미널 에뮬레이터 |
+| 68 | libfm (extra) / menu-cache | 1.3.2 / 1.1.0 | GPL-2.0+ / LGPL-2.1+ | https://github.com/lxde/libfm , https://github.com/lxde/menu-cache | PCManFM-Qt 의존 (파일 유틸·메뉴 캐시) |
+| 69 | libfm-qt / PCManFM-Qt | 0.17.0 | LGPL-2.1+ / GPL-2.0+ | https://github.com/lxqt/libfm-qt , https://github.com/lxqt/pcmanfm-qt | 기본 파일 관리자 |
+| 70 | libexif | 0.6.24 | LGPL-2.1+ | https://github.com/libexif/libexif | 이미지 EXIF (libfm-qt·LXImage) |
+| 71 | FeatherPad | 0.17.1 | GPL-3.0+ | https://github.com/tsujan/FeatherPad | 텍스트 편집기 (text/* 기본앱) |
+| 72 | hunspell | 1.7.2 | LGPL-2.1 / GPL-2.0 / MPL-1.1 | https://github.com/hunspell/hunspell | 맞춤법 검사 (FeatherPad 의존) |
+| 73 | LXImage-Qt | 0.17.0 | GPL-2.0+ | https://github.com/lxqt/lximage-qt | 이미지 뷰어 + 스크린샷 (image/* 기본앱) |
+| 74 | SpeedCrunch | 0.12.0 | GPL-2.0+ | https://github.com/speedcrunch/SpeedCrunch | 계산기 |
+| 75 | LXQt Archiver | 0.2.0 | GPL-2.0+ | https://github.com/lxqt/lxqt-archiver | 압축 관리자 (zip/tar 기본앱) |
+| 76 | json-glib | 1.6.6 | LGPL-2.1+ | https://gitlab.gnome.org/GNOME/json-glib | LXQt Archiver 의존 |
+| 77 | Info-ZIP unzip / zip | 6.0 / 3.0 | Info-ZIP License | https://infozip.sourceforge.net/ | zip 백엔드 |
+| 78 | qps | 1.10.20 | GPL-2.0+ | https://github.com/lxqt/qps | GUI 작업 관리자 |
+| 79 | Firefox ESR (공식 aarch64 ko 빌드, 무수정) | 140.13.0esr | MPL-2.0 | https://hg.mozilla.org/releases/mozilla-esr140/ | 웹 브라우저 (Mozilla 공식 바이너리 재배포) |
+| 80 | Linux From Scratch (절차서) | LFS 12.0 툴체인 / 12.1-era | MIT (지침) / CC BY-NC-SA 2.0 (본문) | https://www.linuxfromscratch.org/ | from-scratch 빌드 절차 참조 |
+| 81 | CMake / Meson / Ninja / QEMU user (빌드 호스트) | 3.28 / 1.3.2 / 1.11.1 / Ubuntu | BSD-3 / Apache-2.0 / Apache-2.0 / GPL-2.0 | https://github.com/Kitware/CMake , https://github.com/mesonbuild/meson , https://github.com/qemu/qemu | 빌드 호스트 도구 (이미지에 미포함) |

@@ -1,0 +1,11 @@
+--- a/bits/math-vector.h
++++ b/bits/math-vector.h
+@@ -35,7 +35,7 @@
+ typedef __attribute__ ((__neon_vector_type__ (2))) double __f64x2_t;
+ #endif
+ 
+-#if __GNUC_PREREQ(10, 0) || __glibc_clang_prereq(11, 0)
++#if 0 /* MaruxOS: SVE — Pi4B(Cortex-A72) 미지원이라 비활성 */
+ #  define __SVE_VEC_MATH_SUPPORTED
+ typedef __SVFloat32_t __sv_f32_t;
+ typedef __SVFloat64_t __sv_f64_t;

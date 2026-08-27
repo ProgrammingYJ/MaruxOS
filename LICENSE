@@ -1,44 +1,78 @@
-# MaruxOS - Public Domain / No License
+# MaruxOS License
 
-This project is released into the **public domain**.
+## 1. MaruxOS's own work — The Unlicense (Public Domain Dedication)
 
-You are free to:
-- Use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-- Use for any purpose (commercial or non-commercial)
-- Modify without attribution
-- Do anything you want with this code
+To the extent possible under law, the MaruxOS authors have waived all copyright and related or neighboring
+rights to **the MaruxOS-specific work in this repository**, which means:
 
-**No restrictions. No conditions. Complete freedom.**
+- build, install and configuration scripts (`scripts/`), configuration files (`config/`, `config-arm64/`),
+- documentation (`*.md`, `docs/`),
+- `src/marux-quicksettings` (the MaruxOS status bar / quick-settings GUI),
+- icons drawn by MaruxOS (`marux-editor.png`, `marux-image.png`, `marux-calc.png`, `marux-archive.png`, `marux-taskmgr.png`),
+- the assembly of the distribution (package selection, layout, integration).
+
+You may use, copy, modify, distribute and sell this work, for any purpose, without asking permission
+and without attribution. The full Unlicense text is reproduced in §4 below and in
+`config/licenses/UNLICENSE.txt` (SPDX: `Unlicense`, OSI-approved).
+
+**Why the Unlicense and not just "public domain":** several jurisdictions (including the Republic of Korea)
+have no formal mechanism for an author to place a work in the public domain. The Unlicense achieves the same
+intent everywhere: a public-domain dedication where the law allows it, and an unconditional, irrevocable,
+OSI-approved license where it does not.
+
+## 2. What the Unlicense does NOT cover
+
+- **Third-party software in the distribution image.** A MaruxOS image is an *aggregate* of hundreds of
+  independent projects — the Linux kernel (GPL-2.0), glibc and Qt 5 (LGPL), Firefox (MPL-2.0), Openbox,
+  Plank, X.org, ibus-hangul, and many more. Each is redistributed **under its own license, unchanged**.
+  The complete list, versions and our compliance notes are in [THIRD-PARTY-LICENSES.md](THIRD-PARTY-LICENSES.md);
+  exact source locations are in [SOURCES.md](SOURCES.md); every modification we make is published in
+  [`patches/`](patches/). License texts are shipped inside the image under `/usr/share/licenses/`.
+- **Proprietary firmware** (Raspberry Pi boot firmware — Broadcom; CYW43455 WiFi firmware — Cypress/Infineon)
+  is redistributed unmodified under its own redistribution terms, only for use with Raspberry Pi hardware,
+  with the license files shipped alongside the firmware.
+- **Artwork by tuna27** (wallpaper and application icons credited to tuna27) remains © tuna27 and is
+  distributed with MaruxOS under the terms the designer grants (see THIRD-PARTY-LICENSES.md).
+- **Trademarks.** "Firefox" and the Firefox logo are trademarks of the Mozilla Foundation; "Raspberry Pi" is a
+  trademark of Raspberry Pi Ltd. MaruxOS uses these names only to describe compatibility and ships the
+  unmodified official Firefox build, as those trademark policies allow.
+
+## 3. NOTICE — written offer for source code
+
+MaruxOS binaries are built from upstream release tarballs listed in `SOURCES.md` (name, version, URL, SHA256)
+plus the patches in `patches/`. The build is fully reproducible from the scripts in this repository.
+If you received a MaruxOS image and need the corresponding source for any GPL/LGPL/MPL component,
+it is available from this repository and the MaruxOS release page; you may also request it from the
+MaruxOS authors (see README "Support & Contact") and it will be provided at no charge beyond the cost of
+physically performing the distribution. This offer is valid for at least three years from the release date.
+
+MaruxOS is built following the Linux From Scratch book (LFS 12.0 toolchain; book instructions MIT-licensed).
 
 ---
 
-이 프로젝트는 **퍼블릭 도메인**으로 공개됩니다.
+## 4. The Unlicense — full text
 
-자유롭게:
-- 사용, 복사, 수정, 병합, 게시, 배포, 재라이선스, 판매 가능
-- 모든 목적(상업적/비상업적)으로 사용 가능
-- 출처 표기 없이 수정 가능
-- 원하는 모든 것을 할 수 있음
+This is free and unencumbered software released into the public domain.
 
-**제한 없음. 조건 없음. 완전한 자유.**
+Anyone is free to copy, modify, publish, use, compile, sell, or
+distribute this software, either in source code form or as a compiled
+binary, for any purpose, commercial or non-commercial, and by any
+means.
 
----
+In jurisdictions that recognize copyright laws, the author or authors
+of this software dedicate any and all copyright interest in the
+software to the public domain. We make this dedication for the benefit
+of the public at large and to the detriment of our heirs and
+successors. We intend this dedication to be an overt act of
+relinquishment in perpetuity of all present and future rights to this
+software under copyright law.
 
-NOTICE: MaruxOS is built using Linux From Scratch (LFS) 12.1 and incorporates
-software from various open source projects, each with their own licenses:
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
 
-- Linux Kernel 6.12 LTS (GPL-2.0): https://www.kernel.org/
-- GRUB (GPL-3.0): https://www.gnu.org/software/grub/
-- Openbox (GPL-2.0): http://openbox.org/
-- tint2 (GPL-2.0): https://gitlab.com/o9000/tint2
-- Firefox (MPL-2.0): https://www.mozilla.org/firefox/
-- And many other LFS components
-
-Please refer to individual component licenses for their specific terms.
-
----
-
-UI/UX Design by tuna27
-AI Development powered by Claude Code (Anthropic)
-
-Special Thanks to Sigterm Co., Ltd. for sponsoring Claude Code MAX plan.
+For more information, please refer to <https://unlicense.org/>

@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Calculator
+Name[ko]=계산기
+Comment=SpeedCrunch — 고정밀 계산기
+Exec=speedcrunch
+Icon=/usr/share/pixmaps/maruxos/marux-calc.png
+Terminal=false
+Type=Application
+Categories=Utility;Calculator;Qt;
+StartupNotify=true
+StartupWMClass=speedcrunch

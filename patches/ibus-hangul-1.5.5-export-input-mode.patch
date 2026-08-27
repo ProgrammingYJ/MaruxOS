@@ -1,0 +1,11 @@
+--- a/src/engine.c
++++ b/src/engine.c
+@@ -1869,7 +1869,7 @@
+ 
+     prop = hangul->prop_hangul_mode;
+ 
+-    hangul->input_mode = input_mode;
++    hangul->input_mode = input_mode; { FILE *mf = fopen ("/tmp/marux-ime-mode", "w"); if (mf != NULL) { fputs ((input_mode == INPUT_MODE_HANGUL) ? "han" : "eng", mf); fclose (mf); } }
+     g_debug("input_mode:%u: %s", hangul->id,
+             (input_mode == INPUT_MODE_HANGUL) ? "hangul" : "latin");
+ 

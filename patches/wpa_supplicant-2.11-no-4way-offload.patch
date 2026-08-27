@@ -1,0 +1,15 @@
+--- a/src/drivers/driver_nl80211_capa.c
++++ b/src/drivers/driver_nl80211_capa.c
+@@ -594,10 +594,10 @@
+ 
+ 	if (ext_feature_isset(ext_features, len,
+ 			      NL80211_EXT_FEATURE_4WAY_HANDSHAKE_STA_PSK))
+-		capa->flags |= WPA_DRIVER_FLAGS_4WAY_HANDSHAKE_PSK;
++		(void)0; /* MaruxOS: host 4-way 강제 */
+ 	if (ext_feature_isset(ext_features, len,
+ 			      NL80211_EXT_FEATURE_4WAY_HANDSHAKE_STA_1X))
+-		capa->flags |= WPA_DRIVER_FLAGS_4WAY_HANDSHAKE_8021X;
++		(void)0; /* MaruxOS: host 4-way 강제 */
+ 
+ 	if (ext_feature_isset(ext_features, len,
+ 			      NL80211_EXT_FEATURE_SAE_OFFLOAD))

@@ -1,0 +1,21 @@
+! MaruxOS Xresources — system-wide X11 client defaults
+! ====================================================
+! xterm 기본 폰트를 Xft (fontconfig)로 강제 → 한국어 글꼴(Nanum) 자동 매칭.
+! 1.x 시리즈는 이 파일 없어서 launcher 통한 xterm 호출 시 한국어 깨짐.
+! 2.0.0 cooked-v4부터 정공.
+
+XTerm*faceName: Monospace
+XTerm*faceSize: 11
+XTerm*locale: true
+XTerm*utf8: 1
+XTerm*utf8Title: true
+XTerm*saveLines: 4096
+
+! 색상 (어두운 배경 + 밝은 글자)
+XTerm*foreground: #d0d0d0
+XTerm*background: #1a1a2e
+XTerm*cursorColor: #ffffff
+
+! 한글 입력기 통합 (XIM)
+XTerm*inputMethod: ibus
+XTerm*preeditType: OverTheSpot

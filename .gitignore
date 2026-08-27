@@ -76,3 +76,11 @@ credentials/
 # Distribution specific
 nul
 iso/live/filesystem.squashfs
+.claude/settings.local.json
+output/*.xz
+docs/*.orig.docx
+docs/*.pre-trim.docx
+scripts/*.slimplan.md
+*.bak
+*.bak-*
+*.bak-v*

@@ -2,6 +2,10 @@
 
 This document records the changes made in each version during the MaruxOS ISO build process.
 
+> ⚠️ **This English version stops at v1.1 (67-v54, 2026-02-19).**
+> For v1.2.x series (idesk desktop) and v2.0.0 "Cooked" series (kernel 6.18.26 LTS, ARM64, Plank attempts/rollback), see the Korean version: [ISO-BUILD-HISTORY.md](ISO-BUILD-HISTORY.md).
+> Detailed v2.0.0 development chronicle (incl. 14 hallucinations / traps): [Kernel-Update-Log.md](Kernel-Update-Log.md).
+
 ---
 
 ## Phoenix Series

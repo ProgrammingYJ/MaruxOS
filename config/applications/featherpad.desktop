@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Text Editor
+Name[ko]=텍스트 편집기
+Comment=FeatherPad — 가벼운 Qt 텍스트 편집기
+Exec=featherpad %F
+Icon=/usr/share/pixmaps/maruxos/marux-editor.png
+Terminal=false
+Type=Application
+Categories=Utility;TextEditor;Qt;
+MimeType=text/plain;text/x-c;text/x-shellscript;text/html;text/css;text/x-python;application/x-shellscript;
+StartupNotify=true
+StartupWMClass=featherpad

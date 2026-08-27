@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Task Manager
+Name[ko]=작업 관리자
+Comment=qps — 프로세스 보기/종료
+Exec=qps
+Icon=/usr/share/pixmaps/maruxos/marux-taskmgr.png
+Terminal=false
+Type=Application
+Categories=System;Monitor;Qt;
+StartupNotify=true
+StartupWMClass=qps

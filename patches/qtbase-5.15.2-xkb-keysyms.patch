@@ -1,0 +1,19 @@
+--- a/src/platformsupport/input/xkbcommon/qxkbcommon.cpp
++++ b/src/platformsupport/input/xkbcommon/qxkbcommon.cpp
+@@ -1,3 +1,16 @@
++/* MaruxOS xkb keysym 보강 — X11 keysymdef.h 표준값 */
++#ifndef XKB_KEY_dead_lowline
++#define XKB_KEY_dead_lowline 0xfe90
++#endif
++#ifndef XKB_KEY_dead_aboveverticalline
++#define XKB_KEY_dead_aboveverticalline 0xfe91
++#endif
++#ifndef XKB_KEY_dead_belowverticalline
++#define XKB_KEY_dead_belowverticalline 0xfe92
++#endif
++#ifndef XKB_KEY_dead_longsolidusoverlay
++#define XKB_KEY_dead_longsolidusoverlay 0xfe93
++#endif
+ /****************************************************************************
+ **
+ ** Copyright (C) 2019 The Qt Company Ltd.

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Terminal
+Comment=Qt 터미널 에뮬레이터
+Exec=qterminal
+Icon=/usr/share/pixmaps/maruxos/marux-terminal.png
+Terminal=false
+Type=Application
+Categories=System;TerminalEmulator;
+StartupNotify=true
+StartupWMClass=qterminal

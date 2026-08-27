@@ -1,5 +1,11 @@
 # Contributing to MaruxOS
 
+> 본 가이드는 MaruxOS 2.0.0 "Cooked" (Linux 6.18.26 LTS, LFS 12.0 툴체인 + 12.1-era 유저랜드) 기준입니다.
+> 빌드 환경: WSL2 (Ubuntu) + 커널 소스는 WSL native fs 필수 (`/mnt/c/`는 NTFS case-insensitive로 빌드 실패).
+> 빌드 실행: `sudo bash scripts/build-2.0.0-cooked-vN.sh`
+
+
+
 **[English](#english) | [한국어](#한국어)**
 
 ---
@@ -191,7 +197,7 @@ Submit in `MaruxOS 디자인/` directory with:
 
 ### Build Environment
 
-MaruxOS is built using **Linux From Scratch (LFS) 12.1**, NOT Debian/Ubuntu. Key differences:
+MaruxOS is built using **Linux From Scratch (LFS) 12.0 toolchain + 12.1-era userland**, NOT Debian/Ubuntu. Key differences:
 - No apt/package manager
 - All software compiled from source
 - squashfs must use **gzip** compression (kernel doesn't support xz)
@@ -304,7 +310,7 @@ MaruxOS에 관심을 가져주셔서 감사합니다!
 
 ### 빌드 환경
 
-MaruxOS는 **Linux From Scratch (LFS) 12.1** 기반입니다 (Debian/Ubuntu 아님):
+MaruxOS는 **Linux From Scratch (LFS) 12.0 툴체인 + 12.1-era 유저랜드** 기반입니다 (Debian/Ubuntu 아님):
 - apt/패키지 관리자 없음
 - 모든 소프트웨어 소스에서 컴파일
 - squashfs는 **gzip** 압축 필수 (커널이 xz 미지원)

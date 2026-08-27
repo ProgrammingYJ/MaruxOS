@@ -203,6 +203,13 @@
     <context name="BRCorner">
       <mousebind button="Left" action="Drag"><action name="Resize"/></mousebind>
     </context>
+    <!-- Client(창 내용) 클릭 → 포커스+올리기. 이게 없으면 클릭 창전환 불가
+         (2026-07-29 ARM64 실기기서 발각된 잠복 버그 — 첫 창겹침 테스트, 양 트랙 공통 픽스) -->
+    <context name="Client">
+      <mousebind button="Left" action="Press"><action name="Focus"/><action name="Raise"/></mousebind>
+      <mousebind button="Middle" action="Press"><action name="Focus"/><action name="Raise"/></mousebind>
+      <mousebind button="Right" action="Press"><action name="Focus"/><action name="Raise"/></mousebind>
+    </context>
   </mouse>
 
   <menu>

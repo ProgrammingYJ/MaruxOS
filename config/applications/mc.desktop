@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=File Manager
 Comment=Midnight Commander File Manager
-Exec=xterm -e mc ~ /
-Icon=/usr/share/maruxos/icons/marux-file-manager.png
+Exec=xterm -class MaruxFiles -e mc ~ /
+Icon=/usr/share/pixmaps/maruxos/marux-file-manager.png
 Terminal=false
 Type=Application
 Categories=System;FileManager;
+StartupNotify=true
+StartupWMClass=MaruxFiles

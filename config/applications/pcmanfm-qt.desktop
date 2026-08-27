@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Files
+Comment=파일 관리자
+Exec=pcmanfm-qt
+Icon=/usr/share/pixmaps/maruxos/marux-file-manager.png
+Terminal=false
+Type=Application
+Categories=System;FileTools;FileManager;
+StartupNotify=true
+StartupWMClass=pcmanfm-qt

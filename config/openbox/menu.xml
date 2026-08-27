@@ -4,12 +4,17 @@
   <menu id="apps-menu" label="Applications">
     <item label="Terminal">
       <action name="Execute">
-        <command>xterm -fa 'Monospace' -fs 11</command>
+        <command>qterminal</command>
       </action>
     </item>
-    <item label="File Manager (mc)">
+    <item label="File Manager">
       <action name="Execute">
-        <command>xterm -e mc ~ /</command>
+        <command>pcmanfm-qt</command>
+      </action>
+    </item>
+    <item label="Text Editor">
+      <action name="Execute">
+        <command>featherpad</command>
       </action>
     </item>
     <item label="Firefox">
@@ -17,27 +22,42 @@
         <command>/usr/bin/firefox</command>
       </action>
     </item>
+    <item label="Image Viewer">
+      <action name="Execute">
+        <command>lximage-qt</command>
+      </action>
+    </item>
+    <item label="Calculator">
+      <action name="Execute">
+        <command>speedcrunch</command>
+      </action>
+    </item>
+    <item label="Archive Manager">
+      <action name="Execute">
+        <command>lxqt-archiver</command>
+      </action>
+    </item>
   </menu>
 
   <menu id="settings-menu" label="Settings">
     <item label="Change Wallpaper">
       <action name="Execute">
-        <command>xterm -T "Wallpaper Changer" -fa 'Monospace' -fs 11 -e /usr/bin/marux-wallpaper</command>
+        <command>qterminal -e /usr/bin/marux-wallpaper</command>
       </action>
     </item>
     <item label="Display Info">
       <action name="Execute">
-        <command>xterm -T "Display" -fa 'Monospace' -fs 11 -e sh -c "xrandr; echo ''; echo 'Press Enter to close'; read"</command>
+        <command>qterminal -e sh -c "xrandr; echo ''; echo 'Press Enter to close'; read"</command>
       </action>
     </item>
     <item label="Network Settings">
       <action name="Execute">
-        <command>xterm -T "Network" -fa 'Monospace' -fs 11 -e nmtui</command>
+        <command>qterminal -e nmtui</command>
       </action>
     </item>
     <item label="Volume Control">
       <action name="Execute">
-        <command>xterm -T "Volume" -fa 'Monospace' -fs 11 -e alsamixer</command>
+        <command>qterminal -e alsamixer</command>
       </action>
     </item>
   </menu>
@@ -45,17 +65,22 @@
   <menu id="system-menu" label="System">
     <item label="System Info (neofetch)">
       <action name="Execute">
-        <command>xterm -T "System Info" -fa 'Monospace' -fs 11 -e sh -c "neofetch; echo ''; echo 'Press Enter to close'; read"</command>
+        <command>qterminal -e sh -c "neofetch; echo ''; echo 'Press Enter to close'; read"</command>
       </action>
     </item>
-    <item label="Task Manager (top)">
+    <item label="Task Manager">
       <action name="Execute">
-        <command>xterm -T "Task Manager" -fa 'Monospace' -fs 11 -e top</command>
+        <command>qps</command>
+      </action>
+    </item>
+    <item label="Task Manager (top, terminal)">
+      <action name="Execute">
+        <command>qterminal -e top</command>
       </action>
     </item>
     <item label="Korean Input Diagnostics">
       <action name="Execute">
-        <command>xterm -T "Hangul Diag" -fa 'Monospace' -fs 11 -e sh -c "cat /tmp/hangul-diag.log 2>/dev/null || echo 'No diagnostics log found'; echo ''; echo 'Press Enter to close'; read"</command>
+        <command>qterminal -e sh -c "cat /tmp/hangul-diag.log 2>/dev/null || echo 'No diagnostics log found'; echo ''; echo 'Press Enter to close'; read"</command>
       </action>
     </item>
   </menu>
@@ -64,12 +89,17 @@
   <menu id="root-menu" label="MaruxOS">
     <item label="Terminal">
       <action name="Execute">
-        <command>xterm -fa 'Monospace' -fs 11</command>
+        <command>qterminal</command>
       </action>
     </item>
     <item label="File Manager">
       <action name="Execute">
-        <command>xterm -e mc ~ /</command>
+        <command>pcmanfm-qt</command>
+      </action>
+    </item>
+    <item label="Text Editor">
+      <action name="Execute">
+        <command>featherpad</command>
       </action>
     </item>
     <item label="Firefox">
@@ -77,27 +107,42 @@
         <command>/usr/bin/firefox</command>
       </action>
     </item>
+    <item label="Image Viewer">
+      <action name="Execute">
+        <command>lximage-qt</command>
+      </action>
+    </item>
+    <item label="Calculator">
+      <action name="Execute">
+        <command>speedcrunch</command>
+      </action>
+    </item>
+    <item label="Archive Manager">
+      <action name="Execute">
+        <command>lxqt-archiver</command>
+      </action>
+    </item>
     <separator/>
     <menu id="new-menu" label="New">
       <item label="Folder">
         <action name="Execute">
-          <command>xterm -T "New Folder" -fa 'Monospace' -fs 11 -e /usr/bin/marux-new-desktop-item folder</command>
+          <command>qterminal -e /usr/bin/marux-new-desktop-item folder</command>
         </action>
       </item>
       <item label="Text File">
         <action name="Execute">
-          <command>xterm -T "New File" -fa 'Monospace' -fs 11 -e /usr/bin/marux-new-desktop-item text</command>
+          <command>qterminal -e /usr/bin/marux-new-desktop-item text</command>
         </action>
       </item>
       <item label="Script (.sh)">
         <action name="Execute">
-          <command>xterm -T "New Script" -fa 'Monospace' -fs 11 -e /usr/bin/marux-new-desktop-item script</command>
+          <command>qterminal -e /usr/bin/marux-new-desktop-item script</command>
         </action>
       </item>
     </menu>
     <item label="Open Desktop Folder">
       <action name="Execute">
-        <command>xterm -e mc ~/Desktop /</command>
+        <command>pcmanfm-qt ~/Desktop</command>
       </action>
     </item>
     <item label="Refresh Desktop">

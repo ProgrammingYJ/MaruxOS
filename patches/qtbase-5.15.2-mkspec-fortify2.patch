@@ -1,0 +1,10 @@
+--- a/mkspecs/linux-aarch64-gnu-g++/qmake.conf
++++ b/mkspecs/linux-aarch64-gnu-g++/qmake.conf
+@@ -21,4 +21,7 @@
+ QMAKE_OBJCOPY           = aarch64-linux-gnu-objcopy
+ QMAKE_NM                = aarch64-linux-gnu-nm -P
+ QMAKE_STRIP             = aarch64-linux-gnu-strip
++# MaruxOS: FORTIFY — Ubuntu 크로스 gcc의 암묵 _FORTIFY_SOURCE=3 무력화 (함정 #35, 2026-08-26)
++QMAKE_CFLAGS   += -D_FORTIFY_SOURCE=2
++QMAKE_CXXFLAGS += -D_FORTIFY_SOURCE=2
+ load(qt_config)

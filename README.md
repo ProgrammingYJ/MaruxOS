@@ -8,11 +8,11 @@
 
 *Not based on Ubuntu, Debian, or any distribution - Pure Linux From Scratch*
 
-[![Download ISO](https://img.shields.io/badge/Download-MaruxOS%201.2.1-blue.svg?style=for-the-badge)](https://github.com/ProgrammingYJ/MaruxOS/releases/latest)
+[![Download ISO](https://img.shields.io/badge/Download-MaruxOS%202.0.0-blue.svg?style=for-the-badge)](https://github.com/ProgrammingYJ/MaruxOS/releases/latest)
 
-[![License: Public Domain](https://img.shields.io/badge/License-Public%20Domain-brightgreen.svg)](LICENSE)
-[![Linux](https://img.shields.io/badge/Kernel-6.12%20LTS-orange.svg)](https://kernel.org/)
-[![LFS](https://img.shields.io/badge/Base-LFS%2012.1-green.svg)](https://www.linuxfromscratch.org/)
+[![License: Unlicense (MaruxOS) + component licenses](https://img.shields.io/badge/License-Unlicense_%2B_component_licenses-brightgreen.svg)](LICENSE)
+[![Linux](https://img.shields.io/badge/Kernel-6.18.26%20LTS-orange.svg)](https://kernel.org/)
+[![LFS](https://img.shields.io/badge/Base-LFS%2012.0-green.svg)](https://www.linuxfromscratch.org/)
 [![AI](https://img.shields.io/badge/Built%20with-Claude%20Code-blueviolet.svg)](https://claude.ai/)
 [![Design](https://img.shields.io/badge/Design-tuna27-ff69b4.svg)]()
 
@@ -42,14 +42,14 @@ Unlike Ubuntu, Fedora, or Arch which are based on existing Linux distributions, 
 - **Lightweight** - Minimal footprint with only essential components
 - **Custom Desktop** - Openbox window manager with tint2 panel
 - **Live Boot** - Boot directly from USB/CD without installation
-- **Modern Kernel** - Linux 6.12 LTS
+- **Modern Kernel** - Linux 6.18.26 LTS
 - **Korean Input** - Full Korean (Hangul) input support via ibus-hangul (Ctrl+Y toggle)
 
 ## System Requirements
 
 | Component | Minimum | Recommended |
 |-----------|---------|-------------|
-| CPU | x86_64 (64-bit) | Dual-core 2GHz+ |
+| CPU | x86_64 (64-bit) or ARM64 (Raspberry Pi 4B) | Dual-core 2GHz+ |
 | RAM | 1GB | 2GB+ |
 | Storage | Live boot only | - |
 | Graphics | VGA compatible | Any modern GPU |
@@ -59,9 +59,10 @@ Unlike Ubuntu, Fedora, or Arch which are based on existing Linux distributions, 
 | Category | Software |
 |----------|----------|
 | Window Manager | Openbox |
-| Panel | tint2 |
-| Terminal | xterm |
-| File Manager | mc (Midnight Commander) |
+| Panel | tint2 (x86_64) / `marux-quicksettings` unified status bar (ARM64, 2.0.0) |
+| Dock / Compositor (ARM64) | Plank (built from source) + picom |
+| Terminal | xterm (x86_64) / **QTerminal** (ARM64, 2.0.0) |
+| File Manager | mc (x86_64) / **PCManFM-Qt** (ARM64, 2.0.0) |
 | Web Browser | Firefox |
 | Wallpaper | feh |
 | Korean Input | ibus-hangul 1.5.5 (libhangul 0.2.0, ibus 1.5.29) |
@@ -87,9 +88,7 @@ Unlike Ubuntu, Fedora, or Arch which are based on existing Linux distributions, 
 
 | Issue | Description |
 |-------|-------------|
-| No Desktop Icons | Desktop file system not supported (unlike Windows) |
-| Terminal Korean Display | Korean text may display incorrectly in xterm (Firefox and GTK3 apps work fine) |
-| Legacy File Manager | mc (Midnight Commander) is text-based and outdated |
+| Legacy File Manager (x86_64) | mc (Midnight Commander) is text-based and outdated. ARM64 ships PCManFM-Qt as of 2.0.0. |
 
 ## Project Structure
 
@@ -100,7 +99,7 @@ MaruxOS/
 │   ├── openbox/           # Window manager settings
 │   └── applications/      # Desktop entries
 ├── kernel/                 # Linux kernel
-│   └── source/            # Kernel source (6.12 LTS)
+│   └── source/            # Kernel source (6.18.26 LTS)
 ├── scripts/               # Build scripts
 ├── output/                # Built ISO files
 ├── MaruxOS 디자인/        # Branding assets
@@ -141,17 +140,17 @@ grub-mkrescue -o MaruxOS-1.0.iso iso-build
 
 - **Live boot only** - No disk installation support yet
 - **No package manager** - Software is pre-installed
-- **Terminal-based file manager** - GUI file manager has library issues
-- **Terminal Korean display** - xterm may not display Korean correctly (GTK3 apps work fine)
+- **Terminal-based file manager (x86_64)** - GUI file manager has library issues; ARM64 ships PCManFM-Qt in 2.0.0
 
 ## Roadmap
 
 - [ ] Disk installation support
 - [ ] Package management system
-- [ ] GUI file manager
+- [x] GUI file manager — **PCManFM-Qt** cross-built for ARM64 in 2.0.0 (Qt5 stack landed with QTerminal); x86_64 still on mc
 - [x] ~~Korean input support~~ (v1.1)
 - [ ] More language support (Japanese, Chinese)
-- [ ] ARM architecture support
+- [x] ARM64 / Raspberry Pi 4B support (2.0.0 — verified on real hardware: full desktop with Plank dock + picom compositor, Korean input in xterm/GTK3 apps/Firefox, wired networking with NTP)
+- [x] ARM64 WiFi + self-made quick-settings panel GUI (verified on real hardware) → QTerminal (Qt5) → PCManFM-Qt — **2.0.0 roadmap complete; final hardware verification pending**
 
 ## Support & Contact
 
@@ -162,13 +161,14 @@ grub-mkrescue -o MaruxOS-1.0.iso iso-build
 
 ## License
 
-MaruxOS is released into the **Public Domain** - complete freedom with no restrictions.
+**MaruxOS's own work** (build system, configuration, documentation, `marux-quicksettings`, MaruxOS-drawn icons) is dedicated to the public domain under **The Unlicense** (public domain dedication, OSI-approved) — use it for anything, no attribution required.
 
-Components have their respective licenses:
-- Linux Kernel: GPL-2.0
-- Openbox: GPL-2.0
-- tint2: GPL-2.0
-- Firefox: MPL-2.0
+A MaruxOS **image is an aggregate**: every third-party component keeps **its own license** — Linux kernel (GPL-2.0), glibc / Qt 5 (LGPL), Firefox (MPL-2.0, unmodified official build), Openbox, Plank, X.org, ibus-hangul, Raspberry Pi / Cypress firmware (proprietary, redistributable), Nanum fonts (OFL 1.1), and more. See:
+
+- [LICENSE](LICENSE) — Unlicense text, scope, and the written offer for corresponding source
+- [THIRD-PARTY-LICENSES.md](THIRD-PARTY-LICENSES.md) — component-by-component list and how we comply
+- [SOURCES.md](SOURCES.md) — exact upstream tarballs (version, URL, SHA256)
+- [patches/](patches/) — every modification we make to upstream code
 
 ## Credits
 
@@ -205,14 +205,14 @@ MaruxOS는 **세계 최초로 100% AI(Claude Code)만으로 제작된 운영체�
 - **경량** - 필수 구성 요소만 포함한 최소한의 시스템
 - **커스텀 데스크톱** - Openbox 윈도우 매니저 + tint2 패널
 - **라이브 부팅** - USB/CD에서 설치 없이 바로 부팅
-- **최신 커널** - Linux 6.12 LTS
+- **최신 커널** - Linux 6.18.26 LTS
 - **한글 입력 지원** - ibus-hangul 기반 한/영 전환 (Ctrl+Y)
 
 ## 시스템 요구 사항
 
 | 구성 요소 | 최소 | 권장 |
 |-----------|------|------|
-| CPU | x86_64 (64비트) | 듀얼코어 2GHz+ |
+| CPU | x86_64 (64비트) 또는 ARM64 (Raspberry Pi 4B) | 듀얼코어 2GHz+ |
 | RAM | 1GB | 2GB+ |
 | 저장 장치 | 라이브 부팅만 가능 | - |
 | 그래픽 | VGA 호환 | 최신 GPU |
@@ -222,9 +222,10 @@ MaruxOS는 **세계 최초로 100% AI(Claude Code)만으로 제작된 운영체�
 | 분류 | 소프트웨어 |
 |------|-----------|
 | 윈도우 매니저 | Openbox |
-| 패널 | tint2 |
-| 터미널 | xterm |
-| 파일 관리자 | mc (Midnight Commander) |
+| 패널 | tint2 (x86_64) / `marux-quicksettings` 통합 상태 바 (ARM64, 2.0.0) |
+| 독 / 컴포지터 (ARM64) | Plank (소스 빌드) + picom |
+| 터미널 | xterm (x86_64) / **QTerminal** (ARM64, 2.0.0) |
+| 파일 관리자 | mc (x86_64) / **PCManFM-Qt** (ARM64, 2.0.0) |
 | 웹 브라우저 | Firefox |
 | 배경화면 | feh |
 | 한글 입력기 | ibus-hangul 1.5.5 (libhangul 0.2.0, ibus 1.5.29) |
@@ -250,8 +251,7 @@ MaruxOS는 **세계 최초로 100% AI(Claude Code)만으로 제작된 운영체�
 
 - **라이브 부팅만 가능** - 디스크 설치 미지원
 - **패키지 관리자 없음** - 소프트웨어 사전 설치됨
-- **터미널 기반 파일 관리자** - GUI 파일 관리자 라이브러리 문제
-- **터미널 한글 표시** - xterm에서 한글 표시가 깨질 수 있음 (Firefox 등 GTK3 앱은 정상)
+- **터미널 기반 파일 관리자 (x86_64)** - GUI 파일 관리자 라이브러리 문제. ARM64는 2.0.0부터 PCManFM-Qt 탑재
 
 ## 지원 및 문의
 
@@ -277,9 +277,9 @@ MaruxOS는 **세계 최초로 100% AI(Claude Code)만으로 제작된 운영체�
 
 <div align="center">
 
-**Current Version: 1.2.1 "67"**
+**Current Version: 2.0.0 "Cooked"**
 
-Made with Linux From Scratch 12.1
+Made with Linux From Scratch 12.0 (toolchain) + 12.1-era userland
 **Made with ❤️ for the Linux community**
 
 [Documentation](docs/) | [Contributing](CONTRIBUTING.md) | [License](LICENSE)

@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Image Viewer
+Name[ko]=이미지 뷰어
+Comment=LXImage-Qt — 이미지 뷰어 + 스크린샷
+Exec=lximage-qt %F
+Icon=/usr/share/pixmaps/maruxos/marux-image.png
+Terminal=false
+Type=Application
+Categories=Graphics;Viewer;Qt;
+MimeType=image/png;image/jpeg;image/gif;image/bmp;image/webp;image/svg+xml;image/tiff;image/x-xpixmap;
+StartupNotify=true
+StartupWMClass=lximage-qt

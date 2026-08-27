@@ -10,16 +10,18 @@ Guide for developers who want to contribute to or customize MaruxOS.
 
 ## Overview
 
-MaruxOS is built entirely from source using **Linux From Scratch (LFS) 12.1**. Unlike Debian-based distributions, every component is compiled from source code.
+MaruxOS is built entirely from source using **Linux From Scratch (LFS) 12.0 toolchain + 12.1-era userland**. Unlike Debian-based distributions, every component is compiled from source code.
 
 | Component | Details |
 |-----------|---------|
-| Base | Linux From Scratch 12.1 |
-| Kernel | Linux 6.12 LTS |
+| Base | Linux From Scratch 12.0 (toolchain) + 12.1-era userland |
+| Kernel | Linux 6.18.26 LTS |
 | Window Manager | Openbox |
 | Panel | tint2 |
 | Compression | gzip (squashfs) |
 | Boot | GRUB |
+
+> **Note**: This guide covers the **x86_64** build. The **ARM64 / Raspberry Pi 4B track** (2.0.0 — separate from-scratch aarch64 rootfs, qemu-chroot builds, Plank dock + picom desktop) is documented in [docs/arm64/](arm64/00-BUILD-REPRODUCIBILITY.md) (reproduction guide, traps catalog, asset reference).
 
 ## Build Environment
 
@@ -245,16 +247,18 @@ MaruxOS에 기여하거나 커스터마이징하려는 개발자를 위한 가�
 
 ## 개요
 
-MaruxOS는 **Linux From Scratch (LFS) 12.1**을 사용하여 소스 코드에서 완전히 빌드됩니다. Debian 기반 배포판과 달리 모든 구성 요소가 소스 코드에서 컴파일됩니다.
+MaruxOS는 **Linux From Scratch (LFS) 12.0 툴체인 + 12.1-era 유저랜드**를 사용하여 소스 코드에서 완전히 빌드됩니다. Debian 기반 배포판과 달리 모든 구성 요소가 소스 코드에서 컴파일됩니다.
 
 | 구성 요소 | 세부 사항 |
 |-----------|-----------|
-| 베이스 | Linux From Scratch 12.1 |
-| 커널 | Linux 6.12 LTS |
+| 베이스 | Linux From Scratch 12.0 (툴체인) + 12.1-era 유저랜드 |
+| 커널 | Linux 6.18.26 LTS |
 | 윈도우 매니저 | Openbox |
 | 패널 | tint2 |
 | 압축 | gzip (squashfs) |
 | 부트 | GRUB |
+
+> **참고**: 이 가이드는 **x86_64** 빌드 기준입니다. **ARM64 / Raspberry Pi 4B 트랙**(2.0.0 — 별도 from-scratch aarch64 rootfs, qemu-chroot 빌드, Plank dock + picom 데스크톱)은 [docs/arm64/](arm64/00-BUILD-REPRODUCIBILITY.md)에 문서화되어 있습니다 (재현 가이드·함정 카탈로그·자산 레퍼런스).
 
 ## 빌드 환경
 

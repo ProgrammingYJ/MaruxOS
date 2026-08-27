@@ -6,6 +6,13 @@ set -e
 
 SQUASHFS_ROOT="${1:-/home/administrator/MaruxOS/build/rootfs-lfs}"
 
+# Source single-source-of-truth metadata (없으면 폴백)
+PROJECT_ROOT="${PROJECT_ROOT:-/mnt/c/Users/Administrator/Desktop/MaruxOS}"
+if [ -f "$PROJECT_ROOT/config/marux-release.conf" ]; then
+    source "$PROJECT_ROOT/config/marux-release.conf"
+fi
+DISTRO_VERSION="${DISTRO_VERSION:-2.0.0}"
+
 NEOFETCH_VERSION="7.1.0"
 NEOFETCH_URL="https://github.com/dylanaraps/neofetch/archive/refs/tags/${NEOFETCH_VERSION}.tar.gz"
 
@@ -82,13 +89,13 @@ NEOCONF
 
 # /etc/os-release 생성 (neofetch가 OS 정보를 읽는 파일)
 if [ ! -f "$SQUASHFS_ROOT/etc/os-release" ]; then
-    cat > "$SQUASHFS_ROOT/etc/os-release" << 'OSREL'
+    cat > "$SQUASHFS_ROOT/etc/os-release" << OSREL
 NAME="MaruxOS"
-VERSION="1.2.0"
+VERSION="$DISTRO_VERSION"
 ID=maruxos
 ID_LIKE=lfs
-VERSION_ID=1.2.0
-PRETTY_NAME="MaruxOS 1.2.0"
+VERSION_ID=$DISTRO_VERSION
+PRETTY_NAME="MaruxOS $DISTRO_VERSION"
 HOME_URL="https://github.com/MaruxOS"
 OSREL
     echo "  Created /etc/os-release"

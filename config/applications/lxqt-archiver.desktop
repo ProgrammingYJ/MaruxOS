@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Archive Manager
+Name[ko]=압축 관리자
+Comment=LXQt Archiver — 압축 파일 열기/만들기
+Exec=lxqt-archiver %F
+Icon=/usr/share/pixmaps/maruxos/marux-archive.png
+Terminal=false
+Type=Application
+Categories=Utility;Archiving;Qt;
+MimeType=application/zip;application/x-tar;application/x-compressed-tar;application/x-bzip-compressed-tar;application/x-xz-compressed-tar;application/gzip;application/x-xz;application/x-bzip;application/x-7z-compressed;
+StartupNotify=true
+StartupWMClass=lxqt-archiver

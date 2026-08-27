@@ -9,7 +9,7 @@
 ## General Questions
 
 ### Q: What is MaruxOS?
-**A:** MaruxOS is **the world's first operating system built 100% with AI (Claude Code)**. It's a lightweight Linux distribution built entirely from source using Linux From Scratch (LFS) 12.1, not based on any existing distribution like Debian, Ubuntu, or Arch.
+**A:** MaruxOS is **the world's first operating system built 100% with AI (Claude Code)**. It's a lightweight Linux distribution built entirely from source using Linux From Scratch (LFS) 12.0 toolchain + 12.1-era userland, not based on any existing distribution like Debian, Ubuntu, or Arch.
 
 ### Q: What makes MaruxOS special?
 **A:** MaruxOS is unique because:
@@ -21,20 +21,23 @@
 **A:** No. MaruxOS is built from scratch using LFS (Linux From Scratch). Unlike most Linux distros that fork from existing distributions, MaruxOS starts from the Linux kernel itself. Every component is compiled from source code, making it a completely independent operating system.
 
 ### Q: What kernel version does MaruxOS use?
-**A:** MaruxOS 1.0 uses Linux kernel 6.12 LTS.
+**A:** MaruxOS 2.0.0 "Cooked" uses Linux kernel 6.18.26 LTS. The 1.x series advertised 6.12 LTS but was actually shipping 6.7.4 due to a Genesis-stage AI hallucination that survived 5 months until 2026-05-05 (see CHANGELOG Errata).
 
 ### Q: Can I install MaruxOS to my hard drive?
-**A:** Not yet. MaruxOS 1.0 only supports live boot mode. Disk installation will be added in a future release.
+**A:** Not yet. MaruxOS only supports live boot mode. Disk installation will be added in a future release.
 
 ---
 
 ## Technical Questions
 
-### Q: Why does the boot screen show "Phoenix"?
-**A:** "Phoenix" was the original codename during development. The current codename is "67". Some boot messages may still show the old name.
+### Q: Why does the boot screen show "Phoenix" or "67"?
+**A:** Codename history:
+- "Phoenix" — original codename (1.0 early development)
+- "67" — 1.0 release through 1.2.x (the meme era)
+- **"Cooked"** — 2.0.0 onwards. Meta-self-reference to LLM hallucination duality ("AI is brilliant but a chronic liar"). Older boot messages from cached squashfs may still show the previous codenames.
 
 ### Q: Why is there no GUI file manager?
-**A:** GUI file managers like PCManFM require newer GLib versions that are incompatible with the current LFS system. We use mc (Midnight Commander), a powerful terminal-based file manager instead.
+**A:** GUI file managers like PCManFM require newer GLib versions that are incompatible with the current LFS system. We use mc (Midnight Commander), a powerful terminal-based file manager instead. **As of 2.0.0, ARM64 ships PCManFM-Qt** — the Qt5 stack landed with QTerminal and the whole dependency chain (libexif → libfm → menu-cache → libfm-qt → pcmanfm-qt) was cross-built from source, so the GLib conflict never arises. x86_64 still uses mc.
 
 ### Q: Why does Firefox show security warnings?
 **A:** Firefox runs with `--no-sandbox` flag for compatibility with the LFS environment. This is expected behavior and doesn't affect normal browsing.
@@ -119,7 +122,7 @@ shutdown -h now
 
 For questions not covered here:
 - **Discord**: `pizzamaru_`
-- **Email**: marudev@outlook.kr
+- **Email**: contact@marulee.dev
 - **Portfolio**: https://marulee.dev
 - **GitHub Issues**: Report bugs and feature requests
 
@@ -130,7 +133,7 @@ For questions not covered here:
 ## 일반 질문
 
 ### Q: MaruxOS가 뭔가요?
-**A:** MaruxOS는 **세계 최초로 100% AI(Claude Code)만으로 제작된 운영체제**입니다. Linux From Scratch (LFS) 12.1을 사용하여 소스 코드부터 완전히 빌드된 경량 리눅스로, 데비안, 우분투, 아치 등 기존 배포판을 기반으로 하지 않습니다.
+**A:** MaruxOS는 **세계 최초로 100% AI(Claude Code)만으로 제작된 운영체제**입니다. Linux From Scratch (LFS) 12.0 툴체인 + 12.1-era 유저랜드를 사용하여 소스 코드부터 완전히 빌드된 경량 리눅스로, 데비안, 우분투, 아치 등 기존 배포판을 기반으로 하지 않습니다.
 
 ### Q: MaruxOS의 특별한 점은?
 **A:** MaruxOS가 특별한 이유:
@@ -142,20 +145,23 @@ For questions not covered here:
 **A:** 아니요. MaruxOS는 LFS (Linux From Scratch)를 사용하여 처음부터 빌드됩니다. 대부분의 리눅스 배포판이 기존 배포판에서 포크하는 것과 달리, MaruxOS는 리눅스 커널 자체부터 시작합니다. 모든 구성 요소가 소스 코드에서 컴파일되어 완전히 독립적인 운영체제입니다.
 
 ### Q: MaruxOS는 어떤 커널 버전을 사용하나요?
-**A:** MaruxOS 1.0은 Linux 커널 6.12 LTS를 사용합니다.
+**A:** MaruxOS 2.0.0 "Cooked"는 Linux 커널 6.18.26 LTS를 사용합니다. 1.x 시리즈는 광고로는 6.12 LTS였으나 실제로는 Genesis 단계 AI hallucination으로 6.7.4가 박혀있었고, 2026-05-05에 발견되어 정공으로 정정되었습니다 (CHANGELOG Errata 참고).
 
 ### Q: MaruxOS를 하드 드라이브에 설치할 수 있나요?
-**A:** 아직 안 됩니다. MaruxOS 1.0은 라이브 부팅 모드만 지원합니다. 디스크 설치는 향후 릴리스에서 추가될 예정입니다.
+**A:** 아직 안 됩니다. MaruxOS는 라이브 부팅 모드만 지원합니다. 디스크 설치는 향후 릴리스에서 추가될 예정입니다.
 
 ---
 
 ## 기술 질문
 
 ### Q: 부팅 화면에 "Phoenix"가 표시되는 이유는?
-**A:** "Phoenix"는 개발 중 사용된 원래 코드네임입니다. 현재 코드네임은 "67"입니다. 일부 부팅 메시지에는 여전히 이전 이름이 표시될 수 있습니다.
+**A:** 코드네임 변천사:
+- "Phoenix" — 1.0 초기 개발 중 사용된 원래 코드네임
+- "67" — 1.0 릴리즈부터 1.2.x까지 (밈 시기)
+- **"Cooked"** — 2.0.0부터. LLM hallucination 양면성("AI는 명석하지만 거짓말쟁이")의 메타-자기참조. 이전 squashfs 캐시에서 옛 코드네임이 표시될 수 있습니다.
 
 ### Q: GUI 파일 관리자가 없는 이유는?
-**A:** PCManFM 같은 GUI 파일 관리자는 현재 LFS 시스템과 호환되지 않는 최신 GLib 버전이 필요합니다. 대신 강력한 터미널 기반 파일 관리자인 mc (Midnight Commander)를 사용합니다.
+**A:** PCManFM 같은 GUI 파일 관리자는 현재 LFS 시스템과 호환되지 않는 최신 GLib 버전이 필요합니다. 대신 강력한 터미널 기반 파일 관리자인 mc (Midnight Commander)를 사용합니다. **2.0.0의 ARM64는 PCManFM-Qt를 탑재합니다** — QTerminal과 함께 Qt5 스택이 들어왔고, 의존성 사슬(libexif → libfm → menu-cache → libfm-qt → pcmanfm-qt) 전체를 소스에서 크로스 빌드했기 때문에 GLib 충돌 자체가 발생하지 않습니다. x86_64는 계속 mc를 사용합니다.
 
 ### Q: Firefox에서 보안 경고가 표시되는 이유는?
 **A:** Firefox는 LFS 환경과의 호환성을 위해 `--no-sandbox` 플래그로 실행됩니다. 이는 예상된 동작이며 일반 브라우징에 영향을 미치지 않습니다.

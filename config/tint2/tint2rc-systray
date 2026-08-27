@@ -1,0 +1,103 @@
+# MaruxOS tint2 - Systray + Clock only (2.0.0 "Cooked" 분할 버전)
+# ================================================================
+# 본 설정은 Plank dock 도입 후 tint2가 system tray + clock 역할만 담당하는 slim 변형.
+# 하단 우측에 collapsed 형태로 떠서 Plank (하단 중앙)와 충돌 없이 공존.
+#
+# 기존 tint2rc는 launcher + taskbar + systray + clock 통합 → Plank가 launcher/taskbar 대체
+
+#---------------------------------------------
+# Backgrounds
+#---------------------------------------------
+# ID 1: Panel background (semi-transparent dark)
+rounded = 0
+border_width = 0
+background_color = #1a1a2e 95
+border_color = #000000 0
+
+# ID 2: Normal item background (transparent)
+rounded = 4
+border_width = 0
+background_color = #000000 0
+border_color = #000000 0
+
+#---------------------------------------------
+# Panel — slim 우측 정렬 (systray + clock)
+#---------------------------------------------
+panel_items = ESC                              # Executor + Systray + Clock (launcher / taskbar 없음)
+panel_size = 360 36                            # 폭 360px (clock + tray 들어가는 정도)
+panel_margin = 0 0
+panel_padding = 6 4 6
+panel_background_id = 1
+panel_position = bottom right horizontal       # 하단 우측 (Plank는 bottom center 사용)
+panel_layer = top
+panel_monitor = all
+panel_dock = 0
+autohide = 0
+strut_policy = follow_size
+
+#---------------------------------------------
+# Executor 1: Network Icon (1.x 자산 보존)
+#---------------------------------------------
+execp = new
+execp_command = /usr/bin/tint2-network-icon
+execp_interval = 10
+execp_has_icon = 1
+execp_cache_icon = 0
+execp_icon_w = 20
+execp_icon_h = 20
+execp_centered = 1
+execp_padding = 4 0 4
+execp_background_id = 0
+execp_lclick_command = xterm -e nmtui
+execp_tooltip = Network Settings
+
+#---------------------------------------------
+# Executor 2: Volume Icon
+#---------------------------------------------
+execp = new
+execp_command = /usr/bin/tint2-volume-icon
+execp_interval = 5
+execp_has_icon = 1
+execp_cache_icon = 0
+execp_icon_w = 20
+execp_icon_h = 20
+execp_centered = 1
+execp_padding = 4 0 4
+execp_background_id = 0
+execp_lclick_command = xterm -e alsamixer
+execp_tooltip = Volume Control
+
+#---------------------------------------------
+# Executor 3: Battery Icon
+#---------------------------------------------
+execp = new
+execp_command = /usr/bin/tint2-battery-icon
+execp_interval = 30
+execp_has_icon = 1
+execp_cache_icon = 0
+execp_icon_w = 20
+execp_icon_h = 20
+execp_centered = 1
+execp_padding = 4 0 4
+execp_background_id = 0
+execp_tooltip = Battery Status
+
+#---------------------------------------------
+# System Tray (nm-applet, volumeicon 등이 자동 도킹)
+#---------------------------------------------
+systray_padding = 4 4 4
+systray_background_id = 0
+systray_icon_size = 20
+systray_icon_asb = 100 0 0
+
+#---------------------------------------------
+# Clock
+#---------------------------------------------
+time1_format = %H:%M
+time1_font = Sans Bold 10
+time2_format = %m-%d (%a)
+time2_font = Sans 8
+clock_font_color = #ffffff 100
+clock_padding = 8 2
+clock_background_id = 0
+clock_tooltip = %A %B %d, %Y
