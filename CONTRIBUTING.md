@@ -213,7 +213,7 @@ MaruxOS is built using **Linux From Scratch (LFS) 12.0 toolchain + 12.1-era user
 
 | Role | Credit |
 |------|--------|
-| **UI/UX Design** | **tuna27** — logo, wallpaper, terminal & file-manager icons |
+| **UI/UX Design** | **tuna27** — logo, wallpaper, terminal & file-manager icons (CC BY 4.0) |
 | **AI Development** | **Claude Code (Anthropic)** |
 | Base System | Linux From Scratch |
 | Kernel | kernel.org |
@@ -326,7 +326,7 @@ MaruxOS는 **Linux From Scratch (LFS) 12.0 툴체인 + 12.1-era 유저랜드** �
 
 | 역할 | 크레딧 |
 |------|--------|
-| **UI/UX 디자인** | **tuna27** — 로고·배경화면·터미널/파일관리자 아이콘 |
+| **UI/UX 디자인** | **tuna27** — 로고·배경화면·터미널/파일관리자 아이콘 (CC BY 4.0) |
 | **AI 개발** | **Claude Code (Anthropic)** |
 | 베이스 시스템 | Linux From Scratch |
 | 커널 | kernel.org |

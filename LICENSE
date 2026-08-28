@@ -32,7 +32,7 @@ OSI-approved license where it does not.
   is redistributed unmodified under its own redistribution terms, only for use with Raspberry Pi hardware,
   with the license files shipped alongside the firmware.
 - **Artwork by tuna27** — exactly four items: the MaruxOS logo (`marux-logo*.png`, `marux_logo.svg`), the wallpaper (`marux-desktop.png`), the file-manager icon (`marux-file-manager.png`) and the terminal icon (`marux-terminal.png`) — remains © tuna27 and is
-  distributed with MaruxOS under the terms the designer grants (see THIRD-PARTY-LICENSES.md).
+  distributed under **Creative Commons Attribution 4.0 (CC BY 4.0)** — tuna27 authorized open-source distribution on 2026-08-28 (via the project author); attribution "tuna27" must be kept. Text: `config/licenses/CC-BY-4.0.txt`, shipped in the image under `/usr/share/licenses/`.
 - **Trademarks.** "Firefox" and the Firefox logo are trademarks of the Mozilla Foundation; "Raspberry Pi" is a
   trademark of Raspberry Pi Ltd. MaruxOS uses these names only to describe compatibility and ships the
   unmodified official Firefox build, as those trademark policies allow.

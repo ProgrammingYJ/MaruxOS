@@ -174,7 +174,7 @@ A MaruxOS **image is an aggregate**: every third-party component keeps **its own
 
 | Role | Credit |
 |------|--------|
-| **UI/UX Design** | **tuna27** — logo, wallpaper, terminal & file-manager icons |
+| **UI/UX Design** | **tuna27** — logo, wallpaper, terminal & file-manager icons (CC BY 4.0) |
 | **AI Development** | **Claude Code (Anthropic)** |
 | Base System | [Linux From Scratch](https://www.linuxfromscratch.org/) |
 | Kernel | [kernel.org](https://kernel.org/) |
@@ -264,7 +264,7 @@ MaruxOS는 **세계 최초로 100% AI(Claude Code)만으로 제작된 운영체�
 
 | 역할 | 크레딧 |
 |------|--------|
-| **UI/UX 디자인** | **tuna27** — 로고·배경화면·터미널/파일관리자 아이콘 |
+| **UI/UX 디자인** | **tuna27** — 로고·배경화면·터미널/파일관리자 아이콘 (CC BY 4.0) |
 | **AI 개발** | **Claude Code (Anthropic)** |
 | 베이스 시스템 | [Linux From Scratch](https://www.linuxfromscratch.org/) |
 | 커널 | [kernel.org](https://kernel.org/) |
