@@ -57,7 +57,7 @@ qemu-system-x86_64 -m 4G -enable-kvm -cdrom output/MaruxOS-X.Y.Z-67-vN.iso
 - `config/xinitrc` — 1.x/x86 v9까지의 X 세션 시작점(tint2 기반, 유산). **2.0.0 데스크톱은 `setup-desktop-config-*.sh`가 xinitrc를 생성**(ibus-daemon, dhcpcd 폴백, feh, picom, bamf, plank, marux-quicksettings, idesk, openbox — ARM64 v15 / x86 v1 이식본).
 - `config/openbox/{rc.xml,menu.xml}` — 우클릭 메뉴 + 키바인드 (Win+T/D/E 등).
 - `config/scripts/marux-*` — 게스트 시스템에서 동작하는 헬퍼 (wallpaper, desktop-refresh, new-desktop-item).
-- `scripts/build-X.Y.Z-67-vN.sh` — 릴리즈별 빌드 스크립트. 버전별로 새 파일 생성 (이전 버전 보존). 헤더에 변경/버그픽스 코멘트 명시.
+- `scripts/build-X.Y.Z-67-vN.sh` — 릴리즈별 빌드 스크립트. 버전별로 새 파일 생성 (이전 버전 보존 — 대체된 버전은 `scripts/archive/{1.x,2.0.0-x86_64,2.0.0-arm64}/`로 이동, 2026-08-28). 헤더에 변경/버그픽스 코멘트 명시. 현재 진입점 인덱스 = `scripts/README.md`.
 - `scripts/install-*.sh` — 빌드 스크립트가 호출하는 패키지별 설치 모듈 (ibus-hangul, idesk, neofetch).
 - `iso/boot/grub/grub.cfg` — GRUB 부트로더 (정적 경로 `/boot/vmlinuz` 사용 — 커널 버전 무관).
 - `/usr/bin/marux-splash` — 부팅 스플래시 (게스트 측 경로).

@@ -128,12 +128,17 @@ MaruxOS is built using WSL (Windows Subsystem for Linux) with the following stru
 
 ### Build Commands
 
-```bash
-# Create squashfs
-mksquashfs rootfs-lfs iso-build/live/filesystem.squashfs -comp gzip -e boot -noappend
+Current entry points (see [`scripts/README.md`](scripts/README.md) for the full index; superseded versions live in `scripts/archive/`):
 
-# Create ISO
-grub-mkrescue -o MaruxOS-1.0.iso iso-build
+```bash
+# x86_64 Live ISO (cooked-v10): parity rootfs → slim staging → gates → squashfs(xz) → ISO
+sudo WSL_KERNEL_BUILD_ROOT=/home/$USER/MaruxOS-kernel-build bash scripts/build-2.0.0-cooked-v10.sh
+
+# ARM64 / Raspberry Pi 4B image (arm64-v34) — run from ~/MaruxOS-arm64
+sudo bash scripts/build-2.0.0-cooked-arm64-v34.sh
+
+# Boot test (x86_64)
+qemu-system-x86_64 -m 4G -enable-kvm -device intel-hda -device hda-duplex -cdrom output/MaruxOS-2.0.0-x86_64.iso
 ```
 
 ## Current Limitations

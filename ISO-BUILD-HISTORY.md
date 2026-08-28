@@ -2,6 +2,8 @@
 
 이 문서는 MaruxOS ISO 빌드 과정에서 각 버전별 변경사항을 기록합니다.
 
+> 📁 **스크립트 위치 (2026-08-28)**: 대체된 빌드 스크립트(x86 cooked-v1~v9, arm64-v6~v33, 1.x 전부)는 `scripts/archive/`로 이동했다(내용 무변경). 본문의 `scripts/xxx.sh` 경로는 작성 당시 기준이며, 현재 진입점은 `scripts/README.md` 참조.
+
 ---
 
 ## Phoenix 시리즈

@@ -13,7 +13,7 @@ rights to **the MaruxOS-specific work in this repository**, which means:
 
 You may use, copy, modify, distribute and sell this work, for any purpose, without asking permission
 and without attribution. The full Unlicense text is reproduced in §4 below and in
-`config/licenses/UNLICENSE.txt` (SPDX: `Unlicense`, OSI-approved).
+`config/licenses/UNLICENSE.txt` and, verbatim for GitHub's license detection, in [`UNLICENSE`](UNLICENSE) (SPDX: `Unlicense`, OSI-approved).
 
 **Why the Unlicense and not just "public domain":** several jurisdictions (including the Republic of Korea)
 have no formal mechanism for an author to place a work in the public domain. The Unlicense achieves the same
