@@ -8,7 +8,7 @@ rights to **the MaruxOS-specific work in this repository**, which means:
 - build, install and configuration scripts (`scripts/`), configuration files (`config/`, `config-arm64/`),
 - documentation (`*.md`, `docs/`),
 - `src/marux-quicksettings` (the MaruxOS status bar / quick-settings GUI),
-- icons drawn by MaruxOS (`marux-editor.png`, `marux-image.png`, `marux-calc.png`, `marux-archive.png`, `marux-taskmgr.png`),
+- artwork made by MaruxOS itself — everything in `MaruxOS 디자인/` **except** the four tuna27 items listed in §2: the app icons `marux-editor.png`, `marux-image.png`, `marux-calc.png`, `marux-archive.png`, `marux-taskmgr.png`, the 1.x panel/status icons (`bettery*.png`, `InternetLan.png`, `internetNotConnected.png`, `sound_0.png`), boot/splash art (`marux-splash.png`, `marux-login.png`, `progress-bar.png`, `progress-box.png`, `kernel-panic.png`),
 - the assembly of the distribution (package selection, layout, integration).
 
 You may use, copy, modify, distribute and sell this work, for any purpose, without asking permission
@@ -31,7 +31,7 @@ OSI-approved license where it does not.
 - **Proprietary firmware** (Raspberry Pi boot firmware — Broadcom; CYW43455 WiFi firmware — Cypress/Infineon)
   is redistributed unmodified under its own redistribution terms, only for use with Raspberry Pi hardware,
   with the license files shipped alongside the firmware.
-- **Artwork by tuna27** (wallpaper and application icons credited to tuna27) remains © tuna27 and is
+- **Artwork by tuna27** — exactly four items: the MaruxOS logo (`marux-logo*.png`, `marux_logo.svg`), the wallpaper (`marux-desktop.png`), the file-manager icon (`marux-file-manager.png`) and the terminal icon (`marux-terminal.png`) — remains © tuna27 and is
   distributed with MaruxOS under the terms the designer grants (see THIRD-PARTY-LICENSES.md).
 - **Trademarks.** "Firefox" and the Firefox logo are trademarks of the Mozilla Foundation; "Raspberry Pi" is a
   trademark of Raspberry Pi Ltd. MaruxOS uses these names only to describe compatibility and ships the

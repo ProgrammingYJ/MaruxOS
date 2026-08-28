@@ -207,7 +207,7 @@ bash /mnt/c/Users/Administrator/Desktop/MaruxOS/scripts/build-2.0.0-cooked-vN.sh
 # 빌드 시 자동으로 rootfs에 sync
 ```
 
-UI/UX 디자인은 **tuna27** 협업.
+UI/UX 디자인은 **tuna27** 협업 (로고·배경화면·터미널/파일관리자 아이콘 — 그 외 아이콘·스플래시는 MaruxOS 자체 제작).
 
 ### Why does the build take so long?
 
@@ -220,7 +220,7 @@ LFS Phase 7 (최종 시스템 빌드)이 8-15시간. 2.0.0 시리즈는 rootfs�
 | 역할 | 크레딧 |
 |------|--------|
 | 개발자 / Vibe Coder | **이용진 (Maru / 마루)** |
-| UI/UX Design | **tuna27** |
+| UI/UX Design | **tuna27** (logo, wallpaper, terminal & file-manager icons) |
 | AI Pair Programmer | **Claude Code (Anthropic)** |
 | Sponsor | **Sigterm Co., Ltd. (시그텀 주식회사)** — Claude Code MAX plan |
 
