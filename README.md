@@ -40,10 +40,10 @@ Unlike Ubuntu, Fedora, or Arch which are based on existing Linux distributions, 
 
 - **Pure LFS Base** - Not based on Debian, Ubuntu, or any other distribution
 - **Lightweight** - Minimal footprint with only essential components
-- **Custom Desktop** - Openbox window manager with tint2 panel
+- **Custom Desktop** - Openbox + Plank dock + picom compositor + self-made `marux-quicksettings` status bar, Qt5 app set (QTerminal, PCManFM-Qt, FeatherPad, LXImage-Qt, SpeedCrunch, LXQt Archiver, qps)
 - **Live Boot** - Boot directly from USB/CD without installation
 - **Modern Kernel** - Linux 6.18.26 LTS
-- **Korean Input** - Full Korean (Hangul) input support via ibus-hangul (Ctrl+Y toggle)
+- **Korean Input** - Full Korean (Hangul) input support via ibus-hangul (Shift+Space toggle; GTK, Qt and XIM apps), 한/A indicator in the status bar
 
 ## System Requirements
 
@@ -80,7 +80,7 @@ Unlike Ubuntu, Fedora, or Arch which are based on existing Linux distributions, 
 
 | Action | Key |
 |--------|-----|
-| Korean/English Toggle | **Ctrl+Y** or **Shift+Space** |
+| Korean/English Toggle | **Shift+Space** (status-bar 한/A indicator follows) |
 | Keyboard Layout | Dubeolsik (2-set QWERTY) |
 | Hanja Conversion | F9 |
 
@@ -95,7 +95,7 @@ Unlike Ubuntu, Fedora, or Arch which are based on existing Linux distributions, 
 ```
 MaruxOS/
 ├── config/                 # Configuration files
-│   ├── tint2/             # Panel configuration
+│   ├── plank/             # Dock launchers (tint2/ = retired 1.x panel config)
 │   ├── openbox/           # Window manager settings
 │   └── applications/      # Desktop entries
 ├── kernel/                 # Linux kernel
@@ -149,7 +149,7 @@ grub-mkrescue -o MaruxOS-1.0.iso iso-build
 - [x] GUI file manager — **PCManFM-Qt** (Qt5 stack landed with QTerminal) on ARM64 (v27) and x86_64 (cooked-v10, 2026-08-28)
 - [x] ~~Korean input support~~ (v1.1)
 - [ ] More language support (Japanese, Chinese)
-- [x] ARM64 / Raspberry Pi 4B support (2.0.0 — verified on real hardware: full desktop with Plank dock + picom compositor, Korean input in xterm/GTK3 apps/Firefox, wired networking with NTP)
+- [x] ARM64 / Raspberry Pi 4B support (2.0.0 — verified on real hardware: full desktop with Plank dock + picom compositor, Korean input in GTK3/Qt5 apps and Firefox, wired networking with NTP)
 - [x] ARM64 WiFi + self-made quick-settings panel GUI (verified on real hardware) → QTerminal (Qt5) → PCManFM-Qt — **2.0.0 roadmap complete; final hardware verification pending**
 
 ## Support & Contact
@@ -203,10 +203,10 @@ MaruxOS는 **세계 최초로 100% AI(Claude Code)만으로 제작된 운영체�
 
 - **순수 LFS 기반** - 데비안, 우분투 등 다른 배포판 기반 아님
 - **경량** - 필수 구성 요소만 포함한 최소한의 시스템
-- **커스텀 데스크톱** - Openbox 윈도우 매니저 + tint2 패널
+- **커스텀 데스크톱** - Openbox + Plank 독 + picom 컴포지터 + 자체 제작 `marux-quicksettings` 상태 바, Qt5 앱 세트(QTerminal, PCManFM-Qt, FeatherPad, LXImage-Qt, SpeedCrunch, LXQt Archiver, qps)
 - **라이브 부팅** - USB/CD에서 설치 없이 바로 부팅
 - **최신 커널** - Linux 6.18.26 LTS
-- **한글 입력 지원** - ibus-hangul 기반 한/영 전환 (Ctrl+Y)
+- **한글 입력 지원** - ibus-hangul 기반 한/영 전환 (Shift+Space; GTK·Qt·XIM 앱), 상태 바 한/A 표시
 
 ## 시스템 요구 사항
 
@@ -243,7 +243,7 @@ MaruxOS는 **세계 최초로 100% AI(Claude Code)만으로 제작된 운영체�
 
 | 동작 | 키 |
 |------|-----|
-| 한/영 전환 | **Ctrl+Y** 또는 **Shift+Space** |
+| 한/영 전환 | **Shift+Space** (상태 바 한/A 표시 연동) |
 | 자판 배열 | 2벌식 (QWERTY) |
 | 한자 변환 | F9 |
 

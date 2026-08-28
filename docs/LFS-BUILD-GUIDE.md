@@ -34,7 +34,7 @@ MaruxOS는 **Linux From Scratch (LFS) 12.0 툴체인 + 12.1-era 유저랜드**�
 - Linux 6.18.26 LTS 커널 (2.0.0 "Cooked" 기준, 1.x는 6.7.4였음 — errata 참고)
 - GCC 13.2.0 도구체인
 - SysVinit 초기화 시스템
-- Openbox + tint2 데스크톱 환경
+- Openbox + Plank 독 + picom + `marux-quicksettings` 상태 바 + Qt5 앱 데스크톱 (1.x는 Openbox + tint2)
 
 ### 빌드 방식
 
@@ -471,9 +471,9 @@ bash scripts/lfs/03-build-temp-tools.sh
    passwd myuser
    ```
 
-2. **데스크톱 환경 설치** (Openbox + tint2)
+2. **데스크톱 환경 설치** (Openbox + Plank + picom + marux-quicksettings; 1.x 시절엔 tint2)
    - Openbox 윈도우 매니저
-   - tint2 패널
+   - Plank 독 + marux-quicksettings 상태 바 (`scripts/install-plank*.sh`, `install-quicksettings*.sh`)
    - feh 배경화면
 
 3. **추가 소프트웨어 설치**
@@ -498,7 +498,7 @@ bash scripts/lfs/03-build-temp-tools.sh
 
 ## 라이선스
 
-MaruxOS의 자체 기여물은 퍼블릭 도메인(Public Domain)으로 배포됩니다 — 저작권 포기, 제한 없는 완전한 자유.
+MaruxOS의 자체 기여물은 **The Unlicense**(OSI 승인 퍼블릭 도메인 헌정)로 배포됩니다 — [LICENSE](../LICENSE) 참조.
 
 개별 패키지는 각자의 라이선스를 따릅니다 (GPL, LGPL, BSD 등).
 

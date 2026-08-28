@@ -11,10 +11,11 @@
 | Obligation | How MaruxOS meets it |
 |---|---|
 | **Corresponding source** (GPL/LGPL) | Every package is built from an upstream release tarball. Exact package/version/URL/SHA256 list: [SOURCES.md](SOURCES.md). All MaruxOS modifications are published as unified diffs in [`patches/`](patches/) and applied by the scripts in [`scripts/`](scripts/). The image itself does **not** carry source tarballs (kept slim); sources are provided via this repository and the release page (GPLv3 §6(d) / GPLv2 §3 written offer: see LICENSE §NOTICE). |
-| **License texts / notices** (all) | Shipped in the image under `/usr/share/licenses/` (2.0.0 v33+) and in this repository under [`config/licenses/`](config/licenses/). |
+| **License texts / notices** (all) | Shipped in the image under `/usr/share/licenses/` (ARM64 v33+, x86_64 cooked-v10+) and in this repository under [`config/licenses/`](config/licenses/). |
 | **Firmware redistribution conditions** | `LICENCE.broadcom` is shipped on the boot partition next to `start4.elf`; `LICENCE.cypress` / `LICENCE.broadcom_bcm43xx` are shipped with the WiFi firmware. Firmware is redistributed **unmodified** and only for use with Raspberry Pi hardware, as those licenses require. |
 | **LGPL relinking** | LGPL libraries (glibc, Qt5, GTK, ibus, …) are **dynamically linked** shared objects; users can replace them. |
-| **Mozilla trademarks** | Firefox is the **unmodified official Mozilla build** (aarch64, ko), redistributed as-is with its branding, per the Mozilla Trademark Policy. |
+| **Mozilla trademarks** | Firefox is the **unmodified official Mozilla build** (aarch64 ESR ko / x86_64 release), redistributed as-is with its branding, per the Mozilla Trademark Policy. |
+| **x86_64 image provenance** | The x86_64 ISO (cooked-v10) is the 1.x LFS rootfs plus the same from-source Qt/desktop stack as ARM64 (cross-built on the host against the rootfs sysroot). A few runtime libraries inherited from the 1.x Plank experiment came from Debian/Ubuntu binary packages (GLib 2.80.0 family — noted below); they are unmodified upstream builds and their source is the upstream tarball of the same version. Modules whose dependencies were never shipped (cups print backend, some imlib2 loaders, gio proxy/gvfs modules, libpulse) are removed at image build time. |
 | **Modified packages** | Marked below (⚙️). Each change is a small patch (see `patches/`) and is announced in the file header/comment as required by GPL §2(a). |
 
 ## Components / 구성 요소
@@ -49,7 +50,7 @@
 | X.org server, libX11, xcb, mesa, libinput … | BLFS | MIT/X11 (mesa: MIT) | |
 | libxkbcommon | BLFS | MIT | |
 | GTK 2 / GTK 3 | 2.24.33 / 3.24.41 | LGPL-2.1+ | |
-| GLib | 2.78 | LGPL-2.1+ | |
+| GLib | 2.78.4 (ARM64; x86_64 headers/pc) · **2.80.0 runtime on x86_64** | LGPL-2.1+ | x86_64 image: the `/usr/lib/libglib-2.0.so.0.8000.0` family was inherited from a Debian/Ubuntu `libglib2.0-0` binary package during the 1.x Plank experiment and is shipped **unmodified**; corresponding source = upstream GLib 2.80.0 tarball (https://download.gnome.org/sources/glib/2.80/). LFS-built 2.78.4 headers/`.pc` remain in `/usr/lib64`; see Kernel-Update-Log §34. |
 | cairo, pango, gdk-pixbuf, ATK | BLFS | LGPL-2.1+ (cairo: LGPL-2.1/MPL-1.1) | |
 | Openbox | BLFS | GPL-2.0+ | window manager |
 | Plank | 0.11.89 | GPL-3.0+ | dock (built from source with Vala) |
@@ -58,7 +59,7 @@
 | picom | v11.2 | MIT + MPL-2.0 | compositor |
 | idesk | 0.7.5 | BSD-3-Clause | desktop icons |
 | feh | BLFS | MIT-style (feh license) | fallback image viewer / wallpaper |
-| tint2 (x86_64 only) | BLFS | GPL-2.0 | retired on ARM64 |
+| tint2 | BLFS | GPL-2.0 | retired (ARM64 v22, x86_64 cooked-v10) — binary still present, not started |
 | xterm | BLFS | MIT/X11 | fallback terminal |
 
 ### Korean input
@@ -90,7 +91,7 @@
 ### Applications
 | Component | Version | License | Notes |
 |---|---|---|---|
-| Firefox ESR | 140.13.0esr (official aarch64 ko build) | **MPL-2.0** | Unmodified official Mozilla binary; Mozilla trademarks retained per Mozilla Trademark Policy. |
+| Firefox | ARM64: ESR 140.13.0esr (official aarch64 ko build) · x86_64: 146.0.1 (official x86_64 release build, inherited from 1.x) | **MPL-2.0** | Unmodified official Mozilla binaries; Mozilla trademarks retained per Mozilla Trademark Policy. |
 
 ### Firmware (proprietary, redistributable)
 | Component | License | Conditions we follow |

@@ -54,7 +54,7 @@ qemu-system-x86_64 -m 4G -enable-kvm -cdrom output/MaruxOS-X.Y.Z-67-vN.iso
 
 **핵심 경로:**
 - `config/lfs-versions.conf`, `config/marux-release.conf` — 버전/패키지 메타데이터 single source of truth. 빌드 스크립트와 다른 모든 메타파일이 여기 참조.
-- `config/xinitrc` — X 세션 시작점 (locale, ibus-daemon, dhcpcd, openbox, idesk, tint2 모두 여기서 기동).
+- `config/xinitrc` — 1.x/x86 v9까지의 X 세션 시작점(tint2 기반, 유산). **2.0.0 데스크톱은 `setup-desktop-config-*.sh`가 xinitrc를 생성**(ibus-daemon, dhcpcd 폴백, feh, picom, bamf, plank, marux-quicksettings, idesk, openbox — ARM64 v15 / x86 v1 이식본).
 - `config/openbox/{rc.xml,menu.xml}` — 우클릭 메뉴 + 키바인드 (Win+T/D/E 등).
 - `config/scripts/marux-*` — 게스트 시스템에서 동작하는 헬퍼 (wallpaper, desktop-refresh, new-desktop-item).
 - `scripts/build-X.Y.Z-67-vN.sh` — 릴리즈별 빌드 스크립트. 버전별로 새 파일 생성 (이전 버전 보존). 헤더에 변경/버그픽스 코멘트 명시.
@@ -68,7 +68,7 @@ qemu-system-x86_64 -m 4G -enable-kvm -cdrom output/MaruxOS-X.Y.Z-67-vN.iso
 - **Minimal busybox initrd** — `/lib/modules` 디렉토리 없음. 부팅 필수 드라이버는 모두 **builtin (`=y`)** 필수. 모듈 (`=m`)로 빌드되면 initrd가 못 로드해서 부팅 패닉. `scripts/build/02-build-kernel.sh`에 명시적 `enable_builtin` 호출 + critical 옵션 grep 검증 게이트 있음.
 - **검증 게이트는 거의 종교적으로 유지** — 1.x 시리즈가 검증 게이트 부재로 6.12 의도 → 6.7.4 hallucination이 5개월 살아남아 92회 빌드 인프라가 됨. 모든 단일진실값(KERNEL_VERSION, SHA256, 코드명 등)은 빌드 산출물과 비교/강제하는 게이트가 있어야 한다. 게이트의 expected 값 자체도 검증 대상 — AI 요약/WebFetch 결과를 그대로 박지 말고 raw bytes로 가져오거나 첫 다운로드 결과를 채택.
 - **라이선스 정책(2026-08-27 확정)**: MaruxOS 고유 저작물 = **The Unlicense**(OSI 승인 퍼블릭 도메인 헌정, LICENSE §1 범위). 배포 이미지는 *집합체* — 서드파티는 각자 라이선스(THIRD-PARTY-LICENSES.md), 우리 수정은 반드시 `patches/`에 diff로 공개(GPL 대응 소스), 이미지엔 `/usr/share/licenses/`·펌웨어 `LICENCE.*` 동봉. "MaruxOS는 Public Domain, 제한 없음" 식의 이미지 전체 주장 금지. tuna27 자산은 디자이너 동의 확인 전까지 헌정 제외.
-- **PCManFM(GTK) 사용 불가** — GLib 2.68+ 필요, v2~v5 빌드 실패 이력. x86_64 파일 매니저는 여전히 `mc` (Midnight Commander). *(2026-08-25 정정: **ARM64는 v27부터 PCManFM-Qt** — GTK판이 아니라 Qt판을 의존성 사슬째 크로스 빌드해서 이 제약을 정공 해소했다. mc는 폴백으로 잔류.)*
+- **PCManFM(GTK) 사용 불가** — GLib 2.68+ 필요, v2~v5 빌드 실패 이력. GTK판 대신 **PCManFM-Qt**를 Qt 의존성 사슬째 크로스 빌드해 정공 해소 — ARM64 v27(2026-08-25) · **x86_64 cooked-v10(2026-08-28, 같은 크로스 체계를 x86 sysroot에 재사용)**. mc는 양쪽 폴백으로 잔류. x86 rootfs엔 1.x Plank 사고 때 deb에서 들어온 GLib 2.80 런타임(/usr/lib)과 LFS 2.78(헤더·pc, /usr/lib64)이 공존 — Kernel-Log §34 벽 9 참조.
 - **한글 입력**: ibus-hangul + memconf 백엔드. WSL2의 GTK3 헤더가 `GDK_WINDOWING_WAYLAND`를 정의해서 im-ibus.so에 Wayland 심볼이 박힘 → 소스 코드에서 `MARUX_DISABLED_WAYLAND`로 sed 패치 필요. X.org 환경 전용.
 - **바탕화면 아이콘**: idesk. `setsid`로 세션 분리 안 하면 SIGHUP에 죽음 (1.2.1 v3에서 수정). PNG는 `marux-*` prefix 통일 (1.2.1 v4에서 정정).
 - **빌드 권한**: 1.x 빌드는 root 또는 sudo 환경 가정. `chroot` 호출 + `rootfs-lfs/` 소유권이 root일 가능성 → 새 빌드 스크립트 작성 시 동일 권한 모델 유지.

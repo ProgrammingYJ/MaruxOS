@@ -36,8 +36,8 @@
 - "67" — 1.0 release through 1.2.x (the meme era)
 - **"Cooked"** — 2.0.0 onwards. Meta-self-reference to LLM hallucination duality ("AI is brilliant but a chronic liar"). Older boot messages from cached squashfs may still show the previous codenames.
 
-### Q: Why is there no GUI file manager?
-**A:** GUI file managers like PCManFM require newer GLib versions that are incompatible with the current LFS system. We use mc (Midnight Commander), a powerful terminal-based file manager instead. **As of 2.0.0, ARM64 ships PCManFM-Qt** — the Qt5 stack landed with QTerminal and the whole dependency chain (libexif → libfm → menu-cache → libfm-qt → pcmanfm-qt) was cross-built from source, so the GLib conflict never arises. x86_64 still uses mc.
+### Q: Is there a GUI file manager?
+**A:** Yes — **PCManFM-Qt** (2.0.0, both architectures: dock icon "Files", Win+E). History: the GTK PCManFM needed a newer GLib than the LFS base, so 1.x shipped mc (Midnight Commander). In 2.0.0 the Qt5 stack landed with QTerminal and the whole chain (libexif → libfm → menu-cache → libfm-qt → pcmanfm-qt) was cross-built from source — ARM64 v27, x86_64 cooked-v10 — so the GLib conflict never arises. mc is kept as a terminal fallback.
 
 ### Q: Why does Firefox show security warnings?
 **A:** Firefox runs with `--no-sandbox` flag for compatibility with the LFS environment. This is expected behavior and doesn't affect normal browsing.
@@ -55,16 +55,16 @@
 feh --bg-fill /path/to/your/image.png
 ```
 
-### Q: How do I restart the panel?
+### Q: How do I restart the dock / status bar?
 **A:**
 ```bash
-killall tint2
-tint2 &
+killall plank
+/usr/bin/plank &   # status bar: killall marux-quicksettings; /usr/bin/marux-quicksettings &
 ```
 
 ### Q: Where are configuration files located?
 **A:**
-- Panel: `~/.config/tint2/tint2rc`
+- Dock launchers: `~/.config/plank/dock1/launchers/*.dockitem` (defaults in `/etc/skel`) · dock settings: GSettings keyfile `~/.config/glib-2.0/settings/keyfile` (defaults `/usr/share/glib-2.0/schemas/40_maruxos.gschema.override`)
 - Openbox: `~/.config/openbox/rc.xml`
 - System-wide xinitrc: `/etc/X11/xinit/xinitrc`
 
@@ -77,13 +77,13 @@ tint2 &
 ```bash
 cat /etc/X11/xinit/xinitrc
 ```
-Make sure openbox and tint2 commands are present and not corrupted.
+Make sure the `openbox`, `plank` and `marux-quicksettings` commands are present, then check `/tmp/plank.log`, `/tmp/quicksettings.log`, `/tmp/picom.log`.
 
 ### Q: startx doesn't start automatically
 **A:** Check if `.bash_profile` exists and contains:
 ```bash
 if [ -z "$DISPLAY" ] && [ "$(tty)" = "/dev/tty1" ]; then
-    exec startx
+    startx   # not exec: if X exits you get the shell back (2.0.0 policy)
 fi
 ```
 
@@ -160,8 +160,8 @@ For questions not covered here:
 - "67" — 1.0 릴리즈부터 1.2.x까지 (밈 시기)
 - **"Cooked"** — 2.0.0부터. LLM hallucination 양면성("AI는 명석하지만 거짓말쟁이")의 메타-자기참조. 이전 squashfs 캐시에서 옛 코드네임이 표시될 수 있습니다.
 
-### Q: GUI 파일 관리자가 없는 이유는?
-**A:** PCManFM 같은 GUI 파일 관리자는 현재 LFS 시스템과 호환되지 않는 최신 GLib 버전이 필요합니다. 대신 강력한 터미널 기반 파일 관리자인 mc (Midnight Commander)를 사용합니다. **2.0.0의 ARM64는 PCManFM-Qt를 탑재합니다** — QTerminal과 함께 Qt5 스택이 들어왔고, 의존성 사슬(libexif → libfm → menu-cache → libfm-qt → pcmanfm-qt) 전체를 소스에서 크로스 빌드했기 때문에 GLib 충돌 자체가 발생하지 않습니다. x86_64는 계속 mc를 사용합니다.
+### Q: GUI 파일 관리자가 있나요?
+**A:** 있습니다 — **PCManFM-Qt**(2.0.0, 양 아키텍처: 독 "Files" 아이콘, Win+E). 역사: 1.x에서는 GTK판 PCManFM이 LFS 베이스보다 새 GLib을 요구해 mc(Midnight Commander)를 썼습니다. 2.0.0에서 QTerminal과 함께 Qt5 스택이 들어왔고 의존성 사슬(libexif → libfm → menu-cache → libfm-qt → pcmanfm-qt)을 통째로 소스 크로스 빌드 — ARM64 v27, x86_64 cooked-v10 — 해서 GLib 충돌이 발생하지 않습니다. mc는 터미널 폴백으로 남아 있습니다.
 
 ### Q: Firefox에서 보안 경고가 표시되는 이유는?
 **A:** Firefox는 LFS 환경과의 호환성을 위해 `--no-sandbox` 플래그로 실행됩니다. 이는 예상된 동작이며 일반 브라우징에 영향을 미치지 않습니다.
@@ -179,16 +179,16 @@ For questions not covered here:
 feh --bg-fill /path/to/your/image.png
 ```
 
-### Q: 패널을 어떻게 재시작하나요?
+### Q: 독 / 상태 바를 어떻게 재시작하나요?
 **A:**
 ```bash
-killall tint2
-tint2 &
+killall plank
+/usr/bin/plank &   # 상태 바: killall marux-quicksettings; /usr/bin/marux-quicksettings &
 ```
 
 ### Q: 설정 파일 위치는 어디인가요?
 **A:**
-- 패널: `~/.config/tint2/tint2rc`
+- 독 런처: `~/.config/plank/dock1/launchers/*.dockitem` (기본값 `/etc/skel`) · 독 설정: GSettings keyfile `~/.config/glib-2.0/settings/keyfile` (기본값 `/usr/share/glib-2.0/schemas/40_maruxos.gschema.override`)
 - Openbox: `~/.config/openbox/rc.xml`
 - 시스템 전역 xinitrc: `/etc/X11/xinit/xinitrc`
 
@@ -201,13 +201,13 @@ tint2 &
 ```bash
 cat /etc/X11/xinit/xinitrc
 ```
-openbox와 tint2 명령이 있고 손상되지 않았는지 확인하세요.
+`openbox`, `plank`, `marux-quicksettings` 명령이 있는지 확인하고 `/tmp/plank.log`, `/tmp/quicksettings.log`, `/tmp/picom.log`를 보세요.
 
 ### Q: startx가 자동으로 시작되지 않음
 **A:** `.bash_profile`이 존재하고 다음 내용이 포함되어 있는지 확인:
 ```bash
 if [ -z "$DISPLAY" ] && [ "$(tty)" = "/dev/tty1" ]; then
-    exec startx
+    startx   # not exec: if X exits you get the shell back (2.0.0 policy)
 fi
 ```
 

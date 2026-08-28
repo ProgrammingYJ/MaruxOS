@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Backup and restore utility
 - System monitoring dashboard
 
-## [2.0.0] "Cooked" - work in progress (target: 2026-08 — OSS Korea 8/11 발표 ✅ 완료, contest 8/27)
+## [2.0.0] "Cooked" - 2026-08-27 (GitHub Release v2.0.0 — OSS Korea 8/11 발표 ✅, 오픈소스 개발자대회 8/27 출품 ✅; x86_64 데스크톱 패리티 2026-08-28)
 
 ### Added
 - **Linux Kernel 6.18.26 LTS** — MaruxOS 역사상 첫 진짜 의도-일치 커널 빌드. 1.x 시리즈는 광고가 "6.12 LTS"였으나 실제로는 Genesis(2025-12-14)에 빌드된 6.7.4 vmlinuz를 92회 빌드 동안 재사용해온 사실이 2026-05-05 발견됨 (errata 참고).
@@ -38,7 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Plank dock 소스빌드 (arm64-v14, 2026-07-28, 실기기 검증)** — aarch64에서 Plank 0.11.89를 소스로 빌드: **Vala 0.56.17 컴파일러 부트스트랩(MaruxOS 자체 valac 보유)** + 11종 체인(gobject-introspection·vala·libgee·libXres·libwnck·libgtop·gnome-menus·xcb-util·startup-notification·bamf·plank). x86-era "빈 독" 버그 근본원인(GSettings memory 백엔드 = 프로세스별·비영속) 규명 → gschema.override 기본값 + `GSETTINGS_BACKEND=keyfile`로 정공 해결.
 - **picom 컴포지터 + Marux 유리 테마 (arm64-v15, 2026-07-29)** — picom v11.2(xrender+vsync) + macOS풍 라운드 반투명 유리 독 테마.
 - **라이브 디버그 픽스 4종 (arm64-v16, 2026-07-29, SHA `57daa20a…`)** — ①클릭 창전환(openbox rc.xml Client 컨텍스트 마우스바인드 부재 — 1.x부터 잠복한 버그, 공유 `config/openbox/rc.xml` 수정으로 x86 트랙도 동시 픽스) ②bamfdaemon 세그폴트 근원 규명(libwnck가 startup-notification 없이 빌드됨) 후 재빌드 *(→ 후일 재규명 2026-08-14: SN 부재는 근원 아님 — v16 실기기에서도 세그폴트 재현. 실근원 = libwnck 43.0 업스트림 버그(`invalidate_icons` NULL 가드 부재, 43.2에서 수정) → 43.2 버전업으로 해결, v17 탑재 예정)* ③유리 테마 확정값(라운드 10 + 알파 95) ④HDMI 콘솔 경고 스팸 제거.
-- **하이브리드 디스크 이미지** — `MaruxOS-2.0.0-arm64.img.xz` (Pi는 ISO9660 부팅 불가 → USB dd → microSD 설치 패턴). 최신 빌드 **arm64-v27** (2026-08-25, SHA `bdf1f50e…`).
+- **하이브리드 디스크 이미지** — `MaruxOS-2.0.0-arm64.img.xz` (Pi는 ISO9660 부팅 불가 → USB dd → microSD 설치 패턴). 릴리즈 이미지 **arm64-v34** (2026-08-27, 384 MB, root/marux, tty1 자동 로그인 — SHA `1a6cbcc0…`; v28 Qt FORTIFY 픽스, v31 FeatherPad, v32 LXImage-Qt·SpeedCrunch·LXQt Archiver·qps, v33 다이어트+라이선스 동봉).
 - ARM64 빌드 게이트 — 빌드 루트 / cross-toolchain / 산출물명 / 커널 ARCH를 강제 검증해 x86_64 트랙과 완전 분리.
 - **libwnck 43.2 진짜 픽스 (arm64-v17, 2026-08-14, 실기기 전항목 검증 ✅, SHA `767ec40e…`)** — bamfdaemon 세그폴트의 실근원은 startup-notification 부재가 아니라 **libwnck 43.0 업스트림 버그**(`invalidate_icons` NULL 가드 부재)였고 43.2로 해결. 독 실행 점·실행 앱 클릭 창전환까지 동작 → **배치 P(Plank) 공식 종결**.
 - **WiFi 무선 네트워크 (arm64-v18~v24, 2026-08-14~23, 실기기 검증 ✅)** — 커널 wireless 스택 7종 `=y` 재빌드 + brcmfmac + Cypress 43455 펌웨어/NVRAM/regulatory.db를 `CONFIG_EXTRA_FIRMWARE`로 임베드(builtin 드라이버는 rootfs 마운트 전에 펌웨어를 요청하므로 initrd로는 늦다) + wpa_supplicant 2.11(`CONFIG_DRIVER_NL80211_BRCM`). **`ASSOCIATED` 무한루프의 진범은 brcmfmac FWSUP** — 펌웨어 supplicant가 EAPOL을 가로채고 4-way를 완주하지 못했다. `feature.c` 패치로 FWSUP를 끄고 **host 4-way를 강제**해 정복. 유선을 뽑은 상태에서 DHCP·인터넷 검증 완료.
@@ -49,8 +49,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **QTerminal (arm64-v26, 2026-08-25)** — `xterm` → **QTerminal 0.17.0**. Qt5 5.15.2 12종 + xcb 플랫폼 플러그인 + qtermwidget + lxqt-build-tools를 **호스트 크로스 컴파일**로 빌드(MaruxOS 최초 — 그전까지는 전부 qemu chroot 네이티브).
 - **PCManFM-Qt (arm64-v27, 2026-08-25)** — `mc` → **PCManFM-Qt 0.17.0**. `libexif → libfm(--with-extra-only) → menu-cache → libfm-qt → pcmanfm-qt` 사슬을 전부 소스에서 크로스 빌드. **1.x에서 PCManFM(GTK)이 GLib 2.68을 요구해 시스템을 망가뜨린 사고를 Qt 경로로 정공 해소.** `mc`·`xterm`은 폴백으로 잔류.
 
-### In progress (2.0.0 잔여 스코프)
-- **2.0.0 로드맵 4/4 완주 (2026-08-25, `arm64-v27`)** — ①ARM64 데스크톱+한글 ②WiFi+퀵설정 GUI ③xterm→QTerminal ④mc→PCManFM-Qt. 남은 것은 **v27 실기기 최종 검증**뿐(v26/v27의 Qt 계열은 빌드·게이트 통과, 하드웨어 검증 대기). ⚠️ 확인 필요: Qt는 입력기 경로가 GTK와 달라 **Qt 앱에서 한글 입력**이 되는지 — 실패 시 ibus Qt5 immodule 빌드 또는 `QT_IM_MODULE=xim`으로 대응.
+### Added (x86_64 desktop parity — cooked-v10, 2026-08-28)
+- **x86_64 ISO도 Pi 이미지와 동일한 Qt 데스크톱** — ARM64 크로스 체계(호스트 gcc-13 + `--sysroot`)를 x86 rootfs 사본(`x86-parity/`)에 재사용해 Qt5 5.15.2·QTerminal·PCManFM-Qt·FeatherPad·LXImage-Qt·SpeedCrunch·LXQt Archiver·qps·Plank(libwnck 43.2)·picom·`marux-quicksettings`·alsa-utils·ibus-hangul 한/A 패치·shared-mime DB 이식. tint2/xterm/mc는 폴백으로만 잔류. rc.xml Win+T/E → qterminal/pcmanfm-qt.
+- **이미지 다이어트 1.24 GB → 238 MB** — 스테이징 슬림(소스·헤더·컴파일러·python 제거, strip) + squashfs **xz**(2.0.0 커널 내장; 1.x는 gzip만) + `/usr/share/licenses/` 동봉 + 원본 rootfs부터 깨져 있던 dangling 모듈 18개 자동 제거.
+- 게이트: FORTIFY=2 검증 마커, `.desktop` config 바이트 일치, libwnck 실해석, 핵심 바이너리 16종 chroot ldd, 슬림 사본에서 Qt 7종 기동(Xvfb). **QEMU/KVM 스크린샷 검증**: 자동 로그인 → 데스크톱 → QTerminal 한글 입력 → FeatherPad → PCManFM-Qt.
+- 함정: x86 rootfs의 GLib 이중 상태(/usr/lib 2.80 deb 출신 런타임 vs /usr/lib64 2.78 LFS 헤더·pc), `/usr/lib/*.so → /usr/lib64` 절대 심볼릭링크를 호스트 `find -xtype l`이 오판 — Kernel-Update-Log §34.
+
+### Status (2.0.0 릴리즈 시점)
+- **2.0.0 로드맵 4/4 완주 (2026-08-25, `arm64-v27`)** — ①ARM64 데스크톱+한글 ②WiFi+퀵설정 GUI ③xterm→QTerminal ④mc→PCManFM-Qt. v27 실기기에서 QTerminal 즉사(함정 #35: 크로스 gcc 암묵 `_FORTIFY_SOURCE=3` 오탐) → v28 `=2` 재빌드로 실기기 기동 실증. 릴리즈 = v34(ARM64) + cooked-v10(x86_64).
 - 알려진 미해결(릴리즈 블로커 아님): Plank 아이콘 우클릭 "닫기" 무동작 / 독 인디케이터 점 위치·크기.
 
 ### Changed

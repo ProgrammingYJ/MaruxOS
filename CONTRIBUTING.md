@@ -184,8 +184,8 @@ Submit in `MaruxOS 디자인/` directory with:
 ### Medium Priority
 
 - [ ] Add language support
-- [ ] GUI file manager
-- [ ] ARM architecture support
+- [x] GUI file manager — PCManFM-Qt (2.0.0, both architectures)
+- [x] ARM architecture support — ARM64 / Raspberry Pi 4B (2.0.0)
 
 ### Low Priority
 
@@ -200,7 +200,7 @@ Submit in `MaruxOS 디자인/` directory with:
 MaruxOS is built using **Linux From Scratch (LFS) 12.0 toolchain + 12.1-era userland**, NOT Debian/Ubuntu. Key differences:
 - No apt/package manager
 - All software compiled from source
-- squashfs must use **gzip** compression (kernel doesn't support xz)
+- squashfs: 1.x kernels lacked xz support (gzip only); the 2.0.0 kernel (6.18.26) has xz built in and `cooked-v10` ships an xz squashfs. Use the current `scripts/build-2.0.0-cooked-vN.sh` rather than hand-rolled commands.
 
 ### Contact
 
@@ -222,7 +222,7 @@ MaruxOS is built using **Linux From Scratch (LFS) 12.0 toolchain + 12.1-era user
 
 ## License
 
-By contributing, you agree that your contributions will be released into the **Public Domain** - complete freedom with no restrictions.
+By contributing, you agree that your contributions to MaruxOS's own work are released under **The Unlicense** (public-domain dedication, OSI-approved) — see [LICENSE](LICENSE). Third-party packages keep their own licenses ([THIRD-PARTY-LICENSES.md](THIRD-PARTY-LICENSES.md)); any change to third-party source must be published as a diff in `patches/`.
 
 ---
 
@@ -313,7 +313,7 @@ MaruxOS에 관심을 가져주셔서 감사합니다!
 MaruxOS는 **Linux From Scratch (LFS) 12.0 툴체인 + 12.1-era 유저랜드** 기반입니다 (Debian/Ubuntu 아님):
 - apt/패키지 관리자 없음
 - 모든 소프트웨어 소스에서 컴파일
-- squashfs는 **gzip** 압축 필수 (커널이 xz 미지원)
+- squashfs: 1.x 커널은 xz 미지원(gzip만). 2.0.0 커널(6.18.26)은 xz 내장이며 `cooked-v10`부터 xz squashfs 출하. 수동 명령보다 현재 `scripts/build-2.0.0-cooked-vN.sh`를 사용.
 
 ### 연락처
 
@@ -335,7 +335,7 @@ MaruxOS는 **Linux From Scratch (LFS) 12.0 툴체인 + 12.1-era 유저랜드** �
 
 ## 라이선스
 
-기여함으로써 귀하의 기여가 **퍼블릭 도메인**으로 공개됨에 동의합니다 - 제한 없는 완전한 자유.
+기여함으로써 MaruxOS 고유 저작물에 대한 귀하의 기여가 **The Unlicense**(OSI 승인 퍼블릭 도메인 헌정)로 공개됨에 동의합니다 — [LICENSE](LICENSE) 참조. 서드파티 패키지는 각자의 라이선스를 유지하며([THIRD-PARTY-LICENSES.md](THIRD-PARTY-LICENSES.md)), 서드파티 소스 수정은 반드시 `patches/`에 diff로 공개합니다.
 
 ---
 

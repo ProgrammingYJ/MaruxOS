@@ -13,7 +13,7 @@
 | **GitHub Release** | [v1.2.1](https://github.com/ProgrammingYJ/MaruxOS/releases/tag/v1.2.1) | `MaruxOS-1.2.0-67-v4.iso` (1.23GB) + SHA256 | 영구. 인터넷 있으면 항상 다운로드 가능. |
 | **Local 출력 디렉토리** | `output/MaruxOS-1.2.0-67-v4.iso` | 동일 ISO (Windows side) | 빌드 호스트에 보존. `output/`는 git ignore라 push되지 않지만 로컬 디스크에 잔류. |
 | **WSL 빌드 트리** | `/home/administrator/MaruxOS/build/legacy-1.x-kernel/` | 1.x의 vmlinuz-6.7.4-maruxos + `/lib/modules/6.7.4` | `build-2.0.0-cooked-vN.sh`가 첫 실행 시 자동 백업 (이미 존재하면 skip) |
-| **Git main branch** | commit `cd6141d` | 1.2.1 시점 코드/문서/설정 전체 | 2.0.0 작업은 `2.0.0-cooked-kernel` 브랜치라 main 무손상. |
+| **Git main branch** | commit `cd6141d` | 1.2.1 시점 코드/문서/설정 전체 | 2026-08-27 이후 main은 2.0.0(fast-forward). 1.2.1 시점은 태그 `v1.2.1` / 커밋 `cd6141d`로 항상 복원 가능. |
 
 ---
 

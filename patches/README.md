@@ -13,7 +13,7 @@ idempotent `sed` (search for `MaruxOS:` in `scripts/`).
 | `glibc-2.38-math-vector-no-sve.patch` | glibc 2.38 (sysroot header) | `bits/math-vector.h` | Disable SVE vector-math declarations (Cortex-A72 has no SVE; broke CMake compiler checks in cross builds). Header only. | LGPL-2.1+ |
 | `qtbase-5.15.2-gcc13-limits.patch` | Qt 5.15.2 | several headers | `#include <limits>` for GCC 11+. Build fix only. | LGPL-3.0 |
 | `qtbase-5.15.2-xkb-keysyms.patch` | Qt 5.15.2 | `src/platformsupport/input/xkbcommon/qxkbcommon.cpp` | Define 4 dead-key keysyms missing from the sysroot's libxkbcommon. Build fix only. | LGPL-3.0 |
-| `qtbase-5.15.2-mkspec-fortify2.patch` | Qt 5.15.2 | `mkspecs/linux-aarch64-gnu-g++/qmake.conf` | `-D_FORTIFY_SOURCE=2` (Ubuntu cross gcc defaults to 3, which false-positives on `qt_readlink`). | LGPL-3.0 |
+| `qtbase-5.15.2-mkspec-fortify2.patch` | Qt 5.15.2 | `mkspecs/linux-aarch64-gnu-g++/qmake.conf` (x86_64 build: same two lines in `mkspecs/linux-g++-64/qmake.conf`) | `-D_FORTIFY_SOURCE=2` (Ubuntu cross gcc defaults to 3, which false-positives on `qt_readlink`). | LGPL-3.0 |
 | `qttools-5.15.2-help-config-no-hosttool-check.patch` | Qt 5.15.2 (qttools) | `Qt5HelpConfigExtras.cmake` (installed file) | Skip existence check of host tools `qhelpgenerator`/`qcollectiongenerator` (not built). | LGPL-3.0 |
 | `qps-1.10.20-allow-ascii-cast.patch` | qps 1.10.20 | `CMakeLists.txt` | `remove_definitions(-DQT_NO_CAST_FROM_ASCII …)` — newer lxqt-build-tools enforces flags the 2018 code predates. | GPL-2.0+ |
 
