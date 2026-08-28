@@ -170,7 +170,7 @@ qemu-system-x86_64 -m 4G -enable-kvm -device intel-hda -device hda-duplex -cdrom
 
 A MaruxOS **image is an aggregate**: every third-party component keeps **its own license** — Linux kernel (GPL-2.0), glibc / Qt 5 (LGPL), Firefox (MPL-2.0, unmodified official build), Openbox, Plank, X.org, ibus-hangul, Raspberry Pi / Cypress firmware (proprietary, redistributable), Nanum fonts (OFL 1.1), and more. See:
 
-- [LICENSE](LICENSE) — Unlicense text, scope, and the written offer for corresponding source
+- [LICENSING.md](LICENSING.md) — Unlicense text, scope, and the written offer for corresponding source
 - [THIRD-PARTY-LICENSES.md](THIRD-PARTY-LICENSES.md) — component-by-component list and how we comply
 - [SOURCES.md](SOURCES.md) — exact upstream tarballs (version, URL, SHA256)
 - [patches/](patches/) — every modification we make to upstream code
@@ -287,6 +287,6 @@ MaruxOS는 **세계 최초로 100% AI(Claude Code)만으로 제작된 운영체�
 Made with Linux From Scratch 12.0 (toolchain) + 12.1-era userland
 **Made with ❤️ for the Linux community**
 
-[Documentation](docs/) | [Contributing](CONTRIBUTING.md) | [License](LICENSE)
+[Documentation](docs/) | [Contributing](CONTRIBUTING.md) | [Licensing](LICENSING.md)
 
 </div>

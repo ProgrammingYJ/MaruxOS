@@ -21,7 +21,7 @@
 | Korean Input | ibus-hangul 1.5.5 (+한/A 상태 노출 패치) — XIM + gtk3 immodule + Qt5 ibus 플러그인, GSettings keyfile 백엔드, 토글 Shift+Space (양 아키텍처) |
 | Boot | GRUB2 + minimal busybox initrd + squashfs Live ISO |
 | Compression | squashfs **xz** (2.0.0 커널 6.18.26 내장; 1.x는 gzip만 가능했음) |
-| License | **The Unlicense**(MaruxOS 고유 저작물) + 구성 요소별 라이선스 — [LICENSE](../LICENSE), [THIRD-PARTY-LICENSES.md](../THIRD-PARTY-LICENSES.md) |
+| License | **The Unlicense**(MaruxOS 고유 저작물) + 구성 요소별 라이선스 — [LICENSING.md](../LICENSING.md), [THIRD-PARTY-LICENSES.md](../THIRD-PARTY-LICENSES.md) |
 
 ### Why create another Linux distribution?
 
@@ -272,7 +272,7 @@ LFS Phase 7 (최종 시스템 빌드)이 8-15시간. 2.0.0 시리즈는 rootfs�
 ## Licensing
 
 ### License?
-MaruxOS 고유 저작물 = **The Unlicense**(OSI 승인 퍼블릭 도메인 헌정) — 무제한 사용/수정/재배포/상용화. 이미지는 집합체라 서드파티는 각자 라이선스. 정책 전문: [LICENSE](../LICENSE) / 구성 요소 목록: [THIRD-PARTY-LICENSES.md](../THIRD-PARTY-LICENSES.md) / 소스·패치: [SOURCES.md](../SOURCES.md), [patches/](../patches/).
+MaruxOS 고유 저작물 = **The Unlicense**(OSI 승인 퍼블릭 도메인 헌정) — 무제한 사용/수정/재배포/상용화. 이미지는 집합체라 서드파티는 각자 라이선스. 정책 전문: [LICENSING.md](../LICENSING.md) / 구성 요소 목록: [THIRD-PARTY-LICENSES.md](../THIRD-PARTY-LICENSES.md) / 소스·패치: [SOURCES.md](../SOURCES.md), [patches/](../patches/).
 
 ### Constituent packages?
 Linux Kernel (GPL-2.0), glibc·Qt5 (LGPL), GRUB (GPL-3.0), Openbox·Plank (GPL), Firefox (MPL-2.0) 등 각자 라이선스 — 전체 목록·준수 방식은 [THIRD-PARTY-LICENSES.md](../THIRD-PARTY-LICENSES.md), 이미지 안 `/usr/share/licenses/`.

@@ -498,7 +498,7 @@ bash scripts/lfs/03-build-temp-tools.sh
 
 ## 라이선스
 
-MaruxOS의 자체 기여물은 **The Unlicense**(OSI 승인 퍼블릭 도메인 헌정)로 배포됩니다 — [LICENSE](../LICENSE) 참조.
+MaruxOS의 자체 기여물은 **The Unlicense**(OSI 승인 퍼블릭 도메인 헌정)로 배포됩니다 — [LICENSING.md](../LICENSING.md) 참조.
 
 개별 패키지는 각자의 라이선스를 따릅니다 (GPL, LGPL, BSD 등).
 

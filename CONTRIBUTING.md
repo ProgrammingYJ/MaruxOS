@@ -222,7 +222,7 @@ MaruxOS is built using **Linux From Scratch (LFS) 12.0 toolchain + 12.1-era user
 
 ## License
 
-By contributing, you agree that your contributions to MaruxOS's own work are released under **The Unlicense** (public-domain dedication, OSI-approved) — see [LICENSE](LICENSE). Third-party packages keep their own licenses ([THIRD-PARTY-LICENSES.md](THIRD-PARTY-LICENSES.md)); any change to third-party source must be published as a diff in `patches/`.
+By contributing, you agree that your contributions to MaruxOS's own work are released under **The Unlicense** (public-domain dedication, OSI-approved) — see [LICENSING.md](LICENSING.md). Third-party packages keep their own licenses ([THIRD-PARTY-LICENSES.md](THIRD-PARTY-LICENSES.md)); any change to third-party source must be published as a diff in `patches/`.
 
 ---
 
@@ -335,7 +335,7 @@ MaruxOS는 **Linux From Scratch (LFS) 12.0 툴체인 + 12.1-era 유저랜드** �
 
 ## 라이선스
 
-기여함으로써 MaruxOS 고유 저작물에 대한 귀하의 기여가 **The Unlicense**(OSI 승인 퍼블릭 도메인 헌정)로 공개됨에 동의합니다 — [LICENSE](LICENSE) 참조. 서드파티 패키지는 각자의 라이선스를 유지하며([THIRD-PARTY-LICENSES.md](THIRD-PARTY-LICENSES.md)), 서드파티 소스 수정은 반드시 `patches/`에 diff로 공개합니다.
+기여함으로써 MaruxOS 고유 저작물에 대한 귀하의 기여가 **The Unlicense**(OSI 승인 퍼블릭 도메인 헌정)로 공개됨에 동의합니다 — [LICENSING.md](LICENSING.md) 참조. 서드파티 패키지는 각자의 라이선스를 유지하며([THIRD-PARTY-LICENSES.md](THIRD-PARTY-LICENSES.md)), 서드파티 소스 수정은 반드시 `patches/`에 diff로 공개합니다.
 
 ---
 

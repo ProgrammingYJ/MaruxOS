@@ -1,16 +1,16 @@
 # MaruxOS — Third-Party Licenses / 서드파티 라이선스
 
-> **Scope.** MaruxOS's *own* work (build scripts, configuration, documentation, `src/marux-quicksettings`, MaruxOS-drawn icons) is dedicated to the public domain under **The Unlicense** (see [LICENSE](LICENSE)).
+> **Scope.** MaruxOS's *own* work (build scripts, configuration, documentation, `src/marux-quicksettings`, MaruxOS-drawn icons) is dedicated to the public domain under **The Unlicense** (see [LICENSING.md](LICENSING.md)).
 > A MaruxOS **image** is an *aggregate* of many independent projects. Each component is redistributed **under its own license**, listed below. Nothing in MaruxOS changes those licenses.
 >
-> **범위.** MaruxOS *고유 저작물*(빌드 스크립트·설정·문서·`src/marux-quicksettings`·자체 제작 아이콘)은 **The Unlicense**로 퍼블릭 도메인에 헌정합니다([LICENSE](LICENSE)).
+> **범위.** MaruxOS *고유 저작물*(빌드 스크립트·설정·문서·`src/marux-quicksettings`·자체 제작 아이콘)은 **The Unlicense**로 퍼블릭 도메인에 헌정합니다([LICENSING.md](LICENSING.md)).
 > MaruxOS **이미지**는 수많은 독립 프로젝트의 *집합체*입니다. 각 구성 요소는 **각자의 라이선스** 하에 재배포되며, MaruxOS는 그 라이선스를 바꾸지 않습니다.
 
 ## How we comply / 준수 방식
 
 | Obligation | How MaruxOS meets it |
 |---|---|
-| **Corresponding source** (GPL/LGPL) | Every package is built from an upstream release tarball. Exact package/version/URL/SHA256 list: [SOURCES.md](SOURCES.md). All MaruxOS modifications are published as unified diffs in [`patches/`](patches/) and applied by the scripts in [`scripts/`](scripts/). The image itself does **not** carry source tarballs (kept slim); sources are provided via this repository and the release page (GPLv3 §6(d) / GPLv2 §3 written offer: see LICENSE §NOTICE). |
+| **Corresponding source** (GPL/LGPL) | Every package is built from an upstream release tarball. Exact package/version/URL/SHA256 list: [SOURCES.md](SOURCES.md). All MaruxOS modifications are published as unified diffs in [`patches/`](patches/) and applied by the scripts in [`scripts/`](scripts/). The image itself does **not** carry source tarballs (kept slim); sources are provided via this repository and the release page (GPLv3 §6(d) / GPLv2 §3 written offer: see LICENSING.md §3). |
 | **License texts / notices** (all) | Shipped in the image under `/usr/share/licenses/` (ARM64 v33+, x86_64 cooked-v10+) and in this repository under [`config/licenses/`](config/licenses/). |
 | **Firmware redistribution conditions** | `LICENCE.broadcom` is shipped on the boot partition next to `start4.elf`; `LICENCE.cypress` / `LICENCE.broadcom_bcm43xx` are shipped with the WiFi firmware. Firmware is redistributed **unmodified** and only for use with Raspberry Pi hardware, as those licenses require. |
 | **LGPL relinking** | LGPL libraries (glibc, Qt5, GTK, ibus, …) are **dynamically linked** shared objects; users can replace them. |
