@@ -91,16 +91,17 @@
     </keybind>
 
     <!-- Win+T: Terminal -->
+    <!-- 2026-08-28: xterm→QTerminal / mc→PCManFM-Qt (메뉴·독과 일치. 양 아키텍처 모두 Qt 앱 보유) -->
     <keybind key="W-t">
       <action name="Execute">
-        <command>xterm -fa 'Monospace' -fs 11</command>
+        <command>qterminal</command>
       </action>
     </keybind>
 
     <!-- Win+E: File Manager -->
     <keybind key="W-e">
       <action name="Execute">
-        <command>xterm -e mc ~ /</command>
+        <command>pcmanfm-qt</command>
       </action>
     </keybind>
 

@@ -1097,7 +1097,16 @@
 - 산출: `MaruxOS-2.0.0-x86_64.iso` **1.24G** (SHA `6342ac4fd4271a7236025dba248eb0edde8cd28c6fbaeb54cd390f55b8165ccb`, = cooked-v9.iso). 빌드 23:54→23:56(2분).
 
 ### 2.0.0-cooked-v9 → 2.0.0-cooked-v10 - 2026-08-28 (x86_64 데스크톱 패리티: Qt 앱 7종·Plank·picom·상태 바·자동 로그인) [준비 중]
-**맥락:** "ISO도 img처럼". x86 rootfs 사본(`x86-parity/rootfs-lfs-parity`)에 ARM64 크로스 체계 재사용으로 Qt 스택·앱·plank·picom·quicksettings 이식 중(Kernel-Log §34). 스크립트 미작성: config x86 v1 + build v10(스테이징 rsync·strip·라이선스·네이티브 기동 게이트). 산출 예정: `MaruxOS-2.0.0-x86_64.iso` 교체.
+**맥락:** "ISO도 img처럼". x86 rootfs 사본(`x86-parity/rootfs-lfs-parity`)에 ARM64 크로스 체계 재사용으로 Qt 스택·앱 7종·plank·picom·quicksettings·alsa-utils·ibus-hangul 한/영 패치 이식 완료(Kernel-Log §34 벽 1~11). 산출: `MaruxOS-2.0.0-x86_64.iso` 교체.
+
+**`scripts/build-2.0.0-cooked-v10.sh` (v9와 구조 다름 — 신규 작성):**
+- 원천 = **`x86-parity/rootfs-lfs-parity`**(원본 `build/rootfs-lfs`는 롤백 자산으로 보존). config = `setup-desktop-config-x86-v1.sh`(ARM64 v15 이식, 공유 Qt `menu.xml` — v9의 `menu-x86.xml`은 유산).
+- [PRE] 게이트: 배치 마커(.q/.f/.e/.t/.x + p/p2/qs/5A + .cfg-x86-v1) / 데스크톱 바이너리 13종 X86-64 / **FORTIFY=2 통과본 SHA**(`gate-qt-fortify-x86.sh`) / `.desktop` 10종 config 바이트 일치+Icon 절대경로 실존 / xinitrc 키워드 7종·tint2 잔재 0·3경로 일치 / 메뉴 featherpad·xterm 잔재 0 / MIME / dock 3 / inittab autologin + `.bash_profile` 비exec / **libwnck 43.2 실해석**(chroot ldd, lib64 43.0 잔재 공존) / ime 마커 / 라이선스 자산 / wpa psk sanitize.
+- [KERNEL]~[6] v9 동일(6.18.26 sync·GRUB·locale·ibus/glib 캐시·메타·root/marux·initrd 문구).
+- **[7] 스테이징 슬림**(ARM64 v33 방식 x86판): rsync exclude(/tools·/sources·/boot·include·doc/man/info·gir·vala·cmake·pkgconfig·mkspecs·.la/.a·python3·gcc/binutils·`/usr/x86_64-*`) → locale ko/en → `strip --strip-unneeded`(ELF, /opt·/lib/modules 제외) → `/usr/share/licenses/`(공통 9 + ARM64 수집 pkg 라이선스 재사용 + MaruxOS 4 + patches, README에 "ARM64 전용 패키지는 목록만" 명시; OFL→truetype/nanum) → 게이트(sources/include/tools/gcc 부재·런타임 lib·**모듈 존재**·NEEDED 전부 해석(lib/lib64/usr/lib64/find)·python 실행참조 0·라이선스 7파일) → **슬림 사본 기동 게이트**(`mount --bind $STAGE $STAGE`로 QTGATE_ROOT 마운트포인트 조건 충족 → 네이티브 chroot Xvfb 7종).
+- [8] `mksquashfs -comp xz -b 1M`(v9 gzip → xz) / [9] xorriso(v9 동일) / [POST] sha256·512 + `MaruxOS-2.0.0-x86_64.iso` 사본.
+- 실행: `WSL_KERNEL_BUILD_ROOT=/home/administrator/MaruxOS-kernel-build` root. QEMU `-device intel-hda -device hda-duplex`로 볼륨 백엔드까지 검증.
+- 산출: **`MaruxOS-2.0.0-cooked-v10.iso` 238M**(248,672,256 B; v9 1.24G → **-81%**), SHA **`2b7f70b6e315d5e24d3926cde44e64602e6374b290d2ee4f95888cfec645c762`**(10:05 재빌드 — rc.xml Win+T→qterminal / Win+E→pcmanfm-qt 반영. 1차 09:51 `227c05f4…`는 키바인드만 xterm/mc인 동일 구성, QEMU 검증에 사용), 빌드 6분(6분: 스테이징 1.2G→strip 868M→dangling 18개 제거→기동 게이트→squashfs xz 212M). 릴리즈 사본 `MaruxOS-2.0.0-x86_64.iso` 동일 SHA. 빌드 중 게이트가 잡은 것: ①상속 dangling 모듈 18개(원본 v9 rootfs부터 깨져 있던 gio/imlib2/cups/pulse/cairo-script) 자동 제거 ②`find -xtype l`을 호스트에서 돌려 `/usr/lib/libpciaccess.so.0 → /usr/lib64/…` 절대 심볼릭링크를 오판 삭제 → Xorg ldd 게이트가 잡음 → chroot 내부 실행으로 교정 ③`soname=$(…|grep)` set -e 침묵사(v33 교훈 재발) ④sed 치환식에 경로 `/` 충돌.
 
 ## ARM64 트랙 이미지 빌드 (별도 명명 `build-2.0.0-cooked-arm64-vN.sh`)
 

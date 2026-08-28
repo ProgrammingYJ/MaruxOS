@@ -200,7 +200,7 @@ for b in speedcrunch qps lximage-qt lxqt-archiver; do
   if [ -x "$LFS/usr/bin/$b" ]; then
     readelf -h "$LFS/usr/bin/$b" | grep -q 'X86-64' && echo "  ✅ $b (x86-64)" || { echo "  🚨 $b 아키텍처 오류"; ok=0; }
     for n in $(readelf -d "$LFS/usr/bin/$b" | grep NEEDED | sed 's/.*\[\(.*\)\]/\1/'); do
-      ls "$LFS/usr/lib/$n" "$LFS/lib/$n" >/dev/null 2>&1 || { echo "  ❌ $b NEEDED 누락: $n"; ok=0; }; done
+      [ -e "$LFS/usr/lib/$n" ] || [ -e "$LFS/lib/$n" ] || [ -e "$LFS/usr/lib64/$n" ] || { echo "  ❌ $b NEEDED 누락: $n"; ok=0; }; done
   else echo "  ❌ $b 없음"; ok=0; fi
 done
 echo "  zip 백엔드: unzip $([ -x "$LFS/usr/bin/unzip" ] && echo ✓ || echo ✗) / zip $([ -x "$LFS/usr/bin/zip" ] && echo ✓ || echo ✗) (비치명)"

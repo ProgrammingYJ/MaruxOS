@@ -114,7 +114,7 @@ if [ -x "$LFS/usr/bin/featherpad" ]; then
   readelf -h "$LFS/usr/bin/featherpad" | grep -q 'X86-64' && echo "  ✅ x86-64 ELF" || { echo "  🚨 아키텍처 오류"; ok=0; }
   # 재귀 의존성 누락 검사 (rootfs 안에서 해석되는가)
   miss=0; for n in $(readelf -d "$LFS/usr/bin/featherpad" | grep NEEDED | sed 's/.*\[\(.*\)\]/\1/'); do
-    ls "$LFS/usr/lib/$n" "$LFS/lib/$n" >/dev/null 2>&1 || { echo "  ❌ NEEDED 누락: $n"; miss=1; }; done
+    [ -e "$LFS/usr/lib/$n" ] || [ -e "$LFS/lib/$n" ] || [ -e "$LFS/usr/lib64/$n" ] || { echo "  ❌ NEEDED 누락: $n"; miss=1; }; done
   [ $miss = 0 ] && echo "  ✅ NEEDED 전부 rootfs에 존재" || ok=0
 fi
 # 존재 ≠ 기동: 기동 게이트(featherpad 포함판)

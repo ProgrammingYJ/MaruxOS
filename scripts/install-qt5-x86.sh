@@ -271,6 +271,10 @@ set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 set(CMAKE_PREFIX_PATH $LFS/usr)
+# MaruxOS x86: /usr/lib64 잔재(1.x GLib 2.78 사고분) 차단 — CMake는 x86_64에서 lib64 변형 경로를 자동 추가해
+# find_library가 /usr/lib64/libglib-2.0.so(2.78)를 절대경로로 박았다(lxqt-archiver 링크 실패, 2026-08-28). pkg-config는 lib 우선이라 무관.
+set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS OFF)
+set(CMAKE_IGNORE_PATH $LFS/usr/lib64 $LFS/lib64)
 set(ENV{PKG_CONFIG_SYSROOT_DIR} $LFS)
 set(ENV{PKG_CONFIG_LIBDIR} $LFS/usr/lib/pkgconfig:$LFS/usr/lib64/pkgconfig:$LFS/usr/share/pkgconfig)
 set(CMAKE_INSTALL_PREFIX /usr)

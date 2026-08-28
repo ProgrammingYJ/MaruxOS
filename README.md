@@ -59,10 +59,10 @@ Unlike Ubuntu, Fedora, or Arch which are based on existing Linux distributions, 
 | Category | Software |
 |----------|----------|
 | Window Manager | Openbox |
-| Panel | tint2 (x86_64) / `marux-quicksettings` unified status bar (ARM64, 2.0.0) |
+| Panel | `marux-quicksettings` unified status bar (2.0.0, both arches — tint2 retired) |
 | Dock / Compositor (ARM64) | Plank (built from source) + picom |
-| Terminal | xterm (x86_64) / **QTerminal** (ARM64, 2.0.0) |
-| File Manager | mc (x86_64) / **PCManFM-Qt** (ARM64, 2.0.0) |
+| Terminal | **QTerminal** (Qt5, 2.0.0, both arches; xterm kept as fallback) |
+| File Manager | **PCManFM-Qt** (2.0.0, both arches; mc kept as fallback) |
 | Web Browser | Firefox |
 | Wallpaper | feh |
 | Korean Input | ibus-hangul 1.5.5 (libhangul 0.2.0, ibus 1.5.29) |
@@ -88,7 +88,7 @@ Unlike Ubuntu, Fedora, or Arch which are based on existing Linux distributions, 
 
 | Issue | Description |
 |-------|-------------|
-| Legacy File Manager (x86_64) | mc (Midnight Commander) is text-based and outdated. ARM64 ships PCManFM-Qt as of 2.0.0. |
+| Plank dock quirks | Right-click "Close" on a dock icon does nothing; running-indicator dot placement is off (both arches). |
 
 ## Project Structure
 
@@ -140,13 +140,13 @@ grub-mkrescue -o MaruxOS-1.0.iso iso-build
 
 - **Live boot only** - No disk installation support yet
 - **No package manager** - Software is pre-installed
-- **Terminal-based file manager (x86_64)** - GUI file manager has library issues; ARM64 ships PCManFM-Qt in 2.0.0
+- **x86_64 ISO desktop parity landed 2026-08-28 (cooked-v10)** - same Qt5 app set as the Pi image; audio backend in the Live ISO depends on the host card (no PulseAudio, ALSA only)
 
 ## Roadmap
 
 - [ ] Disk installation support
 - [ ] Package management system
-- [x] GUI file manager — **PCManFM-Qt** cross-built for ARM64 in 2.0.0 (Qt5 stack landed with QTerminal); x86_64 still on mc
+- [x] GUI file manager — **PCManFM-Qt** (Qt5 stack landed with QTerminal) on ARM64 (v27) and x86_64 (cooked-v10, 2026-08-28)
 - [x] ~~Korean input support~~ (v1.1)
 - [ ] More language support (Japanese, Chinese)
 - [x] ARM64 / Raspberry Pi 4B support (2.0.0 — verified on real hardware: full desktop with Plank dock + picom compositor, Korean input in xterm/GTK3 apps/Firefox, wired networking with NTP)
@@ -222,10 +222,10 @@ MaruxOS는 **세계 최초로 100% AI(Claude Code)만으로 제작된 운영체�
 | 분류 | 소프트웨어 |
 |------|-----------|
 | 윈도우 매니저 | Openbox |
-| 패널 | tint2 (x86_64) / `marux-quicksettings` 통합 상태 바 (ARM64, 2.0.0) |
+| 패널 | `marux-quicksettings` 통합 상태 바 (2.0.0, 양 아키텍처 — tint2 은퇴) |
 | 독 / 컴포지터 (ARM64) | Plank (소스 빌드) + picom |
-| 터미널 | xterm (x86_64) / **QTerminal** (ARM64, 2.0.0) |
-| 파일 관리자 | mc (x86_64) / **PCManFM-Qt** (ARM64, 2.0.0) |
+| 터미널 | **QTerminal** (Qt5, 2.0.0, 양 아키텍처; xterm은 폴백) |
+| 파일 관리자 | **PCManFM-Qt** (2.0.0, 양 아키텍처; mc는 폴백) |
 | 웹 브라우저 | Firefox |
 | 배경화면 | feh |
 | 한글 입력기 | ibus-hangul 1.5.5 (libhangul 0.2.0, ibus 1.5.29) |
@@ -251,7 +251,7 @@ MaruxOS는 **세계 최초로 100% AI(Claude Code)만으로 제작된 운영체�
 
 - **라이브 부팅만 가능** - 디스크 설치 미지원
 - **패키지 관리자 없음** - 소프트웨어 사전 설치됨
-- **터미널 기반 파일 관리자 (x86_64)** - GUI 파일 관리자 라이브러리 문제. ARM64는 2.0.0부터 PCManFM-Qt 탑재
+- **x86_64 ISO 데스크톱 패리티 완료 (2026-08-28, cooked-v10)** - Pi 이미지와 동일한 Qt5 앱 구성. Live ISO의 오디오는 호스트 카드 의존(PulseAudio 없음, ALSA만)
 
 ## 지원 및 문의
 
